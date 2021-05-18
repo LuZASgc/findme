@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>操作提示</title>
+<style type="text/css" media="screen"> 
+	@import url(../Public/Css/Manage/admin_style.css);
+</style>
+<style type="text/css">
+body{
+	font-size:14px;
+	color:#333;
+	font-family:'微软雅黑',Verdana, Geneva, sans-serif;
+	margin-top:100px;
+}
+p{ line-height:25px;}
+a{ color:#333;}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+ 
+<div class="tip_wind" style="left:50%;margin-left:-200px;top:25%;">
+    <dl>
+    	<dt>&nbsp;</dt>
+        <dd>
+        	<h4><{$message}></h4>
+            <p>系统将在 <font color="#FF0000">[<{$waitSecond}>]</font> 秒后跳转!<script>setTimeout("window.location.href ='<{$jumpUrl}>';", <{$waitSecond}>000);</script></p>
+<p><a href="<{$jumpUrl}>">如果您的浏览器没有自动跳转，请点击此链接</a></p>
+ 
+        </dd>
+    </dl>
+    <div class="c"></div>
+</div>
+	</div>
+</body>
+</html>

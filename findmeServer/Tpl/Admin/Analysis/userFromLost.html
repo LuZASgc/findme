@@ -1,0 +1,56 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">用户流失分析</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item <{if $action eq userLose}>selected<{/if}>"><a href="<{U('Analysis/userLose')}>" onclick="LayerShow();">流失用户分析</a></li>
+                <li class="tab-item last-item <{if $action eq clientFromLost}>selected<{/if}>"><a href="<{U('Analysis/clientFromLost')}>" onclick="LayerShow();">流失用户来源统计</a></li>
+            </ul>
+        </div>
+        <!--表格内容-->
+        <div class="mainGrid" style="padding-top:20px;">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">来源</th>
+                    <th class="pct10">总用户</th>
+                    <th class="pct10">总流失用户</th>
+                    <!--<th class="pct10">取消关注数</th>-->
+                    <!--<th class="pct10">删除APP数</th>-->
+                    <!--<th class="pct10 last-col">沉默用户</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <{if $data}>
+                    <{foreach from=$data item=item}>
+                        <tr>
+                            <td><{$item.clientName}></td>
+                            <td><{$item.totalNumber}></td>
+                            <td><{$item.lostNumber}></td>
+                            <!--<td>1</td>-->
+                            <!--<td>1</td>-->
+                            <!--<td>1</td>-->
+                        </tr>
+                    <{/foreach}>
+                <{else}>
+                    <tr><td colspan="3">暂无</td></tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+        <!--描述：分页-->
+        <!--<div class="pagination">-->
+            <!--<a href="javascript:void(0)" class="prev">◀</a>-->
+            <!--<span><i class="cur">1</i>/<i class="total">5</i></span>-->
+            <!--<a href="javascript:void(0)" class="next">▶</a>-->
+            <!--<input type="text" class="page"/>-->
+            <!--<button type="button">跳转</button>-->
+        <!--</div>-->
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>

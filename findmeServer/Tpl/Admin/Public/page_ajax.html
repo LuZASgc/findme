@@ -1,0 +1,11 @@
+<select class="ui-select" id="limitItem" style="width:95px; border-radius:5px; float:left;" onchange="showLimit(this.value)">
+    <option value="10" <{if $limit == 10}>selected<{/if}>>显示10条</option>
+    <option value="15" <{if $limit == 15}>selected<{/if}>>显示15条</option>
+    <option value="20" <{if $limit == 20}>selected<{/if}>>显示20条</option>
+</select>
+<span>共 <{$totalDataCount|default:0}> 条数据</span>
+<a href="javascript:void(0)" onclick="changePage(<{$prevPage}>)" class="prev">◀</a>
+<span><i class="cur" id="nowPage"><{$nowPage}></i>/<i class="total" id="totalPage"><{$totalPage}></i></span>
+<a href="javascript:void(0)" onclick="changePage(<{$nextPage}>)" class="next">▶</a>
+<input type="text" class="page" id="jumpPage" onkeyup="if (event.keyCode == 13 && $('#jumpPage').val() <= <{$totalPage}>) {jumpPage();}"/>
+<button type="button" onclick="jumpPage()">跳转</button>

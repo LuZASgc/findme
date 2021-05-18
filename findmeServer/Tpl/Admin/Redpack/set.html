@@ -1,0 +1,106 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+
+
+
+		<div id="warpper">
+            <div class="content">
+                <div class="location">微信红包</div>
+                <{include file="./nav.html" }>
+                <div class="filedSet" style="padding-bottom: 0;">
+                    <div class="search">
+                        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+                            <input name="m" type="hidden" value="<{$module}>">
+                            <input name="c" type="hidden" value="<{$controller}>">
+                            <input name="a" type="hidden" value="<{$action}>">
+
+                            <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                            <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                            <input name="ofield" id="ofield" type="hidden" value="<{$ofield}>">
+                            <input name="otype"  id="otype"  type="hidden" value="<{$otype}>">
+
+                            <div class="ui-form-item inline-block">
+                                <label class="ui-label">活动状态</label>
+                                <select name="itemStatus" class="ui-select" style="width: 100px;">
+                                    <{html_options options=$itemStatus selected=$audit}>
+                                </select>
+                            </div>
+
+
+                            <div class="ui-form-item inline-block">
+                                <button type="button" class="ui-button" onclick="query();">搜索</button>
+                            </div>
+                            <div class="ui-form-item inline-block">
+                                <button type="button" class="ui-button" onclick="location.href='<{u(add)}>'">添加</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+                             
+                
+                <!--表格内容-->
+                <div class="mainGrid">
+                    <table class="ui-table ui-body">
+                        <thead>
+                        <tr>
+                            <th class="pct15">活动名</th>
+                            <th class="pct10">开始时间</th>
+                            <th class="pct12">波数</th>
+                            <th class="pct9">总金额</th>
+                            <th class="pct9">已发放金额</th>
+                            <th class="pct9">领取人次</th>
+                            <th class="pct9">创建时间</th>
+                            <th class="pct9">状态</th>
+                            <th class="pct12 last-col">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="listHTML">
+                            <{include file="./set_list.html" }>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagerHTML">
+                    <!--描述：分页-->
+                    <{include file="Public/page_ajax.html" }>
+                </div>
+            </div>
+		</div>
+        <{include file="Public/foot_ajax.html" }>
+
+
+        <script>
+            function audit(id,obj){
+                if(!confirm('是否执行审核操作')){
+                    return false;
+                }
+                var $obj=$(obj);
+                var $auditObj=$obj.prev();
+                var itemType=0;
+                if($auditObj.val()!="<{$auditStatus}>"){//当前处于待审核状态
+                    itemType=$obj.parents("tr").find("select.itemType").val()
+                    if(0==itemType){
+                        layer.msg("请设置物品的所属分类");
+                        return;
+                    }
+                }
+
+                LayerShow();
+                $.get("<{u('audit')}>",{id:id,type:itemType},function(result){
+                    layer.msg(result.msg);
+                    if(result.status==0){
+                        $auditObj.val(result.audit);
+                        if(result.audit=="<{$auditStatus}>"){
+                            $obj.text("↓↓↓↓");
+                        }else{
+                            $obj.text("↑↑↑↑");
+                        }
+                    }
+
+                },'json')
+            }
+        </script>
+
+	</body>
+</html>
+

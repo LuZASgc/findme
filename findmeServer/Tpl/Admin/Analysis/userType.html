@@ -1,0 +1,101 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+  <div class="content">
+    <div class="location">用户统计</div>
+    <{include file="Analysis/userStatisticNav.html"}>
+    <div class="filedSet" style="padding-bottom: 0;">
+      <div class="search">
+        <form action="" id="searchForm" method="get"  class="ui-form reportForm">
+          <input name="m" type="hidden" value="<{$module}>">
+          <input name="c" type="hidden" value="<{$controller}>">
+          <input name="a" type="hidden" value="<{$action}>">
+
+          <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+          <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">时间段</label>
+            <input type="text" name="startDate" id="startDate" class="ui-text startDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">—&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="endDate" id="endDate" class="ui-text endDate" value="<{$endDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+          </div>
+          <div class="ui-form-item inline-block" style="float:right; padding-right:10px;">
+            <a href="javascript:void(0)" class="ParameterDefinition ui-label">参数定义</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">日期</th>
+          <th class="pct10">总用户</th>
+          <th class="pct10">app用户</th>
+          <th class="pct10">微信用户</th>
+          <th class="pct10">仅关注用户</th>
+          <th class="pct10">绑定用户</th>
+          <th class="pct10">付费用户</th>
+          <th class="pct10 last-col">流失用户</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $obj}>
+          <{foreach from=$obj item=item}>
+            <tr>
+              <td><{$item.addTime|date_format:"%Y-%m-%d"}></td>
+              <td><{$item.totalCount}></td>
+              <td><{$item.AppUserCount}></td>
+              <td><{$item.weiXinUserCount}></td>
+              <td><{$item.weiXinUserOnlyFirstCount}></td>
+              <td><{$item.bindPhoneUserCount}></td>
+              <td><{$item.payUserCount}></td>
+              <td><{$item.lostUserCount}></td>
+            </tr>
+          <{/foreach}>
+        <{else}>
+          <tr><td colspan="8">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+    <!--描述：分页-->
+    <div class="pagination">
+      <{include file="Public/page.html" }>
+    </div>
+  </div>
+</div>
+<div id="ParameterDefinition" class="PDefinitionBox" style="display:none;">
+  <dl>总用户：所有用户总和。</dl>
+  <dl>App用户：来源是app的所有用户总和。</dl>
+  <dl>微信用户：来源是微信的所有用户总和。</dl>
+  <dl>仅关注用户：未进行过任何资料填写，只关注了微信的用户。</dl>
+  <dl>绑定用户：有进行过手机号绑定的用户。</dl>
+  <dl>付费用户：有进行过起码一次消费的用户。</dl>
+  <dl>流失用户：超过7天未登录的所有用户总和。</dl>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+  $(document).on('click','.ParameterDefinition',function(){
+    var ParameterDefinition = dialog({
+      title: '参数定义',
+      width: 410,
+      content: $("#ParameterDefinition"),
+      onshow: function(){
+        $("#ParameterDefinition form")[0].reset();
+      },
+    });
+    ParameterDefinition.showModal();
+  });
+  datePickter('startDate','endDate',1);
+</script>
+</body>
+</html>

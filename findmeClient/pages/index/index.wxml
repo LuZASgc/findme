@@ -1,0 +1,30 @@
+<!--index.wxml-->
+
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+
+
+
+  <view class="page-section-spacing">
+        <view class="flex-wrp" style="flex-direction:row;" >          
+          <view class="flex-item">
+          超级星探
+          </view>
+          <view class="flex-item" bindtap="createNew">
+          我要发起
+          </view>
+        </view>
+  </view>
+          
+
+
+
+ <button bindtap="login" style='width:300rpx;margin-top:40rpx'>我的</button><!--发起的，参与的-->
+
+</view>

@@ -1,0 +1,77 @@
+
+<script src="<{$preStaticUrl}>Admin/js/common.js"></script>
+<script src="<{$preStaticUrl}>Admin/js/My97DatePicker/WdatePicker.js"></script>
+<script src="<{$preStaticUrl}>js/jquery.ajaxfileupload.js"></script>
+<script src="<{$preStaticUrl}>Admin/js/dialog-min.js"></script>
+<script>
+
+    function changePage(page){
+        if(page==0 || page==$('#nowPage').text()+0 || page>$('#totalPage').text()+0){
+            return false;
+        }
+        $('#page').val(page);
+        query();
+    }
+
+    function jumpPage(){
+        var page=parseInt($('#jumpPage').val());
+        changePage(page);
+    }
+    function query(){
+        LayerShow();
+        $data=($('#searchForm').serialize());
+        $.post($('#searchForm').attr('action'),$data,function(rest){
+            $('#listHTML').html(rest.listHTML);
+            $('#pagerHTML').html(rest.pagerHTML);
+            parent.closeLoading();
+        },'JSON');
+
+    }
+
+    function changeOrder(index){
+        var otype = $('#otype').val();
+        if(index==$('#ofield').val()) {
+            switch (otype.toUpperCase()) {
+                case 'ASC':
+                    otype = 'DESC';
+                    break;
+                case 'DESC':
+                    otype = '';
+                    index = 0;
+                    break;
+                case '':
+                    otype = 'ASC';
+                    break;
+            }
+
+        }else{
+            otype = 'ASC';
+        }
+
+        $('#ofield').val(index);
+        $('#otype').val(otype);
+        $('#searchForm').submit();
+    }
+    
+    function showLimit(item) {
+        $("#limit").val(item);
+        query();
+    }
+    //loading 打开和关闭
+    function LayerShow(){
+        parent.openLoading();
+    }
+    function LayerHide(){
+        if(typeof(parent.closeLoading)=='undefined') return false;
+        parent.closeLoading();
+    }
+    $(function () {
+        if(typeof(parent.closeLoading)=='undefined') return false;
+        parent.closeLoading();
+    });
+
+    $(document).ajaxComplete(function(){
+        LayerHide();
+    });
+
+</script>

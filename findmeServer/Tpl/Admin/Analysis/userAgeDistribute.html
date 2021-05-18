@@ -1,0 +1,50 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">用户统计</div>
+        <{include file="Analysis/userStatisticNav.html"}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">年龄</th>
+                    <th class="pct10">人数</th>
+                    <th class="pct10">占比</th>
+                    <th class="pct10">男性</th>
+                    <th class="pct10 last-col">女性</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $data}>
+                    <{foreach from=$data item=item}>
+                        <tr>
+                            <td><{$item.age}></td>
+                            <td><{$item.groupNum}></td>
+                            <td><{$item.groupRatio}></td>
+                            <td><{$item.maleRatio}></td>
+                            <td><{$item.femaleRatio}></td>
+                        </tr>
+                    <{/foreach}>
+                <{else}>
+                    <tr><td colspan="5">暂无数据</td></tr>
+                <{/if}>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>总计</td>
+                        <td><{$total['totalNumber']}></td>
+                        <td><{$total['totalRatio']}></td>
+                        <td><{$total['totalMaleRatio']}></td>
+                        <td><{$total['totalFemaleRatio']}></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>

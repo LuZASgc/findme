@@ -1,0 +1,114 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+		<div id="warpper">
+            <div class="content">
+                <div class="location">资讯文章</div>
+                <{include file="./nav.html" }>
+                <!--表格内容-->
+                <form id="form" method="post">
+                <div class="mainGrid">
+                    <table class="ui-table ui-body">
+                        <thead>
+                        <tr>
+                            <th class="pct10">排序</th>
+                            <th class="pct15">关联功能</th>
+                            <th class="pct20">关联内容</th>
+                            <th class="pct10 last-col">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <{if $data}>
+                            <{foreach from=$data item=item}>
+                            <tr>
+                                <td><input name="order[<{$item.order}>]" type="text" class="ui-text" value="<{$item.order}>" /></td>
+                                <td>
+                                    <select name="type[<{$item.order}>]" id="type<{$item.order}>" class="ui-select" style="width:100%;" onchange="ajaxGetRelated(this,function(){},document.getElementById('status<{$item.order}>'))">
+                                        <{html_options options=$objType selected=$item.type }>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="status[<{$item.order}>]" id="status<{$item.order}>" class="ui-select" style="width:100%;">
+                                        <option value="0">请选择关联内容</option>
+                                    </select>
+                                    <script>
+                                        $(document).ready(function(){
+                                            ajaxGetRelated(document.getElementById('type<{$item.order}>'),function(){
+                                                $('#status<{$item.order}>').val(<{$item.id}>);
+                                            },document.getElementById('status<{$item.order}>'));
+                                        });
+                                    </script>
+                                </td>
+                                <td class="ta_l">
+                                    <div class="handler">
+                                        <a data-id="<{$item.order}>" class="t-del" href="javascript:void(0);">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <{/foreach}>
+                        <{/if}>
+                            <{section name=loop loop=11 start=11-$leg}>
+                            <tr class="clt<{$smarty.section.loop.index}>">
+                                <td><input name="order[<{$smarty.section.loop.index}>]" type="text" class="ui-text" /></td>
+                                <td>
+                                    <select name="type[<{$smarty.section.loop.index}>]" id="type<{$smarty.section.loop.index}>" class="ui-select select-one" style="width:100%;" onchange="ajaxGetRelated(this,function(){},document.getElementById('status<{$smarty.section.loop.index}>'))">
+                                        <{html_options options=$objType selected=$item.type}>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="status[<{$smarty.section.loop.index}>]" id="status<{$smarty.section.loop.index}>" class="ui-select select-two" style="width:100%;">
+                                        <option value="0">请选择关联内容</option>
+                                    </select>
+                                    <script>
+                                        $(document).ready(function(){
+                                            ajaxGetRelated(document.getElementById('type<{$smarty.section.loop.index}>'),function(){
+                                                $('#status<{$smarty.section.loop.index}>').val();
+                                            },document.getElementById('status<{$smarty.section.loop.index}>'));
+                                        });
+                                    </script>
+                                </td>
+                                <td class="ta_l">
+                                    <div class="handler">
+                                        <a data-id="<{$smarty.section.loop.index}>" class="t-del" href="javascript:void(0);">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <{/section}>
+
+                        </tbody>
+                    </table>
+                    <div class="integral_btn-group" style="padding:20px 0;">
+                        <input type="button" value="保存" id="addNew" class="ui-button"/>
+                    </div>
+
+                </div>
+
+            </div>
+		        </form>
+        </div>
+        <{include file="Public/foot.html" }>
+	</body>
+</html>
+<script>
+    $(function () {
+       $(".t-del").on('click', function () {
+            var id = $(this).attr('data-id');
+            $(".clt"+id).find('.ui-text').val('');
+            $(".clt"+id).find('.select-one option:first').prop("selected", 'selected');
+            $(".clt"+id).find('.select-two option:first').prop("selected", 'selected');
+       });
+
+        $("#addNew").on('click',function () {
+            var $grandp=$(this).closest('form');
+            var data= $grandp.serialize();
+
+            $.post("<{u(everyHotSave)}>", data,function(result){
+                if(result.status==0){
+                    alert("已保存");
+                }else{
+                    alert("修改失败");
+                }
+            },'json');
+        });
+    });
+</script>

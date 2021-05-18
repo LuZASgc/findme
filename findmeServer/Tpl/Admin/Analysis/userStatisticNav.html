@@ -1,0 +1,11 @@
+<div class="ui-tab">
+    <ul>
+        <li class="tab-item <{if $action eq areaDistribute}>selected<{/if}>"><a href="<{U('Analysis/areaDistribute')}>" onclick="LayerShow();">地区分布</a></li>
+        <li class="tab-item <{if $action eq ageDistribute}>selected<{/if}>"><a href="<{U('Analysis/ageDistribute')}>" onclick="LayerShow();">年龄分布</a></li>
+        <li class="tab-item <{if $action eq userLike}>selected<{/if}>"><a href="<{U('Analysis/userLike')}>" onclick="LayerShow();">喜好分析</a></li>
+        <li class="tab-item <{if $action eq indexAnalysis}>selected<{/if}>"><a href="<{U('Analysis/indexAnalysis')}>" onclick="LayerShow();">指数统计</a></li>
+        <li class="tab-item <{if $action eq userType}>selected<{/if}>"><a href="<{U('Analysis/userType')}>" onclick="LayerShow();">用户类型</a></li>
+        <li class="tab-item <{if $action eq onlineTimeDistribute}>selected<{/if}>"><a href="<{U('Analysis/onlineTimeDistribute')}>" onclick="LayerShow();">上线时间分布</a></li>
+        <li class="tab-item last-item <{if $action eq remain}>selected<{/if}>"><a href="<{U('Analysis/remain')}>" onclick="LayerShow();">留存统计</a></li>
+    </ul>
+</div>

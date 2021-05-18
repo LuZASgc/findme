@@ -1,0 +1,178 @@
+<!-- 编辑器样式文件 -->
+<link href="__PUBLIC__/Js/kissy/editor/theme/base-min.css" rel="stylesheet"/>
+<!--[if lt IE 8]><!-->
+<link href="__PUBLIC__/Js/kissy/editor/theme/cool/editor-pkg-sprite-min.css" rel="stylesheet"/>
+<!--<![endif]-->
+<!--[if gte IE 8]><!-->
+<link href="__PUBLIC__/Js/kissy/editor/theme/cool/editor-pkg-min-datauri.css?03011732" rel="stylesheet"/>
+<!--<![endif]-->
+
+<!-- 引入编辑器相关的JS文件 -->
+<script src="__PUBLIC__/Js/kissy/kissy-min.js"></script>
+<script src="__PUBLIC__/Js/kissy/uibase-min.js"></script>
+<script src="__PUBLIC__/Js/kissy/dd-min.js"></script>
+<script src="__PUBLIC__/Js/kissy/component-min.js"></script>
+<script src="__PUBLIC__/Js/kissy/overlay-min.js"></script>
+<script src="__PUBLIC__/Js/kissy/editor/editor-all-pkg-min.js?t=20101223a"></script>
+<script src="__PUBLIC__/Js/kissy/editor/biz/ext/editor-plugin-pkg-min.js?t=20101223a"></script>
+<script>
+var _KISSY_ = {};
+function loadEditor(textareaId) {
+    KISSY.Editor.Config.base = "__PUBLIC__/Js/kissy/editor/plugins/";
+
+    KISSY.use('editor', function() {
+        var KE = KISSY.Editor;
+        var EDITER_UPLOAD = "<?php echo U('Common/kissyUpload'); ?>";
+        //编辑器内弹窗 z-index 底限，防止互相覆盖
+        KE.Config.baseZIndex = 10000;
+        var cfg = {
+            attachForm:true,
+            baseZIndex:10000,
+            focus:true,
+            pluginConfig: {
+                "image":{
+                    upload:{
+                        serverUrl:EDITER_UPLOAD,
+                        surfix:"png,jpg,jpeg,gif,bmp",sizeLimit:'2000'
+                    }
+                },
+                "flash":{
+                    defaultWidth:"300",
+                    defaultHeight:"300"
+                },
+                "resize":{
+                    direction:["y"]
+                },
+                "font-size":{
+                    items:[
+                        {
+                            value:"14px",
+                            attrs:{
+                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
+                            },
+                            name:"" +
+                                    " <span style='font-size:14px'>标准</span>" +
+                                    "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
+                        },
+                        {
+                            value:"16px",
+                            attrs:{
+                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
+                            },
+                            name:"" +
+                                    " <span style='font-size:16px'>大</span>" +
+                                    "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
+                        },
+                        {
+                            value:"18px",
+                            attrs:{
+                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
+                            },
+                            name:"" +
+                                    " <span style='font-size:18px'>特大</span>" +
+                                    "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
+                        },
+                        {
+                            value:"20px",
+                            attrs:{
+                                style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
+                            },
+                            name:"" +
+                                    " <span style='font-size:20px'>极大</span>" +
+                                    "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
+                        }
+                    ],
+                    width:"115px"
+                },
+                "draft":{
+                    interval:5,
+                    limit:10,
+                    helpHtml:  "<div " +
+                            "style='width:200px;'>" +
+                            "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容，" +
+                            "如果发现内容丢失，" +
+                            "请选择恢复编辑历史</div></div>"
+                },
+                "video":{
+                    urlCfg:[
+                        {
+                            reg:/tudou\.com/i,
+                            url:"http://bangpai.daily.taobao.net/json/getTudouVideo.htm?" +
+                                    "url=@url@&callback=@callback@"//"&rand=@rand@"
+                        }
+                    ],
+                    providers:[
+                        {
+                            reg:/youku\.com/i,
+                            width:480,
+                            height:400,
+                            detect:function(url) {
+                                var m = url.match(/id_([^.]+)\.html$/);
+                                if (m) {
+                                    return "http://player.youku.com/player.php/sid/" + m[1] + "/v.swf";
+                                }
+                                m = url.match(/v_playlist\/([^.]+)\.html$/);
+                                if (m) {
+                                    return;
+                                    //return "http://player.youku.com/player.php/sid/" + m[1] + "/v.swf";
+                                }
+                                return url;
+                            }
+                        },
+                        {
+                            reg:/tudou\.com/i,
+                            width:480,
+                            height:400,
+                            detect:function(url) {
+                                return url;
+                            }
+                        },
+                        {
+                            reg:/ku6\.com/i,
+                            width:480,
+                            height:400,
+                            detect:function(url) {
+                                var m = url.match(/show[^\/]*\/([^.]+)\.html$/);
+                                if (m) {
+                                    return "http://player.ku6.com/refer/" + m[1] + "/v.swf";
+                                }
+                                return url;
+                            }
+                        }/*,
+                         {
+                         reg:/taobaocdn\.com/i,
+                         width:480,
+                         height:400,
+                         detect:function(url) {
+                         return url;
+                         }
+                         }*/,
+                        {
+                            reg:/taobaocdn\.com/i,
+                            width:480,
+                            height:400,
+                            detect:function(url) {
+                                return url;
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+
+        _KISSY_[textareaId] = KE("#"+textareaId, cfg);
+        _KISSY_[textareaId].use("sourcearea,checkbox-sourcearea,preview,separator,undo,separator,format,color,font,separator,list,indent,justify,separator,link,image,draft,flash,xiami-music,smiley,separator,table,separator,maximize");
+    });
+}
+
+function getEditorContent(textareaId)
+{
+    return _KISSY_[textareaId].getData();
+}
+
+function getEditorWordCount() {
+	var count = 0;
+
+	return count;
+}
+</script>

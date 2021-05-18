@@ -1,0 +1,114 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+  <div class="content">
+    <div class="location">用户流失分析</div>
+    <div class="ui-tab">
+      <ul>
+        <li class="tab-item <{if $action eq userLose}>selected<{/if}>"><a href="<{U('Analysis/userLose')}>" onclick="LayerShow();">流失用户分析</a></li>
+        <li class="tab-item last-item <{if $action eq clientFromLost}>selected<{/if}>"><a href="<{U('Analysis/clientFromLost')}>" onclick="LayerShow();">流失用户来源统计</a></li>
+      </ul>
+    </div>
+    <div class="filedSet" style="padding-bottom: 0;">
+      <div class="search">
+        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+          <input name="m" type="hidden" value="<{$module}>">
+          <input name="c" type="hidden" value="<{$controller}>">
+          <input name="a" type="hidden" value="<{$action}>">
+
+          <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+          <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">时间段</label>
+            <input type="text" name="startDate" id="startDate" class="ui-text startDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">—&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="endDate" id="endDate" class="ui-text endDate" value="<{$endDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">总用户</th>
+          <th class="pct10">总流失用户</th>
+          <th class="pct10">流失消费用户</th>
+          <th class="pct10">流失绑定用户</th>
+          <th class="pct10 last-col">流失积分兑换用户</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $data}>
+          <tr>
+            <td><{$data[0].allUserNumber}></td>
+            <td><{$data[0].totalSilentNumber}></td>
+            <td><{$data[0].allConsumeNumber}></td>
+            <td><{$data[0].allBindNumber}></td>
+            <td><{$data[0].allPointNumber}></td>
+          </tr>
+        <{else}>
+          <tr><td colspan="5">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+    <br/>
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">日期</th>
+          <!--<th class="pct10">当日总流失</th>-->
+          <!--<th class="pct10">当日取消关注</th>-->
+          <!--<th class="pct10">总取消关注</th>-->
+          <!--<th class="pct10">当日删除APP</th>-->
+          <!--<th class="pct10">总删除APP</th>-->
+          <th class="pct10">流失用户</th>
+          <th class="pct10">消费用户</th>
+          <th class="pct10">绑定用户</th>
+          <th class="pct10 last-col">兑换用户</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $data}>
+          <{foreach from=$data item=item}>
+            <tr>
+              <td><{$item.addTime|date_format:"%Y-%m-%d"}></td>
+              <!--<td></td>-->
+              <!--<td></td>-->
+              <!--<td></td>-->
+              <!--<td></td>-->
+              <!--<td></td>-->
+              <td><{$item.todaySilentNumber}></td>
+              <td><{$item.consumeNumber}></td>
+              <td><{$item.bindPhoneNumber}></td>
+              <td><{$item.pointConsumeNumber}></td>
+            </tr>
+          <{/foreach}>
+        <{else}>
+          <tr><td colspan="5">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+    <!--描述：分页-->
+    <div class="pagination">
+      <{include file="Public/page.html" }>
+    </div>
+  </div>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+  datePickter('startDate','endDate',1);
+</script>
+</body>
+</html>

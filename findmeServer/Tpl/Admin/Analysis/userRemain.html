@@ -1,0 +1,106 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+  <div class="content">
+    <div class="location">留存统计</div>
+    <{include file="Analysis/userStatisticNav.html"}>
+    <div class="filedSet" style="padding-bottom: 0;">
+      <div class="search">
+        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+          <input name="m" type="hidden" value="<{$module}>">
+          <input name="c" type="hidden" value="<{$controller}>">
+          <input name="a" type="hidden" value="<{$action}>">
+
+          <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+          <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">时间段</label>
+            <input type="text" name="startDate" id="startDate" class="ui-text startDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">—&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="endDate" id="endDate" class="ui-text endDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">日期</th>
+          <th class="pct10">新用户数</th>
+          <th class="pct10">次日留存</th>
+          <th class="pct10">3日留存</th>
+          <th class="pct10">7日留存</th>
+          <th class="pct10">15日留存</th>
+          <th class="pct10">30日留存</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $data}>
+          <{foreach from=$data item=item}>
+            <tr>
+              <td><{$item.objTime|date_format:"%Y-%m-%d"}></td>
+              <td><{$item.newUserCount|default:0}></td>
+              <td><{$item.nextDayRemain}><{if $item.nextDayRemain}> (<{$item.nextRemainRatio}>)<{/if}></td>
+              <td><{$item.thirdDayRemain}><{if $item.thirdDayRemain}> (<{$item.thirdRemainRatio}>)<{/if}></td>
+              <td><{$item.seventhDayRemain}><{if $item.seventhDayRemain}> (<{$item.seventhRemainRatio}>)<{/if}></td>
+              <td><{$item.fifteenthDayRemain}><{if $item.fifteenthDayRemain}> (<{$item.fifteenthRemainRatio}>)<{/if}></td>
+              <td><{$item.thirtiethDayRemain}><{if $item.thirtiethDayRemain}> (<{$item.thirtiethRemainRatio}>)<{/if}></td>
+            </tr>
+          <{/foreach}>
+        <{else}>
+          <tr><td colspan="7">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+    <!--描述：分页-->
+    <div class="pagination">
+      <{include file="Public/page.html" }>
+    </div>
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10"></th>
+          <th class="pct10">新用户数</th>
+          <th class="pct10">次日留存</th>
+          <th class="pct10">3日留存</th>
+          <th class="pct10">7日留存</th>
+          <th class="pct10">15日留存</th>
+          <th class="pct10">30日留存</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $total}>
+          <tr>
+            <td>平均留存</td>
+            <td><{$total[0].totalNumber}></td>
+            <td><{$total[0].nextRemainCount}><{if $total[0].nextRemainCount}>(<{$total.nextRemainRatio|default:"0%"}>)<{/if}></td>
+            <td><{$total[0].thirdRemainCount}><{if $total[0].thirdRemainCount}>(<{$total.thirdRemainRatio|default:"0%"}>)<{/if}></td>
+            <td><{$total[0].seventhRemainCount}><{if $total[0].seventhRemainCount}>(<{$total.seventhRemainRatio|default:"0%"}>)<{/if}></td>
+            <td><{$total[0].fifteenthRemainCount}><{if $total[0].fifteenthRemainCount}>(<{$total.fifteenthRemainRatio|default:"0%"}>)<{/if}></td>
+            <td><{$total[0].thirtiethRemainCount}><{if $total[0].thirtiethRemainCount}>(<{$total.thirtiethRemainRatio|default:"0%"}>)<{/if}></td>
+          </tr>
+        <{else}>
+          <tr><td colspan="7">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+  datePickter('startDate','endDate',1);
+</script>
+</body>
+</html>

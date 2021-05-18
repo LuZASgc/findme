@@ -1,0 +1,115 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+  <div class="content">
+    <div class="location">活跃统计</div>
+    <{include file="Analysis/reportFormNav.html"}>
+    <div class="filedSet" style="padding-bottom: 0;">
+      <div class="search">
+        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+          <input name="m" type="hidden" value="<{$module}>">
+          <input name="c" type="hidden" value="<{$controller}>">
+          <input name="a" type="hidden" value="<{$action}>">
+
+          <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+          <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">时间段</label>
+            <input type="text" name="startDate" id="startDate" class="ui-text startDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">—&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" name="endDate" id="endDate" class="ui-text endDate" value="<{$startDate}>" readonly/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+          </div>
+          <div class="ui-form-item inline-block" style="float:right; padding-right:10px;">
+            <a href="javascript:void(0)" class="ParameterDefinition ui-label">参数定义</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">日期</th>
+          <th class="pct10">日总活跃用户</th>
+          <th class="pct10">当日新用户</th>
+          <th class="pct10">老用户</th>
+          <th class="pct10 last-col">流失用户回归</th>
+        </tr>
+        </thead>
+        <tbody>
+        <{if $data}>
+          <{foreach from =$data item=item}>
+            <tr>
+              <td><{$item.timeStr|date_format:"%Y %m %d"}></td>
+              <td><{$item.totalActiveUser}></td>
+              <td><{$item.newUser}></td>
+              <td><{$item.oldUser}></td>
+              <td><{$item.lossComeback}></td>
+            </tr>
+          <{/foreach}>
+        <{else}>
+          <tr><td colspan="5">暂无数据</td></tr>
+        <{/if}>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <!--描述：分页-->
+      <{include file="Public/page.html" }>
+    </div>
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10"></th>
+          <th class="pct10">总活跃用户</th>
+          <th class="pct10">新用户</th>
+          <th class="pct10">老用户</th>
+          <th class="pct10 last-col">流失用户回归</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>汇总</td>
+            <td><{$total[0]['totalActiveUserNum']|default:0}></td>
+            <td><{$total[0]['totalNewUserNum']|default:0}></td>
+            <td><{$total[0]['totalOldUserNum']|default:0}></td>
+            <td><{$total[0]['totalLossComebackNum']|default:0}></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="ParameterDefinition" class="PDefinitionBox" style="display:none;">
+  <dl>活跃定义：周期内有过一次登录的用户。</dl>
+  <dl>总活跃用户：新用户+老用户+流失用户。</dl>
+  <dl>新用户：周期内首次关注、注册的用户。</dl>
+  <dl>流失用户回归：超过七天未登录的用户重新登录。</dl>
+  <dl>老用户：非流失用户、非当关注、注册用户。</dl>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+  $(document).on('click','.ParameterDefinition',function(){
+    var ParameterDefinition = dialog({
+      title: '参数定义',
+      width: 410,
+      content: $("#ParameterDefinition"),
+      onshow: function(){
+        $("#ParameterDefinition form")[0].reset();
+      },
+    });
+    ParameterDefinition.showModal();
+  });
+  datePickter('startDate','endDate',1);
+</script>
+</body>
+</html>

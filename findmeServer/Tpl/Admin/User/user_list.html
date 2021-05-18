@@ -1,0 +1,104 @@
+<{include file="Public/top.html"}>
+<style>
+    .album img{width: 80px;}
+</style>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">用户管理</div>
+
+        <{include file= "User/nav.html"}>
+
+        <div class="filedSet" style="padding-bottom: 0;">
+            <div class="search">
+                <form action="" method="post" class="ui-form reportForm" id="searchForm">
+                    <input name="m" type="hidden" value="<{$module}>">
+                    <input name="c" type="hidden" value="<{$controller}>">
+                    <input name="a" type="hidden" value="<{$action}>">
+
+                    <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                    <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                    <input name="ofield" id="ofield" type="hidden" value="<{$ofield}>">
+                    <input name="otype"  id="otype"  type="hidden" value="<{$otype}>">
+
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">类型</label>
+                        <select name="userType" class="ui-select" style="width: 160px;">
+                               <{html_options options=$userType selected=$selectedUserType}>
+                        </select>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">审核状态</label>
+                        <select name="auditStatus" class="ui-select" style="width: 160px;">
+                            <{html_options options=$auditType selected=$selectedAuditType}>
+                        </select>
+                    </div>
+
+                    <div class="ui-form-item inline-block">
+                        <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <button type="button" id="adduserBtn" class="ui-button" onclick="LayerShow();">添加明星</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">名称</th>
+                    <th class="pct10">头像</th>
+                    <th class="pct5">性别</th>
+                    <th class="pct5">人种</th>
+                    <th class="pct20">图集</th>
+                    <th class="pct5">状态</th>
+                    <th class="pct10 last-col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{foreach from=$list item=item}>
+                <tr>
+                    <td><{$item.nickname}></td>
+                    <td><img src="<{$item.headPic}>" /></td>
+                    <td><{$sex[$item.sex]}></td>
+                    <td><{$race[$item.race]}></td>
+                    <td class="album"><{foreach from=split(',',$item.album) item=photo}>
+                        <{if strlen($photo)>1}>
+                            <img src="<{$photo}>" />
+                        <{/if}>
+                    <{/foreach}>
+                    </td>
+                    <td><{$auditType[$item.status]}></td>
+                    <td class="ta_l">
+                        <div class="handler">
+                            <a href="<{u('userEdit/?uid='|cat:$item['uid'])}>" onclick="LayerShow();">修改</a>
+                            <span class="sep">|</span>
+                            <{if $item.status != $smarty.const.ENABLE_ENABLE}>
+                            <a href="<{u('userUpdate/?uid='|cat:$item['uid'])}>" onclick="if(!confirm('确定不启用该商户么？'))return false;">通过</a>
+                            <{else}>
+                            <a href="<{u('userUpdate/?uid='|cat:$item['uid'])}>" onclick="if(!confirm('确定启用该商户么？'))return false;">不通过</a>
+                            <{/if}>
+                        </div>
+                    </td>
+                </tr>
+                <{/foreach}>
+                </tbody>
+            </table>
+        </div>
+        <!--描述：分页-->
+        <div class="pagination">
+            <{include file="Public/page.html"}>
+        </div>
+
+    </div>
+</div>
+<script>
+    $('#adduserBtn').click(function(){
+        location.href="<{u('userAdd')}>";
+    });
+</script>
+</body>
+<{include file="Public/foot.html" }>

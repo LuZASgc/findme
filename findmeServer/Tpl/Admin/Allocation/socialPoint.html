@@ -1,0 +1,101 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">系统配置</div>
+        <{include file="./nav.html" }>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <form action="" id="searchForm" method="get" class="ui-form reportForm">
+                <input name="m" type="hidden" value="<{$module}>">
+                <input name="c" type="hidden" value="<{$controller}>">
+                <input name="a" type="hidden" value="<{$action}>">
+
+                <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+            </form>
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct15">项目</th>
+                    <th class="pct10">数值</th>
+                    <th class="pct12">状态</th>
+                    <th class="pct12 last-col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{foreach from=$list item=item}>
+                    <tr>
+                        <td><{$item['itemName']}></td>
+                        <td><{$item['point']}></td>
+                        <td><{if $item['status'] == 1}>已启用<{else}>已禁用<{/if}></td>
+                        <td class="ta_l">
+                            <a href="javascript:edit('<{$item.itemName}>','<{$item.action}>','<{$item.point}>');" class="Projects">编辑</a>
+                        </td>
+                    </tr>
+                <{/foreach}>
+                </tbody>
+            </table>
+        </div>
+        <div id="Projects" style="display:none;">
+            <form action="" class="ui-form projectsBox">
+                <input type="hidden" name="action" id="action" />
+                <div class="ui-form-item">
+                    <label class="ui-label">状态：</label>
+                    <span style="width:70px;"><input type="radio" name="status" value="1" checked>&nbsp开启</span>
+                    <input type="radio" name="status" value="0">&nbsp关闭
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">数值：</label>
+                    <input type="text" class="ui-text ui-text-2" id="integral" name="integral" required/>
+                </div>
+            </form>
+        </div>
+        <div class="pagination">
+            <!--描述：分页-->
+            <{include file="Public/page.html" }>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>
+<script>
+    function edit(itemName,action,point){
+        var Projects = dialog({
+            title: itemName,
+            width: 270,
+            content: $("#Projects"),
+            onshow: function(){
+                $("#integral").val(point);
+                $("#action").val(action);
+            },
+            button: [
+                {
+                    value: '提交',
+                    callback: function () {
+                        $.ajax({
+                            type:"get",
+                            url:"<{U('configurePoint')}>",
+                            dataType: 'json',
+                            data: $("#Projects form").serialize(),
+                            success: function(data){
+                                layer.msg(data.msg);
+                                if(data.status==0){
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    },
+                    autofocus: true
+                },
+                {
+                    value: '取消'
+                }
+            ]
+        });
+        Projects.showModal();
+    }
+
+</script>

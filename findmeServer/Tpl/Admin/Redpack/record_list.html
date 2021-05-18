@@ -1,0 +1,11 @@
+<{foreach from=$list item=item}>
+<tr>
+    <td><{if $item['sendTime']}><{$item['sendTime']|date_format:"%Y-%m-%d %H:%M"}><{/if}></td>
+    <td> <a href="<{$item.uid}>"><{$item.nickname}></a> </td>
+    <td><{if $item.sendTime gt 0}>已发出<{else}>未发出<{/if}></td>
+    <td> </td>
+    <td><{$item.money/100}></td>
+
+    <td><a href="javascript:void()">补发</a> </td>
+</tr>
+<{/foreach}>

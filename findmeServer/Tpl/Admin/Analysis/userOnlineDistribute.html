@@ -1,0 +1,57 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">用户统计</div>
+        <{include file="Analysis/userStatisticNav.html"}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">时间段</th>
+                    <th class="pct10">周一</th>
+                    <th class="pct10">周二</th>
+                    <th class="pct10">周三</th>
+                    <th class="pct10">周四</th>
+                    <th class="pct10">周五</th>
+                    <th class="pct10">周六</th>
+                    <th class="pct10 last-col">周日</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $data}>
+                    <{foreach from=$data item=item}>
+                        <tr>
+                            <td><{$item.timeGroup}></td>
+                            <td><{if $item.week == 1}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 2}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 3}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 4}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 5}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 6}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                            <td><{if $item.week == 0}><{$item.groupNumber}><{else}>统计尚未完成<{/if}></td>
+                        </tr>
+                    <{/foreach}>
+                <{/if}>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>总计</td>
+                        <td><{$total.MonNumber}></td>
+                        <td><{$total.TueNumber}></td>
+                        <td><{$total.WedNumber}></td>
+                        <td><{$total.ThuNumber}></td>
+                        <td><{$total.FriNumber}></td>
+                        <td><{$total.SatNumber}></td>
+                        <td><{$total.SunNumber}></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>

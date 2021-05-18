@@ -1,0 +1,211 @@
+<{include file="Public/top.html" }>
+<script type="text/javascript">
+	var nodeAjaxUrl="<{u('SysNode/getNodeListByPid')}>";
+
+$(function(){
+	//获得父级分类ID
+	var pid  = '{.pid}';
+	var pid2 = '{.pid2}';
+	var pid3 = '{.pid3}';
+	//分类名称获得焦点
+	$("#name").focus();
+	
+	//初始化一级分类列表的Ajax方法
+	function initLevelOneCategory(){
+		$.get(nodeAjaxUrl,{pid:"0"},function(data){
+			var obj = data;//$.parseJSON(data);
+				var optionStr = "";
+				for(var i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid").html(optionStr);
+				//遍历pid的option来进行自动选择
+				$('#pid option').each(function(){
+					if($(this).val()==pid){
+						$(this).attr("selected","selected");
+						//触发一级分类列表change事件，用来显示二级列表
+						$("#pid").change();
+					}
+				});
+				
+
+			
+		})	
+	}
+
+	function getSelectedText(obj){
+		return $('#'+obj).find("option:selected").text()
+	}
+
+	
+	//动态绑定一级分类change事件，异步获取子分类赋值给pid2
+	$("#pid").bind("change",function(){
+		if($(this).val()!=0){
+			$.get(nodeAjaxUrl,{pid:""+$(this).val()+""},function(data){
+			var obj = data;//$.parseJSON(data);
+
+				var optionStr = "";
+				for(i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid2").html(optionStr);
+				
+				//遍历pid2的option来进行自动选择
+				$('#pid2 option').each(function(){
+      				if($(this).val()==pid2){
+						$(this).attr("selected","selected");
+						//触发二级分类列表change事件，用来显示三级列表
+						$("#pid2").change();
+					}
+  				});
+			})	
+		}else{
+			$("#pid2").html('');
+			$("#pid3").html('');
+		}
+		
+	})
+	//动态绑定二级分类change事件，异步获取子分类赋值给pid3
+	$("#pid2").bind("change",function(){
+		$.get(nodeAjaxUrl,{pid:""+$(this).val()+""},function(data){
+			
+			var obj = data;//$.parseJSON(data);
+
+				var optionStr = "";
+				for(var i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid3").html(optionStr);
+
+			
+		})
+	})	
+
+	$('#isMenu').bind('click',function(){
+		$('#class,#show').show();
+		$("input[name='group']").attr('checked',false);
+		$("input[name='classname']").val('');
+	});
+	$('#noMenu').bind('click',function(){
+		$('#class,#show').hide();
+		$("input[name='group']").attr('checked',false);
+		$("input[name='classname']").val('');
+	});
+
+	//一些页面加载就执行的操作
+	initLevelOneCategory();
+
+
+	$('form').submit(function () {
+		if($('#pid').val()==null){
+			layer.msg("请指定顶级菜单");
+			return false;
+		}
+		var level=1;
+		var tip='';
+		if($('#pid2').val()==null){
+			level=2;
+			tip='['+getSelectedText('pid')+']';
+		}else{
+			level=3;
+			tip='['+getSelectedText('pid')+']'+' - '+'['+getSelectedText('pid2')+']';
+		}
+
+		if(!window.confirm("将作为"+level+"级权限\n"+"位于"+tip+' 之下')){
+			return false;
+		}
+		$.post("<{u('SysNode/insert')}>",$('form').serialize(),function(result){
+			if(result.status==1){
+				layer.msg("权限添加成功");
+				location.href=result.url;
+			}else{
+				layer.msg(result.info);
+			}
+
+		},'json');
+
+
+
+
+
+		return false;
+	})
+})
+
+
+</script>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">模块管理</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item"><a href="<{U('SysNode/index')}>" onclick="LayerShow();">模块列表</a></li>
+                <li class="tab-item last-item selected"><a href="<{U('SysNode/add')}>" onclick="LayerShow();">新增模块</a></li>
+            </ul>
+        </div>
+        <div class="topic">管理员信息</div>
+        <div class="form-box border0 border-box">
+            <form action="<{u('SysNode/insert')}>" method="post" class="ui-form" id="addManagerForm">
+                <div class="ui-form-item">
+                    <label class="ui-label">标题(中文)：</label>
+                    <input type="text" class="ui-text"  name="title" required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">名称(用于程序判断)：</label>
+                    <input type="text" class="ui-text"  name="name"  required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">父级：</label>
+                    <div class="father-box" id="fenlei">
+                        <select id="pid" name="pid" size="15" style="float:left;">
+                        </select>
+                        <select id="pid2" name="pid2" size="15" style="float:left;">
+                        </select>
+                        <select id="pid3" name="pid3" size="15" style="float:left;" disabled="disabled">
+                        </select>
+                    </div>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">排序：降序显示</label>
+                    <input type="text" class="ui-text" id="integral" name="sort"  required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">状态：</label>
+                    <span class="ui-field">
+                        <input type="radio" id="open" name="status" value="1" required><label for="open">&nbsp;&nbsp;启用</label>
+                        <input type="radio" id="close" name="status" value="0" required><label for="close">&nbsp;&nbsp;不启用</label>
+                    </span>
+                </div>
+
+				<div class="ui-form-item" >
+					<label class="ui-label">是否菜单项</label>
+                    <span class="ui-field">
+                        <input type="radio" id="isMenu"  value="1"  name="is_menu"  required><label for="open">&nbsp;&nbsp;设置</label>
+                        <input type="radio" id="noMenu" value="0"  name="is_menu"   required><label for="close">&nbsp;&nbsp;不设置</label>
+                    </span>
+				</div>
+
+				<div class="ui-form-item" id="show" style="display: none">
+					<label class="ui-label">所属菜单区域</label>
+					<input type="radio" value="1" name="group">社区运营
+					<input type="radio" value="2" name="group">数据统计
+					<input type="radio" value="3" name="group">系统配置
+				</div>
+
+				<div class="ui-form-item" id="class" style="display: none">
+					<label class="ui-label">Class名称</label>
+					<input type="text"  class="ui-text" name="classname" />
+				</div>
+
+                <div class="integral_btn-group">
+            		<input type="submit" value="提交" class="ui-button"/>
+        		</div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<{include file="Public/foot.html" }>

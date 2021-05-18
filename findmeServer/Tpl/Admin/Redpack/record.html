@@ -1,0 +1,79 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+		<div id="warpper">
+            <div class="content">
+                <div class="location">物品交换</div>
+                <{include file="./nav.html" }>
+                <div class="filedSet" style="padding-bottom: 0;">
+                    <div class="search">
+                        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+                            <input name="m" type="hidden" value="<{$module}>">
+                            <input name="c" type="hidden" value="<{$controller}>">
+                            <input name="a" type="hidden" value="<{$action}>">
+
+                            <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                            <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                            <input name="ofield" id="ofield" type="hidden" value="<{$ofield}>">
+                            <input name="otype"  id="otype"  type="hidden" value="<{$otype}>">
+
+                            <div class="ui-form-item inline-block">
+                                <label class="ui-label">时间</label>
+                                <input  name="startDate" id="startDate" readonly class="ui-select" type="text" />
+                                <label class="ui-label">至</label>
+                                <input  name="endDate" id="endDate" readonly class="ui-select" type="text" />
+                            </div>
+                            <div class="ui-form-item inline-block">
+                                <label class="ui-label">活动</label>
+                                <select name="setId" class="ui-select" style="width: 100px;">
+                                    <option value="0">全部</option>
+                                    <{html_options options=$setKV selected=$setId}>
+                                </select>
+                            </div>
+                            <div class="ui-form-item inline-block">
+                                <label class="ui-label">用户昵称</label>
+                                <input  name="nickname" class="ui-text bg-text keyword" type="text" />
+                            </div>
+
+                            <div class="ui-form-item inline-block">
+                                <button type="button" class="ui-button" onclick="query();">搜索</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+                             
+                
+                <!--表格内容-->
+                <div class="mainGrid">
+                    <table class="ui-table ui-body">
+                        <thead>
+                        <tr>
+                            <th class="pct15">发出时间</th>
+                            <th class="pct10">用户昵称</th>
+                            <th class="pct12">红包发送状态</th>
+                            <th class="pct9">红包领取状态</th>
+                            <th class="pct9">红包金额</th>
+                            <th class="pct9">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="listHTML">
+                            <{include file="./record_list.html" }>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagerHTML">
+                    <!--描述：分页-->
+                    <{include file="Public/page_ajax.html" }>
+                </div>
+            </div>
+		</div>
+        <{include file="Public/foot_ajax.html" }>
+
+
+        <script>
+            datePickter('startDate','endDate',true);
+        </script>
+
+	</body>
+</html>
+

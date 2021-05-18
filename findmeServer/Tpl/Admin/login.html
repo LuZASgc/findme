@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>登陆</title>
+<link rel="stylesheet" type="text/css" href="<{$preStaticUrl}>/Admin/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="<{$preStaticUrl}>/Admin/css/index.css"/>
+<link rel="stylesheet" type="text/css" href="<{$preStaticUrl}>/Admin/js/lib/layer/skin/layer.css"/>
+	<script src="<{$preStaticUrl}>/js/jquery-2.1.4.min.js?v=<{$resVersion}>"></script>
+	<script src="<{$preStaticUrl}>/layer/layer.js?v=<{$resVersion}>"></script>
+<script>
+$(document).ready(
+		function(){
+				$("#popup-submit").click(function () {
+					$.ajax({
+						url: "<{u('check_login')}>", // 加随机数防止缓存
+						type: "post",
+						dataType: "json",
+						data: {
+							// 二次验证所需的三个值
+							userName:$('#userName').val(),
+							passWord:$('#passWord').val()
+
+						},
+						success: function (result) {
+							if (result.status == 1) {
+								layer.msg("登陆成功，正在转入管理后台");
+								location.href="<{U('index/index')}>";
+							} else {
+								layer.msg(result.info);
+							}
+						}
+					});
+
+			});
+		}
+)
+
+
+</script>
+</head>
+<body ng-controller="xyController" class="loginPage">
+<form action="<{$postUrl}>" method="post" id="loginForm">
+	<div class="abosuluteCenter pageContent hAlignCenterDiv">
+		
+			<div class="xyLogo" style="margin-top: 30px;"></div>
+			<div class="accountInput"><input type="text" class="userInfoInput" id="userName" ng-model="accountV"/></div>
+			<div class="passwordInput"><input type="password" class="userInfoInput" id="passWord" ng-model="passwordV"/></div>
+			<div style="margin-top: 30px;">
+				<a class="xy-button" id="popup-submit">登陆</a>
+			</div>
+			<div class="poweredTxt">Powered by JiaochenClub  2015-2018  轿辰会</div>
+			<div class="alertTxt"><a ng-click="downloadChrome()">点击下载Chrome浏览器（谷歌），否则某些功能有可能无法使用！</a></div>
+		
+	</div>
+	</form>
+</body>
+</html>
+

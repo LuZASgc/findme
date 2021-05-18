@@ -1,0 +1,81 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">日周月报表</div>
+        <{include file="Analysis/reportFormNav.html"}>
+        <div class="filedSet" style="padding-bottom: 0;">
+            <div class="search">
+                <form action="" id="searchForm" method="get" class="ui-form reportForm">
+                    <input name="m" type="hidden" value="<{$module}>">
+                    <input name="c" type="hidden" value="<{$controller}>">
+                    <input name="a" type="hidden" value="<{$action}>">
+
+                    <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                    <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">月选择</label>
+                        <input type="text" name="startDate" id="startDate" class="ui-text startDate" value="<{$startDate}>" onfocus="WdatePicker({maxDate: new Date(),dateFmt:'yyyy-MM'})" readonly/>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">—&nbsp;&nbsp;&nbsp;</label>
+                        <input type="text" name="endDate" id="endDate" class="ui-text endDate" value="<{$endDate}>" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'startDate\')}',dateFmt:'yyyy-MM'})" readonly/>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">日期</th>
+                    <th class="pct10">新增用户</th>
+                    <th class="pct10">新增绑定</th>
+                    <th class="pct10">新增付费</th>
+                    <th class="pct10">点赞人数</th>
+                    <th class="pct10">评论人数</th>
+                    <th class="pct10">发稿人数</th>
+                    <th class="pct10">活跃人数</th>
+                    <th class="pct10">兑换人数</th>
+                    <th class="pct10">付费金额</th>
+                    <th class="pct10 last-col">总付费人数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $data}>
+                <{foreach from=$data item=item}>
+                <tr>
+                    <td><{$item.addTime|date_format:"%Y-%m"}></td>
+                    <td><{$item.addUserNum}></td>
+                    <td><{$item.addBindNum}></td>
+                    <td><{$item.addOrderNum}></td>
+                    <td><{$item.praiseNum}></td>
+                    <td><{$item.commentNum}></td>
+                    <td><{$item.writeArticleNum}></td>
+                    <td><{$item.activeNum}></td>
+                    <td><{$item.exchangeNum}></td>
+                    <td><{$item.cashNum}></td>
+                    <td><{$item.payNum}></td>
+                </tr>
+                <{/foreach}>
+                <{else}>
+                <tr><td colspan="11">暂无数据</td></tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <!--描述：分页-->
+            <{include file="Public/page.html" }>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>

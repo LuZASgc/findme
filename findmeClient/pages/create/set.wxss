@@ -1,0 +1,12 @@
+/* pages/create/set.wxss */
+.container{}
+.userinfo{position: absolute;left: 0;top:0}
+.userinfo-avatar{position: absolute;border-radius: 50%;width:100rpx;height: 100rpx;left:20rpx;top:20rpx}
+.userinfo-nickname{position: absolute;top:40rpx;left:130rpx;width: 300rpx}
+.album{display: block;width:98%;margin: 10rpx auto;height: 642rpx;background-color:#eee}
+.album .img{float: left;margin-left: 10rpx;margin-bottom:10rpx;width: 230rpx;height:300rpx;background-repeat:no-repeat;
+background-position:center center;background-size:100%;border-radius:20rpx;border:1rpx solid red;}
+.album .img image{width:80rpx;
+height:80rpx;
+display:block;float:right;margin-right:8rpx;margin-top:8rpx
+}

@@ -1,0 +1,79 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">系统配置</div>
+        <{include file="./nav.html" }>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <form id="dataForm">
+                <table class="ui-table ui-body">
+                    <thead>
+                    <tr>
+                        <th class="pct10">标题</th>
+                        <th class="pct20">数值</th>
+                        <th class="pct10">备注</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <{foreach from=$list key=key item=item}>
+                            <{if $key}>
+                                <{if $item.flag == 1}>
+                                    <td colspan="3" style="background: #ccc;height: auto;"><{$item.content}></td>
+                                <{else}>
+                                    <tr>
+                                        <td title="<{$item.title}>"><{$item.title}></td>
+                                        <td title="<{$item.localValue}>">
+                                            <{if $item.type == "PE"}>
+                                                <select name="<{$key}>" style="float: left;">
+                                                    <{foreach from=$item.optionT item=pe}>
+                                                        <option value="<{$pe[0]}>" <{if $item.localValue == $pe[0]}> selected<{/if}>><{$pe[1]}></option>
+                                                    <{/foreach}>
+                                                </select>
+                                            <{else if $item.type == "EE"}>
+                                                <select name="<{$key}>" style="float: left;">
+                                                    <{foreach from=$item.optionT key=k item=ee}>
+                                                        <option value="<{$k}>" <{if $item.localValue == $k}> selected<{/if}>><{$ee}></option>
+                                                    <{/foreach}>
+                                                </select>
+                                            <{else if $item.type == "I"}>
+                                                <input name="<{$key}>" value='<{$item.localValue}>' type='number' style="width:10%;float: left;"/>
+                                            <{else if $item.type == "T"}>
+                                                <input name="<{$key}>" value='<{$item.localValue}>' type='text' style="width:30%;float: left;"/>
+                                            <{else if $item.type == "LT"}>
+                                                <input name="<{$key}>" value='<{$item.localValue}>' type='text' style="width: 50%;float: left;"/>
+                                            <{else if $item.type == "TT"}>
+                                                <textarea name="<{$key}>" type='text' style="width:100%;float: left;"><{$item.localValue}></textarea>
+                                            <{else}>
+                                                <input name="<{$key}>" value='<{$item.localValue}>' type='text'  style="width: 100%"/>
+                                            <{/if}>
+                                        </td>
+                                        <td title="<{$item.mem}>"><{$item.mem}></td>
+                                    </tr>
+                                <{/if}>
+                            <{/if}>
+                        <{/foreach}>
+                    </tbody>
+                </table>
+                <div class="integral_btn-group">
+                    <input type="button" value="保存" id="btn" class="ui-button"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>
+<script>
+    $("#btn").on('click',function () {
+        LayerShow();
+        $data = $("#dataForm").serialize();
+        $.post("<{U('Allocation/saveSysControl')}>",$data,function (res) {
+            parent.closeLoading();
+            layer.msg("修改成功");
+            location.reload();
+        });
+    })
+</script>

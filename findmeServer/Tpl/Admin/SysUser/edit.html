@@ -1,0 +1,107 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">管理员编辑</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item"><a href="<{U('SysUser/index')}>" onclick="LayerShow();">管理员列表</a></li>
+                <li class="tab-item last-item"><a href="<{U('SysUser/add')}>" onclick="LayerShow();">新增管理员</a></li>
+                <li class="tab-item last-item selected"><a href="javascript:void(0);">编辑管理员</a></li>
+            </ul>
+        </div>
+        <div class="topic">管理员信息</div>
+        <div class="form-box border0 border-box">
+            <form action="<{U('SysUser/update')}>" method="post" class="ui-form" id="addManagerForm">
+                <input type="hidden" value="<{$obj['id']}>" name="id" />
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">用户名：</label>
+                    <input type="text" class="ui-text" value="<{$obj['real_name']}>"  name="real_name" placeholder="输入你的姓名" required/>
+                </div>
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">邮箱：</label>
+                    <input type="text" class="ui-text"  value="<{$obj['email']}>" name="email" placeholder="输入你的邮箱" />
+                </div>
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">登录账号：</label>
+                    <input type="text" class="ui-text"  value="<{$obj['username']}>" name="username" placeholder="输入你的登陆账号" required/>
+                </div>
+
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">QQ或者MSN：</label>
+                    <input type="text" class="ui-text" value="<{$obj['qq_msn']}>"  name="qq_msn" placeholder="输入你的QQ或者MSN" />
+                </div>
+
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">登录密码：</label>
+                    <input type="password" placeholder="输入你的密码" value="" class="ui-text"  name="password" />
+                </div>
+                
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">角色权限：</label>
+                    <select name="role_id" class="ui-select">
+                    <{foreach from="$role_list" item="v"}>
+                        <option value="<{$v.id}>" <{if $obj['role_id'] == $v.id}> selected="selected" <{/if}>><{$v['remark']}></option>
+                    <{/foreach}>
+                    </select>
+                </div>
+
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">手机：</label>
+                    <input type="text" class="ui-text" id="integral" name="phone" value="<{$obj['phone']}>" placeholder="输入你的手机号码" required/>
+                </div>
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">状态：</label>
+                    <span class="ui-field">
+                        <input type="radio" id="open" value="1" name="status" checked><label for="open">&nbsp;&nbsp;启用</label>
+                        <input type="radio" id="close" value="0" name="status" ><label for="close">&nbsp;&nbsp;不启用</label>
+                    </span>
+                </div>
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">前台用户：</label>
+                    <input type="text" class="ui-text" name="nickname" placeholder="输入前台昵称" value="<{$obj['nickname']}>"/>
+                </div>
+                <div class="ui-form-item inline-block">
+                    <label class="ui-label">前台用户编号：</label>
+                    <input type="text" class="ui-text" name="uid" placeholder="输入前台用户编号" value="<{$obj['uid']}>"/>
+                </div>
+            
+        </div>
+        <div class="integral_btn-group">
+            <input type="submit" value="提交编辑" class="ui-button"/>
+        </div>
+        </form>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+    var province=<{$obj.province}>;
+    var city=<{$obj.city}>;
+    var district=<{$obj.district}>;
+
+
+    $('#province').bind('change',function(){
+        ajaxGetRegion({id:this.value },'city');
+    });
+    $('#city').bind('change',function(){
+        ajaxGetRegion({id:this.value },'district');
+    });
+
+    $(document).ready(
+            function(){
+                //行政区划三级联动
+                if(province>0 && city>0){
+                    ajaxGetRegion({id:province },'city',function(){
+                        $('#city').val(city)
+                        if(district>0){
+                            ajaxGetRegion({id:city },'district',function(){
+                                $('#district').val(district)
+                            });
+                        }
+                    });
+                }
+            }
+    )
+
+</script>

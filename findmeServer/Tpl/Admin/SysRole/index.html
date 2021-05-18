@@ -1,0 +1,83 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+	<div id="warpper">
+        <div class="content">
+            <div class="location">角色管理</div>
+            <div class="ui-tab">
+                <ul>
+                    <li class="tab-item selected"><a href="<{u('SysRole/index')}>" onclick="LayerShow();">角色列表</a></li>
+                    <li class="tab-item last-item"><a href="<{u('SysRole/add')}>" onclick="LayerShow();">新增角色</a></li>
+                </ul>
+            </div>
+            <div class="filedSet" style="padding-bottom: 0;">
+                <div class="search">
+                    <form action="<{U('SysRole/search')}>" class="ui-form reportForm"  id="searchForm" method="get">
+
+                    	<input name="m" type="hidden" value="<{$module}>">
+                        <input name="c" type="hidden" value="<{$controller}>">
+                        <input name="a" type="hidden" value="search">
+                    	<input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                    	<input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                        <div class="ui-form-item inline-block">
+                        	<label class="ui-label">编号</label>
+                            <input type="text" class="ui-text bg-text keyword" name="id" value="<{$id}>" />
+
+                            <label class="ui-label">关键字</label>
+                            <input type="text" class="ui-text bg-text keyword" name="keywords" value="<{$keywords}>"/>
+                        </div>
+                        <div class="ui-form-item inline-block">
+                            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+            <!--表头-->
+            <form method="post" name="FORM" action="<{u('SysRole/batchOperate')}>">
+	            <!--表格内容-->
+	            <div class="mainGrid">
+	                <table class="ui-table ui-body">
+	                    <thead>
+	                        <tr>
+                                <th class="pct5"></th>
+                                <th class="pct10">编号</th>
+                                <th class="pct10">角色名</th>
+                                <th class="pct20">备注</th>
+                                <th class="pct10 last-col">操作</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                    	<{foreach from="$list" item="vo"}>
+		                        <tr>
+		                        	<td class="td2">&nbsp;<input type="checkbox" name="delid[]" value="<{$vo.id}>" /></td>
+		                            <td><{$vo.id}></td>
+		                            <td><{$vo.name}></td>
+		                            <td><{$vo.remark}></td>
+		                            <td class="ta_l">
+		                                <div class="handler">
+		                                	<a class="mr5" id="access" href="<{u('SysRole/access?id='|cat:$vo['id'])}>" onclick="LayerShow();">分配权限</a>
+		                                	<span class="sep">|</span>
+		                                    <a href="<{u('SysRole/edit?id='|cat:$vo['id'])}>" onclick="LayerShow();">编辑</a>
+		                                    <span class="sep">|</span>
+		                                    <a href="<{u('SysRole/delete?id='|cat:$vo['id'])}>" onclick="if(!confirm('您确认要删除此数据吗?删除后数据不能恢复!'))return false;">删除</a>
+		                                </div>
+		                            </td>
+		                        </tr>
+		                    <{/foreach}>
+	                    </tbody>
+	                </table>
+	            </div>
+            
+	            <!--描述：分页-->
+	        </form>
+	        <div class="pagination">
+	        	<{include file="Public/page.html" }>
+	            <!-- <a href="javascript:void(0)" class="prev">◀</a>
+	            <span><i class="cur">1</i>/<i class="total">5</i></span>
+	            <a href="javascript:void(0)" class="next">▶</a>
+	            <input type="text" class="page"/>
+	            <button type="button">跳转</button> -->
+	        </div>
+        </div>
+	</div>
+<{include file="Public/foot.html" }>

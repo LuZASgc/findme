@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><{$Think.lang.SiteName}></title>
+<style type="text/css">
+
+*{padding:0;margin:0}
+body{padding:0;margin:0px;font-size:12px;color:#555;font-family:Verdana;}
+a{text-decoration:none;color:#06F;}
+a:hover{ text-decoration:underline;}
+select{margin-left:1.5em;vertical-align:middle;border:1px solid #b4cceb;height:22px;font-size:12px;}
+#main{width:800px;margin:auto;}
+input{font-size:12px;}
+#wrap{background:url(<{$preStaticUrl}>/Images/Manage/Login/top_01.png) center bottom no-repeat;height:170px;}
+#wrapb{background:url(<{$preStaticUrl}>/Images/Manage/Login/top_02.png) center  top no-repeat;height:15px;}
+#wrapc{background:url(<{$preStaticUrl}>/Images/Manage/Login/top_03.png) center  top no-repeat;height:350px;}
+#logo{background:url(<{$preStaticUrl}>/Images/Manage/Login/logo.png) center top no-repeat;height:64px;width:210px;}
+.logo{padding:100px 0 0 200px;}
+.login{margin:0 0 0 140px;padding-top:10px;}
+.login th{height:33px;line-height:33px;list-style:none;text-align:right;font-weight:normal;width:200px;font-size:12px;}
+.login td{text-align:left;font-size:12px;}
+.input{font-size:12px;vertical-align:middle;height:17px;margin-top:2px;border:1px solid #fff;color:#666;}
+.logo-icon{border: 1px solid; border-color: #8cb7e1 #e3f0fc #e3f0fc #8cb7e1;float:left;margin-left:1.5em;_margin-left:.7em;background:#fff;padding-right:.5em;}
+.logo-icon div{background:#fff url(<{$preStaticUrl}>/Images/Manage/Login/login-icon.gif);width:18px;float:left;margin-top:3px;margin-left:.5em;display:inline;}
+.logo-icon .pw{background-position:1px 1px;width:18px;height:20px;}
+.logo-icon .pwpd{background-position:0 -49px;width:18px;height:20px;}
+.logo-icon .yan{background-position:0 -99px;width:18px;height:20px;}
+.logo-icon .pw2{width:8em;}
+.logo-icon .pwpd2{width:9em;}
+.logo-icon .yan2{width:6em;}
+
+</style>
+<script type="text/javascript" src="<{$preStaticUrl}>/Js/jquery/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	$("#verifyImage").bind("click",function(){
+		var timenow = new Date().getTime();
+		$(this).attr("src","<{u('Public/verify')}>?"+timenow);
+	})
+})
+
+</script>
+</head>
+<body>
+<div id="main">
+    <div id="wrap">
+         <div class="logo">
+              <div id="logo"></div>
+         </div>
+    </div>
+    <div id="wrapb"></div>
+    <div id="wrapc">
+         <div class="login">
+              <form method="post" name="login" action="<{u('Public/check_login')}>"><!-- action = //逃避自动匹配 -->
+				<input TYPE="hidden" name="Login_f" value=1>
+				<input TYPE="hidden" name="verify" value="$verifyurl">
+                   <table cellpadding="0" cellspacing="0" width="100%">
+                        <tr><th><{$Think.lang.AdministratorAccount}></th><td><div class="logo-icon"><div class="pw"></div><input class="input pw2" name="username" type="text" /></div></td></tr>
+                        <tr><th><{$Think.lang.Password}></th><td><div class="logo-icon"><div class="pwpd"></div><input class="input pwpd2" type="password" name="password" /></div></td></tr>
+                        <tr><th><{$Think.lang.VerifyCode}></th><td><div class="logo-icon"><div class="yan"></div><input class="input yan2" name="verify" id="verify"/></div>&nbsp;<img src="<{u('Public/verify')}>" id="verifyImage" style="margin-top:1px;cursor:pointer;" alt="看不清楚，换一张" />
+                        </td></tr>
+                        <tr><th></th><td><input name="submit" type="image" src="<{$preStaticUrl}>/Images/Manage/Login/login.gif" style="margin-left:1.5em;margin-top:.5em;width:80px;height:30px;" /></td></tr>
+                   </table>
+              </form>
+         </div>
+    </div>
+</div>
+
+</form>
+<script language="JavaScript">
+document.login.username.focus();
+var agt = navigator.userAgent.toLowerCase();
+var is_ie = ((agt.indexOf("msie") != -1) && (agt.indexOf("opera") == -1));
+function getObj(id){
+	return document.getElementById(id);
+}
+function showcustomquest(qid){
+	getObj("customquest").style.display = qid==-1 ? '' : 'none';
+}
+function ietruebody(){
+	return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body;
+}
+function getTop() {
+	return typeof window.pageYOffset != 'undefined' ? window.pageYOffset:ietruebody().scrollTop;
+}
+function getLeft() {
+	return (typeof window.pageXOffset != 'undefined' ? window.pageXOffset:ietruebody().scrollLeft)
+}
+</script>
+
+</body>
+</html>

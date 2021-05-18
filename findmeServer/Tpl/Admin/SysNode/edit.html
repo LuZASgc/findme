@@ -1,0 +1,213 @@
+<{include file="Public/top.html" }>
+<script type="text/javascript">
+	var nodeAjaxUrl="<{u('SysNode/getNodeListByPid')}>";
+	//获得父级分类ID
+	var path = '<{$obj.path}>';
+	var pid_array = path.split("/");
+
+	var pid = '<{$obj.category_id}>';
+	var pid2 = pid_array[0];
+
+
+$(function(){
+
+	//如果当前分类是三级分类，则替换一级分类ID和二级分类ID，以供自动选择判断使用
+	if(pid_array.length==4 || pid_array.length==3){
+		pid = pid_array[0];
+		pid2 = pid_array[1]; 
+	}
+	//分类名称获得焦点
+	$("#title").focus();
+
+	function getSelectedText(obj){
+		return $('#'+obj).find("option:selected").text()
+	}
+	//初始化一级分类列表的Ajax方法
+	function initLevelOneCategory(){
+		$.get(nodeAjaxUrl,{pid:"0"},function(data){
+			var obj = data;//$.parseJSON(data);
+				var optionStr = "";
+				for(i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid").html(optionStr);
+				//遍历pid的option来进行自动选择
+				$('#pid option').each(function(){
+					if($(this).val()==pid){
+						$(this).attr("selected","selected");
+						//触发一级分类列表change事件，用来显示二级列表
+						$("#pid").change();
+					}
+				});
+		})	
+	}
+	
+	//动态绑定一级分类change事件，异步获取子分类赋值给pid2
+	$("#pid").bind("change",function(){
+		if($(this).val()!=0){
+			$.get(nodeAjaxUrl,{pid:""+$(this).val()+""},function(data){
+			var obj = data;//$.parseJSON(data);
+
+				var optionStr = "";
+				for(i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid2").html(optionStr);
+				
+				//遍历pid2的option来进行自动选择
+				$('#pid2 option').each(function(){
+      				if($(this).val()==pid2){
+						$(this).attr("selected","selected");
+						//触发二级分类列表change事件，用来显示三级列表
+						$("#pid2").change();
+					}
+  				});
+			
+			})	
+		}else{
+			$("#pid2").html('');
+			$("#pid3").html('');
+		}
+		
+	})
+	//动态绑定二级分类change事件，异步获取子分类赋值给pid3
+	$("#pid2").bind("change",function(){
+		$.get(nodeAjaxUrl,{pid:""+$(this).val()+""},function(data){
+			
+			var obj = data;//$.parseJSON(data);
+
+				var optionStr = "";
+				for(var i=0;i<obj.length;i++){
+					optionStr += "<option value='" + obj[i].id + "'>" + obj[i].title + "[" + obj[i].name +"]</option>";
+				}
+				$("#pid3").html(optionStr);
+
+			
+		})
+	})	
+	var isMenu = "<{$obj.is_menu}>";
+	if(isMenu == 1){$("#show").show();}
+	$("#isMenu").bind('click',function () {$("#show").show();$("input[name='group']").attr('checked',false);});
+	$("#noMenu").bind('click',function () {$("#show").hide();$("input[name='group']").attr('checked',false);});
+
+	//一些页面加载就执行的操作
+	initLevelOneCategory();
+
+
+	$('form').submit(function () {
+
+		if($('#pid').val()==null){
+			layer.msg("请指定顶级菜单");
+			return false;
+		}
+		var level=1;
+		var tip='';
+		if($('#pid2').val()==null){
+			level=2;
+			tip='['+getSelectedText('pid')+']';
+		}else{
+			level=3;
+			tip='['+getSelectedText('pid')+']'+' - '+'['+getSelectedText('pid2')+']';
+		}
+
+		if(!window.confirm("将作为"+level+"级权限\n"+"位于"+tip+' 之下')){
+			return false;
+		}
+		$.post("<{u('SysNode/update')}>",$('form').serialize(),function(result){
+			if(result.status==1){
+				layer.msg("权限修改成功");
+				location.href=result.url;
+			}else{
+				layer.msg(result.info);
+			}
+		},'json');
+
+
+
+
+
+		return false;
+	})
+})
+
+
+</script>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">模块管理</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item"><a href="<{U('SysNode/index')}>" onclick="LayerShow();">模块列表</a></li>
+                <li class="tab-item last-item"><a href="<{U('SysNode/add')}>" onclick="LayerShow();">新增模块</a></li>
+                <li class="tab-item last-item selected"><a href="javascript:void(0);">编辑模块</a></li>
+            </ul>
+        </div>
+        <div class="topic">管理员信息</div>
+        <div class="form-box border0 border-box">
+            <form action="<{u('SysNode/update')}>" method="post" class="ui-form" id="addManagerForm">
+            	<input type="hidden" name="id" value="<{$obj.id}>" />
+                <div class="ui-form-item">
+                    <label class="ui-label">标题：</label>
+                    <input type="text" class="ui-text" value="<{$obj.title}>"  name="title" required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">名称：</label>
+                    <input type="text" class="ui-text" value="<{$obj.name}>"  name="name"  required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">父级：</label>
+                    <div class="father-box" id="fenlei">
+                        <select id="pid" name="pid" size="15" style="float:left;">
+                        </select>
+                        <select id="pid2" name="pid2" size="15" style="float:left;">
+                        </select>
+                        <select id="pid3" name="pid3" size="15" style="float:left;" disabled="disabled">
+                        </select>
+                    </div>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">排序：降序显示</label>
+                    <input type="text" value="<{$obj.sort}>"  class="ui-text" id="integral" name="sort"  required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">状态：</label>
+                    <span class="ui-field">
+                        <input type="radio" id="open" value="1" name="status" <{if $obj.status == 1}> checked <{/if}> required><label for="open">&nbsp;&nbsp;启用</label>
+                        <input type="radio" id="close" value="0"  name="status" <{if $obj.status == 0}> checked <{/if}> required><label for="close">&nbsp;&nbsp;不启用</label>
+                    </span>
+                </div>
+
+                <div class="ui-form-item">
+                    <label class="ui-label">是否设置菜单栏</label>
+                    <span class="ui-field">
+                        <input type="radio" id="isMenu" value="1"  name="is_menu" <{if $obj.is_menu == 1}> checked <{/if}>  required><label for="open">&nbsp;&nbsp;设置</label>
+                        <input type="radio" id="noMenu" name="is_menu"  value="0" <{if $obj.is_menu == 0}> checked <{/if}> required><label for="close">&nbsp;&nbsp;不设置</label>
+                    </span>
+                </div>
+
+				<div class="ui-form-item" id="show" style="display: none;">
+					<label class="ui-label">所属菜单区域</label>
+					<input type="radio" value="1" name="group" <{if $obj.group==1}>checked<{/if}> >社区运营
+					<input type="radio" value="2" name="group" <{if $obj.group==2}>checked<{/if}> >数据统计
+					<input type="radio" value="3" name="group" <{if $obj.group==3}>checked<{/if}> >系统配置
+				</div>
+
+                <{if $obj.level == 2}>
+				<div class="ui-form-item">
+                    <label class="ui-label">Class名称</label>
+                    <input type="text" value="<{$obj.classname}>"  class="ui-text" id="integral" name="classname"  required/>
+                </div>
+				<{/if}>
+
+                <div class="integral_btn-group">
+            		<input type="submit" value="提交" class="ui-button"/>
+        		</div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<{include file="Public/foot.html" }>

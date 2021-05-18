@@ -1,0 +1,42 @@
+<{include file="Public/top.html"}>
+<script type="text/javascript">
+function show_son_category(v){
+	$.getJSON("<{u('SysNode/getSonCategory')}>?pid="+v,function(data){
+			$.each(data.data,function(i,obj){
+				obj = eval(obj);
+				//alert(obj.title);
+			})
+			
+	});
+}
+</script>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">角色管理</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item"><a href="<{U('SysRole/index')}>" onclick="LayerShow();">角色列表</a></li>
+                <li class="tab-item last-item selected"><a href="<{U('SysRole/add')}>" onclick="LayerShow();">新增角色</a></li>
+            </ul>
+        </div>
+        <div class="topic">角色信息</div>
+        <form action="<{U('SysRole/insert')}>" method="post" class="ui-form" id="addManagerForm">
+            <div class="form-box border0 border-box">
+                    <div class="ui-form-item">
+                        <label class="ui-label">角色名称：</label>
+                        <input type="text" class="ui-text" id="integral" name="name" placeholder="运营" required/>
+                    </div>
+                    <div class="ui-form-item">
+                        <label class="ui-label">备注：</label>
+                        <input type="text" class="ui-text" id="integral" name="remark" placeholder="运营人员使用权限" required/>
+                    </div>
+            </div>
+            <div class="integral_btn-group">
+                <input type="submit" value="提交编辑" class="ui-button"/>
+            </div>
+        </form>
+    </div>
+</div>
+<{include file="Public/foot.html" }>

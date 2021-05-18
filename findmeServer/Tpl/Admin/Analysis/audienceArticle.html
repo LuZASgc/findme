@@ -1,0 +1,47 @@
+<{include file = "Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">类型受众分析</div>
+        <{include file="Analysis/audienceNav.html"}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">类型</th>
+                    <th class="pct10">文章数量</th>
+                    <th class="pct10">总阅读量</th>
+                    <th class="pct10">平均阅读量</th>
+                    <th class="pct10">总评论数</th>
+                    <th class="pct10">平均评论数</th>
+                    <th class="pct10">总点赞数</th>
+                    <th class="pct10 last-col">平均点赞数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $article}>
+                    <{foreach from=$article item=item}>
+                        <tr>
+                            <td><{$item.typeName}></td>
+                            <td><{$item.articleNum}></td>
+                            <td><{$item.viewNum}></td>
+                            <td><{$item.avgViewNum}></td>
+                            <td><{$item.commentNum}></td>
+                            <td><{$item.avgCommentNum}></td>
+                            <td><{$item.praiseNum}></td>
+                            <td><{$item.avgPraiseNum}></td>
+                        </tr>
+                    <{/foreach}>
+                <{else}>
+                    <tr><td colspan="6">暂无数据</td></tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html"}>
+</body>
+</html>

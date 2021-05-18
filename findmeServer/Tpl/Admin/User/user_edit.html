@@ -1,0 +1,303 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<div id="warpper" style="height: 900px;">
+    <div class="content" style="height: 900px;">
+        <div class="location">明星管理</div>
+        <{include file= "User/nav.html"}>
+        <div class="topic">添加明星</div>
+        <div class="form-box border0 border-box">
+            <form action="<{u($smarty.const.ACTION_NAME)}>" class="ui-form" method="post" id="addManagerForm">
+
+                <input type="hidden"  name="uid" value="<{$obj.uid}>" />
+
+                <div class="ui-form-item">
+                    <label class="ui-label">名称：</label>
+                    <input type="text" class="ui-text" name="nickname" value="<{$obj.nickname}>" required/>
+                </div>
+
+                <div class="ui-form-item">
+                    <label class="ui-label">性别</label>
+                    <{html_radios name="sex" options=$sex selected=$obj.sex separator="&nbsp;"}>
+                </div>
+
+                <div class="ui-form-item">
+                    <label class="ui-label">人种</label>
+                    <{html_radios name="race" options=$race selected=$obj.race separator="&nbsp;"}>
+                </div>
+
+                <div class="ui-form-item">
+                    <label class="ui-label">明星头像：</label>
+                    <span class="picture_box picture_150 " id="listPic" >
+                        <div class="a-imgBox" id="imgBox" <{if $obj.headPic}> style="display:block;"<{else}>style="display:none;"<{/if}>>
+                            <input type="hidden" name="headPic" value="<{$preUploadUrl}><{$obj.headPic}>">
+                            <a href="javascript:void(0);" class="a-close" onclick="deleteListPic()"></a>
+                            <img src="<{$preUploadUrl}><{$obj.headPic}>" width="150" height="130" />
+                        </div>
+                        <div>
+                            <a href="javascript:;" class="a-upload">
+                                <input type="file" name="file"  >
+                            </a>
+                            <i>上传图片</i>
+                            <i>150*130</i>
+                        </div>
+                    </span>
+                </div>
+
+
+        <div class="ui-form-item2 uploader" style="min-height: 157px">
+            <label class="ui-label">明星图集:</label>
+            <div style="width: 775px;display: inline-block;">
+                <{foreach from=split(',',$obj.album) item=img}>
+                    <{if strlen($img)>1}>
+                    <span class="picture_box picture_150">
+                        <div class="a-imgBox"   style="display:block;">
+                            <a href="javascript:void(0);" class="a-close" onclick="removeElement(this)"></a>
+                            <img src="<{$preUploadUrl}><{$img}>" width="150" height="130" />
+                            <input type="hidden" name="album[]" value="<{$img}>" />
+                        </div>
+                    </span>
+                    <{/if}>
+                <{/foreach}>
+
+                    <span class="picture_box picture_150 " id="addImg" style="position: absolute;">
+                        <div>
+                            <a href="javascript:;" class="a-upload">
+                                <input type="file" name="file"  >
+                            </a>
+                            <i>上传图片</i>
+                            <i>150*130</i>
+                        </div>
+                    </span>
+            </div>
+        </div>
+
+                <div class="integral_btn-group">
+                    <input type="submit" value="提交" class="ui-button"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<{include file="Public/foot.html" }>
+
+<script>
+    //删除图片
+    function deleteListPic() {
+        $('#imgBox').hide();
+        $('.uptxt').text('上传图片');
+        $('#listPic').val('');
+    }
+
+
+    function TestBlack(TagName){
+        var obj = document.getElementById(TagName);
+        if(obj.style.display==""){
+            obj.style.display = "none";
+        }else{
+            obj.style.display = "";
+
+            var address = $("#selectAddress").val();
+            addr = address.split("/");
+            var length = addr.length;
+            var askLevel = length+1;
+            var i;
+            for(i=0;i<length;i++){
+                if(addr[i] <= 0){
+                    askLevel = parseInt(i+1);
+                    break;
+                }
+            }
+            if(askLevel > 3) askLevel = 3;
+            tab('tab',3,askLevel);
+        }
+    }
+
+    function tab(a,b,c) {
+        for(i=1;i<=b;i++){
+            if(c==i)
+            {
+                // 判断选择模块
+                document.getElementById(a+"_mo_"+i).style.display = "block";  // 显示模块内容
+                document.getElementById(a+"_to_"+i).className = "no";   // 改变菜单为选中样式
+
+                var address = $("#selectAddress").val();
+                addr = address.split("/");
+                length = addr.length;
+                var arrLength = 0;
+                for(z=0;z<length;z++){
+                    if(addr[z] > 0){
+                        arrLength++;
+                    }
+                }
+                if(c > arrLength+1){
+                    //清空后两级数据(例如，只选择了省级数据，区和街道数据应清空)
+                    for(var j=arrLength+2;j<=b;j++){
+                        $("#"+a+"_mo_"+j).empty();
+                    }
+                } else {
+                    if(c==1){
+                        //显示省级数据
+                        $("#"+addr[0]).attr('class','active');
+                    } else{
+                        area_id = addr[c-2];
+                        var param = {provinceID:addr[0],area_id:area_id,level:c};
+
+                        $.post("<{U('Business/getArea_info')}>",param,function (res) {
+                            if(res.status == 1){
+//                                        layer.msg(res.msg);
+                            }else{
+                                $("#"+a+"_mo_"+c).empty().append(res.dataHtml);
+                                $("#"+addr[c-1]).attr('class','active');
+                            }
+                        });
+                    }
+
+                }
+            }
+            else{
+                // 没有选择的模块
+                document.getElementById(a+"_mo_"+i).style.display = "none"; // 隐藏没有选择的模块
+                document.getElementById(a+"_to_"+i).className = "";  // 清空没有选择的菜单样式
+            }
+        }
+    }
+
+    function area_tab(a,b,c,id,name) {
+        tab(a,b,c);
+        orginalLevel = c-1;     //点击的那一级
+        $("#"+a+"_mo_"+orginalLevel+" ul").find("li").each(function () {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            }
+        });
+        switch (parseInt(c)){
+            case 2:
+                $("#province").val(id);
+                $("#provinceName").val(name);
+                $("#showSelectAdd").val(name);
+                $("#selectAddress").val(id);
+                $("#city,#district").val('');
+                $("#cityName,#districtName").val('');
+                break;
+            case 3:
+                $("#city").val(id);
+                $("#cityName").val(name);
+                $("#showSelectAdd").val($("#provinceName").val()+'/'+name);
+                $("#selectAddress").val($("#province").val()+'/'+id);
+                $("#district").val('');
+                $("#districtName").val('');
+                break;
+            case 4:
+                $("#district").val(id);
+                $("#districtName").val(name);
+                $("#showSelectAdd").val($("#provinceName").val()+'/'+$("#cityName").val()+'/'+name);
+                $("#selectAddress").val($("#province").val()+'/'+$("#city").val()+'/'+id);
+                break;
+        }
+        $("#"+id).attr('class','active');
+        if(c < 4){
+            $("#"+a+"_mo_"+c+"").empty();
+            var provinceID = $("#province").val();
+            var param = {provinceID:provinceID,area_id:id,level:c};
+            $.post("<{U('Business/getArea_info')}>",param,function (res) {
+                if(res.status == 1){
+                    layer.msg(res.msg);
+                }else{
+                    $("#"+a+"_mo_"+c+"").empty().append(res.dataHtml);
+                }
+            });
+        } else if(c == 4){
+            //关闭地址选择器
+            TestBlack('carnub1');
+
+
+            //修改商圈
+            $.post("<{U('Business/getTradeAreaKV')}>",{areaId:id},function (res) {
+                if(res.status == 1){
+                    layer.msg(res.msg);
+                }else{
+                    $("#tradeArea").empty().append(res.dataHtml);
+                }
+            });
+
+
+        }
+
+    }
+
+
+    (function ($) {
+        'use strict';
+        $.fn.uploader = function () {
+            return this.each(function () {
+                var $this = $(this);
+                var $img = $this.find('img');
+                var $file = $this.find('input[type=file]');
+                var $hidden = $this.find('input[type=hidden]');
+                var $txt = $this.find('i.uptxt');
+                $file.AjaxFileUpload({
+                    action: './api.php?m=Api&c=index&a=ajaxUpload&from=IMG_STORE_ALBUM',
+                    onSubmit: function () {
+                        $txt.text('上传中');
+                    },
+                    onComplete: function (filename, response) {
+                        if(parseInt(response.id)>0){
+                            $txt.text("上传成功");
+                            newImg(response.msg);
+                        }else{
+                            $txt.text(response.msg);
+                        }
+                    }
+                });
+            });
+        }
+    })(jQuery);
+    $('#addImg').uploader();
+
+
+    (function ($) {
+        'use strict';
+        $.fn.uploader = function () {
+            return this.each(function () {
+                var $this = $(this);
+                var $img = $this.find('img');
+                var $file = $this.find('input[type=file]');
+                var $hidden = $this.find('input[type=hidden]');
+                var $txt = $this.find('i.uptxt');
+                var $imgBox = $this.find('div[id=imgBox]');
+                $file.AjaxFileUpload({
+                    action: './api.php?m=Api&c=index&a=ajaxUpload&from=IMG_STORE_LIST',
+                    onSubmit: function () {
+                        $txt.text('上传中');
+                    },
+                    onComplete: function (filename, response) {
+                        if(parseInt(response.id)>0){
+                            $txt.text("上传成功");
+                            $hidden.attr('value', response.msg);
+                            $img.attr("src",response.msg);
+                            $imgBox.css('display','block');
+                        }else{
+                            $txt.text(response.msg);
+                        }
+
+                    }
+                });
+            });
+        }
+    })(jQuery);
+
+    $('#listPic').uploader();
+
+    function removeElement(obj){
+        $(obj).parents('.picture_150').remove();
+    }
+
+    function newImg(src){
+        $img=$('<span class="picture_box picture_150"><div class="a-imgBox"  style="display:block;"><a href="javascript:void(0);" class="a-close" onclick="removeElement(this)"></a><img src="<{$preUploadUrl}><{$img}>" width="150" height="130" /> <input type="hidden" name="album[]" value="" /></div></span>');
+        $('#addImg').before($img);
+        $img.find('input[type=hidden]').val(src);
+        $img.find('img').attr('src',src);
+    }
+</script>

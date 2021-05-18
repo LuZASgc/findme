@@ -1,0 +1,47 @@
+<{include file = "Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">类型受众分析</div>
+        <{include file="Analysis/audienceNav.html"}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">类型</th>
+                    <th class="pct10">商品数量</th>
+                    <th class="pct10">总兑换人数</th>
+                    <th class="pct10">平均兑换人数</th>
+                    <th class="pct10">总消耗积分</th>
+                    <th class="pct10">平均消耗积分</th>
+                    <th class="pct10">总消费金额</th>
+                    <th class="pct10 last-col">平均消费金额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $goods}>
+                    <{foreach from=$goods item=item}>
+                        <tr>
+                            <td><{$item.typeName}></td>
+                            <td><{$item.goodsNum}></td>
+                            <td><{$item.exchangeNum}></td>
+                            <td><{$item.avgExchangeNum}></td>
+                            <td><{$item.costPointNum}></td>
+                            <td><{$item.avgCostPointNum}></td>
+                            <td><{$item.costCashNum}></td>
+                            <td><{$item.avgCostCashNum}></td>
+                        </tr>
+                    <{/foreach}>
+                <{else}>
+                    <tr><td colspan="8">暂无数据</td></tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html"}>
+</body>
+</html>

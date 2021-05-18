@@ -1,0 +1,186 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+		<div id="warpper">
+            <div class="content">
+                <div class="location">红包活动</div>
+                <{include file="./nav.html" }>
+
+                <form action="<{u(update)}>" class="ui-form" id="addManagerForm" method="post" >
+                <div class="topic">红包活动 <{if $obj.id }>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red"> 当活动没有人参加过，且已下线，才可编辑 </span>
+                    <{if $canEdit}><b>可以编辑</b><{else}><b>不可编辑</b><{/if}>
+                    <{/if}></div>
+                <div class="form-box border0 border-box" id="setdiv">
+                        <input type="hidden" name="id" value="<{$obj.id|default:0}>" />
+                        <div class="ui-form-item">
+                            <label class="ui-label">活动名称</label>
+                            <input type="text" class="ui-text"  name="title" value="<{$obj.title}>" required/>
+                        </div>
+
+                        <div class="ui-form-item">
+                            <label class="ui-label">祝福语</label>
+                            <textarea  class="ui-textarea"  name="wish"  required><{$obj.wish}></textarea>
+                            <i>换行分隔</i>
+                        </div>
+                    <{foreach from=$obj.wave key=key item=item}>
+                        <div class="content waveset">
+                            <div class="topic">波次<i class="wave">1</i> &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="removeWave(this)" class="del-button">删除</a></div>
+                            <div class="form-box border0 border-box">
+                            <div class="ui-form-item">
+                                <label class="ui-label">金额</label>
+                                <input type="phone" class="ui-text"  name="money[]" value="<{$item.money/100}>" required/>
+                            </div>
+                            <div class="ui-form-item">
+                                <label class="ui-label">领奖时间</label>
+                                <input id="startDate<{$key}>" name="startTime[]" value="<{$item.beginTime|date_format:'%Y-%m-%d %H:%M:%S'}>" readonly class="date ui-select" type="text" required/>
+                                至
+                                <input id="endDate<{$key}>" name="endTime[]" readonly value="<{$item.endTime|date_format:'%Y-%m-%d %H:%M:%S'}>" class="date ui-select" type="text" required/>
+                            </div>
+
+                            <div class="ui-form-item">
+                                <label class="ui-label">奖励配置</label>
+                                <textarea  class="ui-textarea"  name="set[]" placeholder="金额下限,金额上限,数量"  required><{$item.waveSet}></textarea>
+                                <i>换行分隔;</i>
+                            </div>
+                                </div>
+                        </div>
+                    <{/foreach}>
+                </div>
+                    <{if $obj.id eq 0 }>
+                        <div class="integral_btn-group">
+                            <button type="button"  class="ui-button " id="moreWave">增加波次</button>
+                            <input type="submit" value="提交" class="ui-button"/>
+                            <input type="reset"  value="清空" class="ui-button fade-o-butn"/>
+                        </div>
+                    <{else}>
+                        <{if $canEdit}>
+                            <div class="integral_btn-group">
+                                <button type="button"  class="ui-button " id="moreWave">增加波次</button>
+                                <input type="submit" value="修改" class="ui-button"/>
+                            </div>
+                        <{/if}>
+                    <{/if}>
+
+                </form>
+            </div>
+		</div>
+
+        <div class="content waveset" id="template" style="display: none">
+            <div class="topic">波次<i class="wave">1</i> &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="removeWave(this)" class="del-button">删除</a></div>
+            <div class="form-box border0 border-box">
+                <div class="ui-form-item">
+                    <label class="ui-label">金额</label>
+                    <input type="phone" class="ui-text"  name="money[]" value="<{$obj.title}>" required/>
+                </div>
+                <div class="ui-form-item">
+                    <label class="ui-label">领奖时间</label>
+                    <input  name="startTime[]" readonly value="" class="timeBegin  ui-select" type="text" required/>
+                    至
+                    <input  name="endTime[]" readonly value="" class="timeEnd  ui-select" type="text" required/>
+                </div>
+
+                <div class="ui-form-item">
+                    <label class="ui-label">奖励配置</label>
+                    <textarea  class="ui-textarea"  name="set[]" placeholder="金额下限,金额上限,数量"   required><{$obj.title}></textarea>
+                    <i>换行分隔</i>
+                </div>
+            </div>
+        </div>
+
+
+
+        <{include file="Public/foot.html" }>
+		<script>
+            var num=99;
+            $(document).ready(function(){
+                resetWaveNum();
+                $('#moreWave').click(function(e){
+                    num++;
+                    var $wave=$('#template').clone().removeAttr('id').appendTo('#setdiv').show();
+                    $wave.find('.timeBegin').attr('id','startDate'+num).addClass('date');
+                    $wave.find('.timeEnd').attr('id','endDate'+num).addClass('date');
+                    resetWaveNum();
+                });
+
+                $("form").submit(function () {
+                    layer.msg("正在提交数据...",{time:999});
+                    $.post("<{U('update')}>",$(this).serialize(), function(data){
+                        if(data.status==0){
+                             layer.msg(data.info);
+                        }else{
+                            layer.msg(data.info);
+                            location.href="<{U('setList')}>";
+                        }
+                    }, 'json');
+                    return false;
+                });
+            });
+
+
+            function resetWaveNum(){
+                $('.wave').each(function(i){
+                    $(this).text(i+1);
+                });
+
+
+                var ids=new Array()
+
+                $('.date').each(function(i){
+                    ids[i]=$(this).attr('id');
+                });
+
+
+                var nums=ids.length;
+                var next='';
+                var prev='';
+
+                for(var i=0;i<nums;i++){
+                    console.log('当前：'+ids[i]);
+                    if(i==0){//first
+                        next=ids[i+1];
+                        (function(o){
+                            $("#" + ids[i]).unbind().bind('click focus',function () {
+                                WdatePicker({
+                                    dateFmt: 'yyyy-MM-dd HH:mm:ss',
+                                    maxDate:'#F{$dp.$D(\''+o+'\')}',
+                                })
+                            });
+                         })(next);
+                    }else if(i==nums-1){//last
+                        prev=ids[i-1];
+                        (function(o) {
+                            $("#" + ids[i]).unbind().bind('click focus', function () {
+                                WdatePicker({
+                                    dateFmt: 'yyyy-MM-dd HH:mm:ss',
+                                    minDate: '#F{$dp.$D(\'' + o + '\')}'
+                                })
+                            });
+                        })(prev);
+                    }else{//middle
+                        prev=ids[i-1];
+                        next=ids[i+1];
+                        (function(o1,o2){
+                            $("#" + ids[i]).unbind().bind('click focus',function () {
+                                    WdatePicker({
+                                        dateFmt: 'yyyy-MM-dd HH:mm:ss',
+                                        minDate:'#F{$dp.$D(\'' + o1 + '\')}',
+                                        maxDate:'#F{$dp.$D(\'' + o2 + '\')}'
+                                    })
+                            });
+                        })(prev,next);
+                    }
+                }
+
+
+            }
+
+            function removeWave(obj){
+                $(obj).closest(".waveset").remove();
+                resetWaveNum();
+            }
+
+
+
+        </script>
+	</body>
+</html>

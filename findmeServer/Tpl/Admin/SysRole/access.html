@@ -1,0 +1,110 @@
+<{include file="Public/top.html" }>
+<!-- <link media="screen" rel="stylesheet" href="<{$preStaticUrl}>/Css/colorbox/colorbox.css" />
+<script src="<{$preStaticUrl}>/Js/jquery.colorbox-min.js"></script> -->
+<script>
+
+// $(document).ready(function(){
+// 	$("#access").colorbox();
+// })
+
+//    $(document).ready(function(){
+//        $('.check-all-box').on('ifClicked', function(event){
+//            var parent_box = $(this);
+//            var children_box = $(this).parent().parent().next().find('input');
+//            children_box.each(function(){
+//                if(parent_box.prop("checked") == true){
+//                    $(this).iCheck('uncheck');
+//                }else{
+//                   $(this).iCheck('check');
+//                }
+//            });
+//        });
+        // $('.checkbox-item').on('ifChecked', function(event){
+        //     var parent_id = $(this).data('parent');
+        //     console.log(parent_id);
+        // });
+//    });
+
+</script>
+</head>
+<body>
+    <div id="warpper">
+        <div class="content">
+            <div class="location">角色管理</div>
+            <div class="ui-tab">
+                <ul>
+                    <li class="tab-item"><a href="<{U('SysRole/index')}>" onclick="LayerShow();">角色列表</a></li>
+                    <li class="tab-item"><a href="<{U('SysRole/add')}>" onclick="LayerShow();">新增角色</a></li>
+                    <li class="tab-item last-item selected"><a href="javascript:void(0);">权限分配</a></li>
+                </ul>
+            </div>
+            <div class="topic">权限分配</div>
+            <form action="<{u('SysRole/accessUpdate')}>" class="ui-form" id="addManagerForm" method="post">
+                <input type="hidden" name="id" value="<{$role.id}>" />
+                <!--level=1 默认被选中-->
+                <!--<input type="checkbox" name="access[]" value="<{$module_level_1.id}>">-->
+                <input type="hidden" name="access[]" value="<{$module_level_1.id}>">
+                <input type="hidden" name="access[]" value="<{$module_level_1_shop.id}>">
+                <div class="form-box border0 border-box">
+                    <p>超级管理员后台</p>
+
+                    <{foreach from=$module_level_2 item="l2"}>
+                        <div class="ui-form-item">
+                            <input type="hidden" value="<{$l2.id}>" name="access[]">
+                            <{* <input type="checkbox" onclick="checkAll()" /> *}>
+                            <div style="float:left">
+                                <label class="ui-label"><{$l2.title}></label>
+                                <label>全选</label>
+                                <input type="checkbox"  class="check-all-box" checked="checked" />
+                            </div>
+                            <span class="ui-field" style="width:38%; text-align:left;">
+                                <{foreach from=$l2['sub'] item="l3"}>
+                                <div class="list-checkbox">
+                                <input <{if $l3.checked==1 }> checked <{/if}> value="<{$l3.id}>" type="checkbox" name="access[]" class="checkbox-item" data-parent="<{$l2['id']}>"><label>&nbsp;&nbsp;<{$l3.title}></label>
+                                </div>
+                                <{/foreach}>
+                            </span>
+                        </div>
+                    <{/foreach}>
+                </div>
+                <div class="form-box border0 border-box">
+                    <p>商户管理</p>
+
+                    <{foreach from=$module_level_2_shop item="l2"}>
+                    <div class="ui-form-item">
+                        <input type="hidden" value="<{$l2.id}>" name="access[]">
+                        <div style="float:left">
+                        <{* <input type="checkbox" onclick="checkAll()" /> *}>
+                        <label class="ui-label"><{$l2.title}></label>
+                        <label>全选</label>
+                        <input type="checkbox"  class="check-all-box" checked="checked" />
+                            </div>
+                            <span class="ui-field" style="width:38%; text-align:left;">
+                                <{foreach from=$l2['sub'] item="l3"}>
+                                <div class="list-checkbox">
+                                    <input <{if $l3.checked==1 }> checked <{/if}> value="<{$l3.id}>" type="checkbox" name="access[]" class="checkbox-item" data-parent="<{$l2['id']}>"><label>&nbsp;&nbsp;<{$l3.title}></label>
+                                </div>
+                                <{/foreach}>
+                            </span>
+                    </div>
+                    <{/foreach}>
+                </div>
+                <div class="integral_btn-group">
+                    <input type="button" value="提交编辑" id="submit" onfocus="blur();" onclick="LayerShow();" class="ui-button"/>
+                </div>
+            </form>
+        </div>
+    </div>
+<{include file="Public/foot.html" }>
+<script>
+    $("#submit").on('click',function () {
+        var param = $("#addManagerForm").serialize();
+       $.post("<{u('SysRole/accessUpdate')}>",param,function (res) {
+           parent.closeLoading();
+           layer.msg(res.msg);
+           if(res.status == 0){
+               location.reload();
+           }
+       });
+    });
+</script>

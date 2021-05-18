@@ -1,0 +1,29 @@
+<{foreach from=$list item=item}>
+<tr>
+    <td><{$item.title}></td>
+    <td><{$item.beginTime|date_format:"%Y-%m-%d %H:%M"}></td>
+    <td><{$item.waves}></td>
+    <td><{$item.totalMoney/100}></td>
+    <td><{$item.issuedMoney/100}></td>
+    <td><{$item.issuedNum}></td>
+    <td><{$item.addTime|date_format:"%Y-%m-%d %H:%M"}></td>
+    <td><{$itemStatus[$item.status]}></td>
+    <td class="ta_l">
+        <div class="handler">
+            <a href="<{u('edit?id='|cat:$item['id'])}>" onclick="LayerShow();">修改</a>
+            <span class="sep">|</span>
+            <a href="<{u('recordList?id='|cat:$item['id'])}>" onclick="LayerShow();">记录</a>
+            <span class="sep">|</span>
+
+            <input type="hidden" value="<{$item['audit']}>" name="auditStatus" />
+            <a href="javascript:void(0)" onclick="audit(<{$item.id}>,this)">
+            <{if $auditStatus eq $item['status'] }>
+                暂停
+            <{else}>
+                正常
+            <{/if}>
+                </a>
+        </div>
+    </td>
+</tr>
+<{/foreach}>

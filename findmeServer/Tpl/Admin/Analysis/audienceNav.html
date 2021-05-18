@@ -1,0 +1,7 @@
+<div class="ui-tab">
+    <ul>
+        <li class="tab-item <{if $action eq eventAudience}>selected<{/if}>"><a href="<{U('Analysis/eventAudience')}>" onclick="LayerShow();">活动类型受众分析</a></li>
+        <li class="tab-item <{if $action eq articleAudience}>selected<{/if}>"><a href="<{U('Analysis/articleAudience')}>" onclick="LayerShow();">文章类型受众分析</a></li>
+        <li class="tab-item last-item <{if $action eq goodsAudience}>selected<{/if}>"><a href="<{U('Analysis/goodsAudience')}>" onclick="LayerShow();">商品类型受众分析</a></li>
+    </ul>
+</div>

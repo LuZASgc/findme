@@ -1,0 +1,86 @@
+<{include file="Public/top.html" }>
+</head>
+<body>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">管理员管理</div>
+        <div class="ui-tab">
+            <ul>
+                <li class="tab-item selected"><a href="<{U('SysUser/index')}>" onclick="LayerShow();">管理员列表</a></li>
+                <li class="tab-item last-item"><a href="<{U('SysUser/add')}>" onclick="LayerShow();">新增管理员</a></li>
+            </ul>
+        </div>
+        <div class="filedSet" style="padding-bottom: 0;">
+            <div class="search">
+                <form action="" method="get" id="searchForm" class="ui-form reportForm" >
+                	<input name="m" type="hidden" value="<{$module}>">
+                    <input name="c" type="hidden" value="<{$controller}>">
+                    <input name="a" type="hidden" value="search">
+                    <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                    <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">状态</label>
+                        <select class="ui-select" name="status">
+                        	<option value="" selected>全部</option>
+                        	<option value="1" <{if $status == 1}>selected<{/if}>>打开</option>
+                        	<option value="0" <{if $status === 0}>selected<{/if}>>关闭</option>
+                        </select>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <label class="ui-label">关键字</label>
+                        <input type="text" class="ui-text bg-text keyword" name="keywords" value="<{$keywords}>"/>
+                    </div>
+                    <div class="ui-form-item inline-block">
+                        <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+                    </div>
+                </form>
+            </div>
+        </div> 
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                    <tr>
+                        <th class="pct10">编号</th>
+                        <th class="pct10">用户名</th>
+                        <th class="pct10">登陆账号</th>
+                        <th class="pct10">角色权限</th>
+                        <th class="pct10">启用状态</th>
+                        <th class="pct10 last-col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <{foreach from="$list" item="vo"}>
+                    <tr>
+                        <td><{$vo.id}></td>
+                        <td><{$vo.real_name}></td>
+                        <td><{$vo.username}></td>
+                        <td><{$rolelist[$vo.role_id]}></td>
+                        <td>
+                        	<{if $vo.status ==1}>
+                        		启用
+                        	<{else}>
+                        		未启用
+                        	<{/if}>
+                        </td>
+                        <td class="ta_l">
+                            <div class="handler">
+                                <a href="<{u('SysUser/edit?id='|cat:$vo['id'])}>" onclick="LayerShow();">编辑</a>
+                                <span class="sep">|</span>
+                                <a href="<{u('SysUser/delete?id='|cat:$vo['id'])}>" onclick="if(!confirm('您确认要删除此数据吗?删除后数据不能恢复!'))return false;">删除</a>
+                            </div>
+                        </td>
+                    </tr>
+                <{/foreach}>
+                </tbody>
+            </table>
+        </div>
+        <!--描述：分页-->
+        <div class="pagination">
+	        <{include file="Public/page.html" }>
+	    </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>

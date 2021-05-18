@@ -1,0 +1,10 @@
+<div class="ui-tab">
+    <ul>
+        <li class="tab-item <{if $action eq index}>selected<{/if}>"><a href="<{u(index)}>" onclick="LayerShow();">文章列表</a></li>
+        <li class="tab-item <{if $action eq edit or $action eq add}>selected<{/if}>">
+            <{if $action eq edit}><a href="javascript:void(0)">修改文章</a>
+            <{else}><a href="<{u(add)}>" onclick="LayerShow();">添加文章</a><{/if}>
+        </li>
+        <{if $weeklyHot}><li class="tab-item <{if $action eq everyHot}>selected<{/if}>"><a href="<{u(everyHot)}>" onclick="LayerShow();">每周热门</a></li><{/if}>
+    </ul>
+</div>

@@ -1,0 +1,100 @@
+<{include file="Public/top.html" }>
+<script src="<{$preStaticUrl}>Admin/js/highcharts.js?v=<{$resVersion}>"></script>
+</head>
+<body ng-controller="xyController">
+<div id="warpper">
+    <div class="content">
+        <div class="location">用户统计</div>
+        <{include file="Analysis/userStatisticNav.html"}>
+        <{if $xAxis}>
+            <div id="doubleColumnLineChart" style="width:80%; height:340px;"></div>
+        <{/if}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">类型</th>
+                    <th class="pct10">指数总和</th>
+                    <th class="pct10">参与人数</th>
+                    <th class="pct10 last-col">人数占比</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{foreach from=$data item=item}>
+                    <tr>
+                        <td><{$item.indexName}></td>
+                        <td><{$item.totalIndexNum}></td>
+                        <td><{$item.joinNumber}></td>
+                        <td><{$item.joinNumberRatio}></td>
+                    </tr>
+                <{/foreach}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>
+<script>
+    $(function(){
+        $('#doubleColumnLineChart').highcharts({
+            credits: {
+                text: '',
+
+            },
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: '指数分布统计图',
+                y:5
+            },
+            xAxis: [{
+                categories: <{$xAxis}>,
+                labels: {
+            x:0,
+                    style: {
+                color: '#000',
+                        fontSize: '12px',
+
+            }}
+    }],
+        yAxis: [{ // 主Y轴
+            min:0,
+            max:15000,
+            tickInterval:3000,
+            labels: {
+                format: '{value}',
+                style: {
+                    color: '#000',
+                    fontSize: '12px'
+                }
+            },
+            title: {
+                text: '',
+                style: {
+                    color: '#000',
+                    fontSize: '12px'
+                }
+            }
+        }],
+                tooltip: {
+            shared: true
+        },
+        legend: {
+            backgroundColor: '#FFF'
+        },
+        series: [{
+            name: '人数',
+            color: '#fe7f30',
+            type: 'column',
+            yAxis: 0,
+            data: [<{$yAxis}>],
+                tooltip: {valueSuffix: '人'}
+    }]
+
+    });
+    });
+</script>

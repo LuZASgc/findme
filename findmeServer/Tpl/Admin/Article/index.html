@@ -1,0 +1,204 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+		<div id="warpper">
+            <div class="content">
+                <div class="location">资讯文章</div>
+                <{include file="./nav.html" }>
+                <div class="filedSet" style="padding-bottom: 0;">
+                    <div class="search">
+                        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+                            <input name="m" type="hidden" value="<{$module}>">
+                            <input name="c" type="hidden" value="<{$controller}>">
+                            <input name="a" type="hidden" value="<{$action}>">
+
+                            <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+                            <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+                            <input name="ofield" id="ofield" type="hidden" value="<{$ofield}>">
+                            <input name="otype"  id="otype"  type="hidden" value="<{$otype}>">
+
+                            <{if $clientFromSwitch}>
+                                <div class="ui-form-item inline-block">
+                                    <label class="ui-label">文章来源</label>
+                                    <select name="clientFrom" class="ui-select" style="width: 100px;">
+                                        <{html_options options=$clientFrom selected=$selectedSource}>
+                                    </select>
+                                </div>
+                            <{/if}>
+                            <{if $clientShowSwitch}>
+                                <div class="ui-form-item inline-block">
+                                    <label class="ui-label">展现渠道</label>
+                                    <select name="clientShow" class="ui-select" style="width: 100px;">
+                                        <{html_options options=$clientShow selected=$selectedClientShow}>
+                                    </select>
+                                </div>
+                            <{/if}>
+                            <div class="ui-form-item inline-block">
+                                <label class="ui-label">审核状态</label>
+                                <select name="audit" class="ui-select" style="width: 100px;">
+                                    <option value="0">请选择</option>
+                                    <{html_options options=$auditStatus selected=$audit}>
+                                </select>
+                            </div>
+                            <div class="ui-form-item inline-block">
+                                <input type="text" value="<{$title}>" class="ui-text bg-text keyword" name="title" placeholder="标题关键字" style="width: 80px;" />
+                            </div>
+                            <div class="ui-form-item inline-block">
+                                <input type="text" value="<{$nickname}>" class="ui-text bg-text keyword" name="nickname" placeholder="用户昵称" style="width: 160px;" />
+                            </div>
+
+                            <div class="ui-form-item inline-block">
+                                <button type="submit" class="ui-button" onclick="LayerShow();">搜索</button>
+                            </div>
+
+                            <div class="ui-form-item inline-block">
+                                <button type="button" class="ui-button" onclick="LayerShow();exportData()">导出</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+                             
+                
+                <!--表格内容-->
+                <div class="mainGrid">
+                    <table class="ui-table ui-body">
+                        <thead>
+                        <tr>
+                            <th class="pct15">标题</th>
+                            <th class="pct10">分类</th>
+                            <th class="pct12">作者</th>
+                            <th class="pct9">评论数</th>
+                            <th class="pct9"><a href="javascript:void(0)" onclick="changeOrder(1)">点赞数</a><span class="<{if $ofield eq 1}><{$otype}><{/if}>"></span></th>
+                            <th class="pct9"><a href="javascript:void(0)" onclick="changeOrder(2)">阅读量</a><span class="<{if $ofield eq 2}><{$otype}><{/if}>"></span></th>
+                            <th class="pct15"><a href="javascript:void(0)" onclick="changeOrder(3)">发布时间</a><span class="<{if $ofield eq 3}><{$otype}><{/if}>"></th>
+                            <th class="pct12">审核状态</th>
+                            <th class="pct12 last-col">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <{foreach from=$list item=item}>
+                            <tr>
+                                <td class="title" data="<{$item['listPic']}>"><a href="<{$WEBSITE}>wap.php?m=Wap&c=Article&a=detail&id=<{$item['id']}>" target="_blank"><{$item['title']}></a></td>
+                                <td><{$contentType[$item['contentType']]|default:'未分类'}></td>
+                                <td><{$item['nickname']|default:'管理后台'}></td>
+                                <td><a style="color:#2077d1;" href="<{u('comment/index?objType='|cat:$smarty.const.OBJ_TYPE_ARTICLE)|cat:'&objID='|cat:$item['id']}>"><{$item['commentNum']}></a></td>
+                                <td><{$item['praiseNum']}></td>
+                                <td><{$item['viewNum']}></td>
+                                <td><{$item['addTime']|date_format:"%Y-%m-%d %H:%M"}></td>
+                                <td>
+                                    <a id="audit<{$item['id']}>" class="<{if $item['audit'] eq 2}>face_icon-2 <{else}>face_icon<{/if}>" onclick="audit(<{$item['id']}>,'<{u('audit?id='|cat:$item['id'])}>')" href="javascript:void(0)"></a>&nbsp;&nbsp;&nbsp;
+                                    <a id="elite<{$item['id']}>" class="<{if $item['elite'] eq 2}>star_icon-2 <{else}>star_icon<{/if}>" onclick="elite(<{$item['id']}>,'<{u('elite?id='|cat:$item['id'])}>')" href="javascript:void(0)"></a></td>
+                                <td class="ta_l">
+                                    <div class="handler">
+                                        <{if $push eq 1}>
+                                            <{if $item['pushCenter'] eq 0}>
+                                            <span id="spanPush<{$item['id']}>">
+                                                <a href="javascript:void(0)" onclick="push('<{$item['id']}>')">提交</a>
+                                                <span class="sep">|</span>
+                                            </span>
+                                            <{/if}>
+                                        <{/if}>
+                                        <a href="<{u('edit?id='|cat:$item['id'])}>" onclick="LayerShow();">修改</a>
+                                        <span class="sep">|</span>
+                                        <a id="delete<{$item['id']}>"  onclick="del(<{$item['id']}>,'<{u('delete?id='|cat:$item['id'])}>')" href="javascript:void(0)">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <{/foreach}>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <!--描述：分页-->
+                    <{include file="Public/page.html" }>
+                </div>
+            </div>
+		</div>
+        <{include file="Public/foot.html" }>
+	</body>
+</html>
+<script>
+    function audit(id,url){
+        if(!confirm('是否执行审核操作')){
+            return false;
+        }
+        $.get(url,function(result){
+            if(result.status==1){
+                $('#audit' + id).toggleClass('face_icon-2 ').toggleClass('face_icon');
+            }else{
+                layer.msg(result.info);
+            }
+        },'json')
+    }
+    function elite(id,url){
+        if(!confirm('是否执行精华操作')){
+            return false;
+        }
+        $.get(url,function(result){
+            if(result.status==1) {
+                $('#elite'+id).toggleClass('star_icon-2').toggleClass('star_icon');
+            }else{
+                layer.msg(result.info);
+            }
+        },'json')
+    }
+
+    function push(id){
+        if(!confirm('是否执行推送操作')){
+            return false;
+        }
+        layer.msg('推送过程大约需要3至6秒，如果有大量图片，过程可能会更久，请耐性等待',{time:100000});
+        var url="<{u(pushCenter)}>"+"&id="+id;
+        $.get(url,function(result){
+            layer.closeAll();
+            if(result.status==0) {
+                layer.msg(result.msg);
+                $('#spanPush'+id).remove();
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json')
+    }
+
+
+    function del(id,url){
+        if(!confirm('是否执行删除操作')){
+            return false;
+        }
+        $.get(url,function(result){
+            if(result.status==1) {
+                $('#delete'+id).parent().parent().parent().remove();
+            }else{
+                layer.msg(result.info);
+            }
+        },'json')
+    }
+
+    $(document).ready(
+        $('.title').on('mouseover',function (e) {
+            if(e.target.tagName!='TD'){
+                return;
+            }
+            layer.closeAll();
+            var url=$(e.target).attr('data');
+            var title = e.target.innerText;
+            layer.tips("<h1 style='color: #000000;text-overflow:ellipsis;overflow: hidden;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;min-height: 25px;'>"+title+'</h1><img src="'+url+'" style="width:280px;height:140px;">', e.target,
+                    {
+                        tips:[4,'#ffffff'],
+                        area: ['300px', '180px'],
+                        skin:'BoxShadow'
+                    });
+
+        })
+    );
+
+    function exportData(){
+        var exportUrl = "<{U('Article/index')}>";
+        window.location.href = exportUrl+'&export=1'
+                +'&clientFrom='+$("#searchForm select[name='clientFrom']:selected").val()
+                +'&clientShow='+$("#searchForm select[name='clientShow']:selected").val()
+                +'&audit='+$("#searchForm select[name='audit']:selected").val()
+                +'&title='+$("#searchForm input[name='title']").val()
+                +'&nickname='+$("#searchForm input[name='nickname']").val();
+    }
+</script>

@@ -1,0 +1,19 @@
+<!--play.wxml-->
+<view style='display:flex'>
+<image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+<view id='countdown' >{{num}}</view>
+<button id='submit'>提交</button>
+</view>
+
+  <view class="photo"  style="">
+<block wx:for="{{album}}" wx:key="unique">  
+    <view class='img' catchtap='selectPhoto' catchlongpress='showBigImg' style='background:url({{item}})' data-id="{{index}}">
+      <image class='right' style='display:{{albumShow[index]}}' src='/image/cardSuccessIcon.png'></image>
+    </view>
+</block>
+  </view>
+
+<view wx:if="{{showModalStatus}}"  data-statu="close" class='modal' bindtap='showBigImg'></view>
+<image wx:if="{{showModalStatus}}" data-statu="close" class="modalImage"   bindtap='showBigImg' src='{{bigImg}}'  ></image>
+
+

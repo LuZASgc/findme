@@ -1,0 +1,124 @@
+<{include file="Public/top_analysis.html" }>
+<script>
+require(["jquery","angular","ngcomponents/xy-navigator"],function($,angular){
+
+//此处发送ajax请求获得数据后执行以下代码
+
+  //下面这些数组中的数据到时候会来自于后端返回的数据
+  var rawAry = [
+    <{foreach from=$events item=item}>
+    {"aType":"<{$item.contentType}>","aCount":<{$item.totalCount}>,"aRequestCount":<{$item.totalApply}>,"aRequestAverage":<{$item.avgApply}>,"aViewCount":<{$item.totalHot}>,"aViewAverage":<{$item.avgHot}>},
+    <{/foreach}>
+  ],
+  rawAry2 = [
+      <{foreach from=$article item=item}>
+        {"pType":"<{$item.contentType}>","pCount":<{$item.totalCount}>,"pViewCount":<{$item.totalView}>,"pViewAverage":<{$item.avgView}>,"pCommentCount":<{$item.totalComment}>,"pCommentAverage":<{$item.avgComment}>,"pPraiseCount":<{$item.totalPraise}>,"pPraiseAverage":<{$item.avgPraise}>},
+      <{/foreach}>
+  ],
+  rawAry3 = [
+        <{foreach from=$pointMall item=item}>
+          {"pType":"<{$item.contentType}>","pCount":<{$item.totalCount}>,"pExchangeCount":<{$item.totalTimes}>,"pExchangeAverage":<{$item.avgTimes}>,"pPointTotal":<{$item.totalPoint}>,"pPointAverage":<{$item.avgPoint}>,"pCashTotal":<{$item.totalCash}>,"pCashAverage":<{$item.avgCash}>},
+          <{/foreach}>
+
+  ];
+  
+  angular.module('app', ['xyComponents']).controller('xyController',function($scope,$log){
+    $scope.activityData = rawAry;
+    $scope.postData = rawAry2;
+    $scope.goodsData = rawAry3;
+  });
+
+  angular.bootstrap(document,["app"]);
+});
+
+</script>
+</head>
+<body ng-controller="xyController">
+<div class="xy-location">类型受众分析</div>
+<xy-navigator elems="['活动类型受众分析','文章类型受众分析','商品类型受众分析']"></xy-navigator>
+<!--活动类型-->
+<div class="xy-nav-content current">
+  <table id="table1" class="xy-table fullWidth bottomBorderedTable grayBorder">
+    <thead class="borderedTable">
+      <tr>
+        <th>类型</th>
+        <th>活动数量</th>
+        <th>总报名人数</th>
+        <th>平均报名人数</th>
+        <th>总人气</th>
+        <th>平均人气</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in activityData">
+        <td>{{x.aType}}</td>
+        <td>{{x.aCount}}</td>
+        <td>{{x.aRequestCount}}</td>
+        <td>{{x.aRequestAverage}}</td>
+        <td>{{x.aViewCount}}</td>
+        <td>{{x.aViewAverage}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--文章类型-->
+<div class="xy-nav-content">
+	<table id="table1" class="xy-table fullWidth bottomBorderedTable grayBorder">
+    <thead class="borderedTable">
+      <tr>
+        <th>类型</th>
+        <th>文章数量</th>
+        <th>总阅读量</th>
+        <th>平均阅读量</th>
+        <th>总评论量</th>
+        <th>平均评论量</th>
+        <th>总点赞数</th>
+        <th>平均点赞数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in postData">
+        <td>{{x.pType}}</td>
+        <td>{{x.pCount}}</td>
+        <td>{{x.pViewCount}}</td>
+        <td>{{x.pViewAverage}}</td>
+        <td>{{x.pCommentCount}}</td>
+        <td>{{x.pCommentAverage}}</td>
+        <td>{{x.pPraiseCount}}</td>
+        <td>{{x.pPraiseAverage}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--商品类型-->
+<div class="xy-nav-content">
+	<table id="table1" class="xy-table fullWidth bottomBorderedTable grayBorder">
+    <thead class="borderedTable">
+      <tr>
+        <th>类型</th>
+        <th>商品数量</th>
+        <th>总兑换人次</th>
+        <th>平均兑换人次</th>
+        <th>总消耗积分</th>
+        <th>平均消耗积分</th>
+        <th>总消费金额</th>
+        <th>平均消费金额</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in goodsData">
+        <td>{{x.pType}}</td>
+        <td>{{x.pCount}}</td>
+        <td>{{x.pExchangeCount}}</td>
+        <td>{{x.pExchangeAverage}}</td>
+        <td>{{x.pPointTotal}}</td>
+        <td>{{x.pPointAverage}}</td>
+        <td>{{x.pCoshTotal}}</td>
+        <td>{{x.pCoshAverage}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

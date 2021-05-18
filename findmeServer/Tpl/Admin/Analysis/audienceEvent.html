@@ -1,0 +1,43 @@
+<{include file = "Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+    <div class="content">
+        <div class="location">类型受众分析</div>
+        <{include file="Analysis/audienceNav.html"}>
+        <!--表格内容-->
+        <div class="mainGrid">
+            <table class="ui-table ui-body">
+                <thead>
+                <tr>
+                    <th class="pct10">类型</th>
+                    <th class="pct10">活动数量</th>
+                    <th class="pct10">总报名人数</th>
+                    <th class="pct10">平均报名人数</th>
+                    <th class="pct10">总人气</th>
+                    <th class="pct10 last-col">平均人气</th>
+                </tr>
+                </thead>
+                <tbody>
+                <{if $event}>
+                    <{foreach from=$event item=item}>
+                        <tr>
+                            <td><{$item.typeName}></td>
+                            <td><{$item.eventNum}></td>
+                            <td><{$item.applyNum}></td>
+                            <td><{$item.avgApplyNum}></td>
+                            <td><{$item.hotNum}></td>
+                            <td><{$item.avgHotNum}></td>
+                        </tr>
+                    <{/foreach}>
+                <{else}>
+                    <tr><td colspan="6">暂无数据</td></tr>
+                <{/if}>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<{include file="Public/foot.html"}>
+</body>
+</html>

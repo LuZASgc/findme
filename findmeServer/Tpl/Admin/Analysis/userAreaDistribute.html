@@ -1,0 +1,116 @@
+<{include file="Public/top.html" }>
+<script src="<{$preStaticUrl}>Admin/js/highcharts.js?v=<{$resVersion}>"></script>
+</head>
+<body ng-controller="xyController">
+<div id="warpper">
+  <div class="content">
+    <div class="location">用户分布统计</div>
+    <{include file="Analysis/userStatisticNav.html"}>
+    <{if $xAxis}>
+    <div id="doubleColumnLineChart" style="width:100%; height:340px;"></div>
+    <{/if}>
+
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">地区</th>
+          <th class="pct10">人数</th>
+          <th class="pct10">占比</th>
+          <th class="pct10">男性</th>
+          <th class="pct10 last-col">女性</th>
+        </tr>
+        </thead>
+        <tbody>
+          <{if $data}>
+            <{foreach from=$data item=item}>
+              <tr>
+                <td><{$item.areaName}></td>
+                <td><{$item.totalNum}></td>
+                <td><{$item.totalRatio}></td>
+                <td><{$item.maleRatio}></td>
+                <td><{$item.femaleRatio}></td>
+              </tr>
+            <{/foreach}>
+          <{else}>
+            <tr><td colspan="5">暂无数据</td></tr>
+          <{/if}>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td>总计</td>
+          <td><{$total.totalNum}></td>
+          <td><{$total.totalNumRatio}></td>
+          <td><{$total.totalMaleRatio}></td>
+          <td><{$total.totalFemaleRatio}></td>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+<{include file="Public/foot.html" }>
+</body>
+</html>
+<script>
+  $(function(){
+    $('#doubleColumnLineChart').highcharts({
+      credits: {
+        text: '',
+
+      },
+      chart: {
+        zoomType: 'xy'
+      },
+      title: {
+        text: '地区分布统计图',
+        y:5
+      },
+      xAxis: [{
+        categories: <{$xAxis}>,
+        labels: {
+          x:0,
+          style: {
+            color: '#000',
+            fontSize: '12px',
+
+          }}
+      }],
+      yAxis: [{ // 主Y轴
+        min:0,
+        max:300,
+        tickInterval:50,
+        labels: {
+          format: '{value}',
+          style: {
+            color: '#000',
+            fontSize: '12px'
+          }
+        },
+        title: {
+          text: '',
+          style: {
+            color: '#000',
+            fontSize: '12px'
+          }
+        }
+      }],
+      tooltip: {
+        shared: true
+      },
+      legend: {
+        backgroundColor: '#FFF'
+      },
+      series: [{
+        name: '人数',
+        color: '#fe7f30',
+        type: 'column',
+        yAxis: 0,
+        data: [<{$yAxis}>],
+        tooltip: {valueSuffix: '人'}
+      }]
+
+    });
+  });
+</script>

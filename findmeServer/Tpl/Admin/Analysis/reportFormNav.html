@@ -1,0 +1,9 @@
+<div class="ui-tab">
+    <ul>
+        <li class="tab-item <{if $action eq dayReportForm}>selected<{/if}>"><a href="<{U('Analysis/dayReportForm')}>" onclick="LayerShow();">日报表</a></li>
+        <li class="tab-item <{if $action eq weekReportForm}>selected<{/if}>"><a href="<{U('Analysis/weekReportForm')}>" onclick="LayerShow();">周报表</a></li>
+        <li class="tab-item <{if $action eq monReportForm}>selected<{/if}>"><a href="<{U('Analysis/monReportForm')}>" onclick="LayerShow();">月报表</a></li>
+        <li class="tab-item <{if $action eq dailyActive}>selected<{/if}>"><a href="<{U('Analysis/dailyActive')}>" onclick="LayerShow();">日活跃</a></li>
+        <li class="tab-item last-item <{if $action eq monthlyActive}>selected<{/if}>"><a href="<{U('Analysis/monthlyActive')}>" onclick="LayerShow();">月活跃</a></li>
+    </ul>
+</div>

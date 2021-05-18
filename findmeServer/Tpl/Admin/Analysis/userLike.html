@@ -1,0 +1,89 @@
+<{include file="Public/top.html"}>
+</head>
+<body>
+<div id="warpper">
+  <div class="content">
+    <div class="location">用户统计</div>
+    <{include file="Analysis/userStatisticNav.html"}>
+    <div class="filedSet" style="padding-bottom: 0;">
+      <div class="search">
+        <form action="" id="searchForm" method="get" class="ui-form reportForm">
+          <input name="m" type="hidden" value="<{$module}>">
+          <input name="c" type="hidden" value="<{$controller}>">
+          <input name="a" type="hidden" value="<{$action}>">
+
+          <input name="p" id="page" type="hidden" value="<{$page|default:1}>">
+          <input name="limit" id="limit" type="hidden" value="<{$limit|default:10}>">
+          <input name="ofield" id="ofield" type="hidden" value="<{$ofield}>">
+          <input name="otype"  id="otype"  type="hidden" value="<{$otype}>">
+          <div class="ui-form-item inline-block">
+            <label class="ui-label">关键字</label>
+            <input type="text" class="ui-text bg-text keyword" value="<{$keywords}>" name="keywords"/>
+          </div>
+          <div class="ui-form-item inline-block">
+            <button type="submit" class="ui-button" onclick="LayerShow();">查询</button>
+          </div>
+          <div class="ui-form-item inline-block" style="float:right; padding-right:10px;">
+            <a href="javascript:void(0)" class="ParameterDefinition ui-label">参数定义</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--表格内容-->
+    <div class="mainGrid">
+      <table class="ui-table ui-body">
+        <thead>
+        <tr>
+          <th class="pct10">ID</th>
+          <th class="pct10">昵称</th>
+          <th class="pct10">姓名</th>
+          <{foreach from=$index item=item key=key}>
+            <th class="pct10"><a href="javascript:void(0)" onclick="changeOrder('<{$key}>')"><{$item}>指数</a></th>
+          <{/foreach}>
+        </tr>
+        </thead>
+        <tbody>
+          <{foreach from=$data item=item}>
+            <tr>
+              <td><{$item.uid}></td>
+              <td><{$item.nickname}></td>
+              <td><{$item.realName}></td>
+              <{foreach from=$index item=type key=key}>
+                <td><{$item["index$key"]}></td>
+              <{/foreach}>
+            </tr>
+          <{/foreach}>
+        </tbody>
+      </table>
+    </div>
+    <!--描述：分页-->
+    <div class="pagination">
+      <{include file="Public/page.html" }>
+    </div>
+  </div>
+</div>
+<div id="ParameterDefinition" class="PDefinitionBox" style="display:none;">
+  <dl>阅读操作：对应指数+1</dl>
+  <dl>点赞操作：对应指数+1</dl>
+  <dl>评论操作：对应指数+2</dl>
+  <dl>活动报名（不付费）：对应指数+2</dl>
+  <dl>转发操作：对应指数+3</dl>
+  <dl>活动报名（付费）：对应指数+5</dl>
+  <dl>积分操作（积分兑换、积分秒杀……）：对应指数+5</dl>
+</div>
+<{include file="Public/foot.html" }>
+<script>
+  $(document).on('click','.ParameterDefinition',function(){
+    var ParameterDefinition = dialog({
+      title: '参数定义',
+      width: 410,
+      content: $("#ParameterDefinition"),
+      onshow: function(){
+        $("#ParameterDefinition form")[0].reset();
+      },
+    });
+    ParameterDefinition.showModal();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+/* pages/play/play.wxss */
+#countdown{width:100rpx;height:100rpx;border-radius:50%;background-color:lightblue;margin:auto;margin-left:200rpx;text-align:center;line-height:100rpx}
+#submit{width:150rpx;float: right;margin-top:20rpx;margin-right:20rpx}
+.photo{border-top:1px dashed red;display:flex;flex-direction: row;flex-wrap:wrap;align-items:center;justify-content:center}
+.photo image{width: 300rpx;height: 300rpx;margin:10rpx;border-radius: 20rpx}
+image.selected{outline:4px solid green}
+.userinfo-avatar{border-radius: 50%;width:100rpx;height: 100rpx;margin-left:20rpx;margin-top:20rpx}

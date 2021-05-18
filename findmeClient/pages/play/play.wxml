@@ -1,0 +1,17 @@
+<!--play.wxml-->
+<view style='display:flex'>
+<image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+<view id='countdown' >{{num}}</view>
+<button id='submit'>提交</button>
+</view>
+  <view class="photo" bindtap='selectPhoto' style="">
+    <image src='/image/1.jpg' data-id="1"></image>
+    <image src='/image/2.jpg' data-id="3"></image>
+    <image src='/image/3.jpg' data-id="5"></image>
+    <image src='/image/4.jpg' data-id="7"></image>
+    <image src='/image/5.jpg' data-id="9"></image>
+    <image src='/image/6.jpg' data-id="11"></image>
+  </view>
+
+
+

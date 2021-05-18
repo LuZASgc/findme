@@ -1,0 +1,254 @@
+<{include file="Public/top_analysis.html" }>
+<script>
+var dayAry = [
+  {"dDate":50,"dNewUser":50,"dNewBind":50,"dNewCustomer":50,"dLike":50,"dComment":50,"dContribute":50,"dActive":50,"dExchange":50,"dConsum":5000,"dConsumer":50},
+  {"dDate":50,"dNewUser":50,"dNewBind":50,"dNewCustomer":50,"dLike":50,"dComment":50,"dContribute":50,"dActive":50,"dExchange":50,"dConsum":5000,"dConsumer":50},
+  {"dDate":50,"dNewUser":50,"dNewBind":50,"dNewCustomer":50,"dLike":50,"dComment":50,"dContribute":50,"dActive":50,"dExchange":50,"dConsum":5000,"dConsumer":50},
+  {"dDate":50,"dNewUser":50,"dNewBind":50,"dNewCustomer":50,"dLike":50,"dComment":50,"dContribute":50,"dActive":50,"dExchange":50,"dConsum":5000,"dConsumer":50},
+  {"dDate":50,"dNewUser":50,"dNewBind":50,"dNewCustomer":50,"dLike":50,"dComment":50,"dContribute":50,"dActive":50,"dExchange":50,"dConsum":5000,"dConsumer":50}
+],
+weekAry = [
+  {"wDate":50,"wNewUser":50,"wNewBind":50,"wNewCustomer":50,"wLike":50,"wComment":50,"wContribute":50,"wActive":50,"wExchange":50,"wConsum":5000,"wConsumer":50},
+  {"wDate":50,"wNewUser":50,"wNewBind":50,"wNewCustomer":50,"wLike":50,"wComment":50,"wContribute":50,"wActive":50,"wExchange":50,"wConsum":5000,"wConsumer":50},
+  {"wDate":50,"wNewUser":50,"wNewBind":50,"wNewCustomer":50,"wLike":50,"wComment":50,"wContribute":50,"wActive":50,"wExchange":50,"wConsum":5000,"wConsumer":50},
+  {"wDate":50,"wNewUser":50,"wNewBind":50,"wNewCustomer":50,"wLike":50,"wComment":50,"wContribute":50,"wActive":50,"wExchange":50,"wConsum":5000,"wConsumer":50},
+  {"wDate":50,"wNewUser":50,"wNewBind":50,"wNewCustomer":50,"wLike":50,"wComment":50,"wContribute":50,"wActive":50,"wExchange":50,"wConsum":5000,"wConsumer":50}
+],
+monthAry = [
+  {"mDate":50,"mNewUser":50,"mNewBind":50,"mNewCustomer":50,"mLike":50,"mComment":50,"mContribute":50,"mActive":50,"mExchange":50,"mConsum":5000,"mConsumer":50},
+  {"mDate":50,"mNewUser":50,"mNewBind":50,"mNewCustomer":50,"mLike":50,"mComment":50,"mContribute":50,"mActive":50,"mExchange":50,"mConsum":5000,"mConsumer":50},
+  {"mDate":50,"mNewUser":50,"mNewBind":50,"mNewCustomer":50,"mLike":50,"mComment":50,"mContribute":50,"mActive":50,"mExchange":50,"mConsum":5000,"mConsumer":50},
+  {"mDate":50,"mNewUser":50,"mNewBind":50,"mNewCustomer":50,"mLike":50,"mComment":50,"mContribute":50,"mActive":50,"mExchange":50,"mConsum":5000,"mConsumer":50},
+  {"mDate":50,"mNewUser":50,"mNewBind":50,"mNewCustomer":50,"mLike":50,"mComment":50,"mContribute":50,"mActive":50,"mExchange":50,"mConsum":5000,"mConsumer":50}
+];
+require(["jquery","angular","js/xy-utils","ngcomponents/xy-navigator","ngcomponents/xy-pageNavigator","WdatePicker"],function($,angular,xyUtils){
+
+  angular.module("app", ["xyComponents"]).controller("xyController",function($scope,$log){
+    $scope.dayData = dayAry;
+    $scope.dCurrentPage = 1; $scope.dTotalPage = 5;
+    $scope.onDayPageChange = function(p){
+      $log.log("currentPage is:"+p);
+    };
+
+    $scope.weekData = weekAry;
+    $scope.wCurrentPage = 1; $scope.wTotalPage = 5;
+    $scope.onWeekPageChange = function(p){
+      $log.log("currentPage is:"+p);
+    };
+
+    $scope.monthData = monthAry;
+    $scope.mCurrentPage = 1; $scope.mTotalPage = 5;
+    $scope.onMonthPageChange = function(p){
+      $log.log("currentPage is:"+p);
+    };
+
+  });
+
+  angular.bootstrap(document,["app"]);
+
+  xyUtils.generateDateIntervalPicker("dDateFrom","dDateTo");
+  xyUtils.generateDateIntervalPicker("wDateFrom","wDateTo",undefined,[1,2,3,4,5,6],true);
+  xyUtils.generateDateIntervalPicker("mDateFrom","mDateTo","yyyy-MM");
+});
+</script>
+</head>
+<body ng-controller="xyController">
+<div class="xy-location">日周月报表</div>
+
+<xy-navigator elems="['日报表','周报表','月报表','日活跃','月活跃']"></xy-navigator>
+<!--日报表-->
+<div class="xy-nav-content current">
+	<div style="line-height:32px;">
+    <span>时间段</span>
+    <input id="dDateFrom" class="selectIndicatorBG shorterInput" type="text" placeholder="选择开始时间"/>
+    <span>-</span>
+    <input id="dDateTo" class="selectIndicatorBG shorterInput" type="text" placeholder="选择结束时间"/>
+    <a class="xy-button">查询</a>
+  </div>
+	<table class="xy-table fullWidth bottomBorderedTable grayBorder" style="margin:10px 0">
+    <thead class="borderedTable">
+      <tr>
+        <th>日期</th>
+        <th>新增用户</th>
+        <th>新增绑定</th>
+        <th>新增付费</th>
+        <th>点赞人数</th>
+        <th>评论人数</th>
+        <th>发稿人数</th>
+        <th>活跃人数</th>
+        <th>兑换人数</th>
+        <th>付费金额</th>
+        <th>总付费人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in dayData">
+        <td>{{x.dDate}}</td>
+        <td>{{x.dNewUser}}</td>
+        <td>{{x.dNewBind}}</td>
+        <td>{{x.dNewCustomer}}</td>
+        <td>{{x.dLike}}</td>
+        <td>{{x.dComment}}</td>
+        <td>{{x.dContribute}}</td>
+        <td>{{x.dActive}}</td>
+        <td>{{x.dExchange}}</td>
+        <td>{{x.dConsum}}</td>
+        <td>{{x.dConsumer}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <xy-page-navigator style="float:right" crt-page="dCurrentPage" total-page="dTotalPage" on-change="onDayPageChange"></xy-page-navigator>
+</div>
+
+<!--周报表-->
+<div class="xy-nav-content">
+  <div style="line-height:32px;">
+    <span>时间段</span>
+    <input id="wDateFrom" class="selectIndicatorBG shorterInput" type="text" placeholder="选择开始时间"/>
+    <span>-</span>
+    <input id="wDateTo" class="selectIndicatorBG shorterInput" type="text" placeholder="选择结束时间"/>
+    <a class="xy-button">查询</a>
+  </div>
+  <table class="xy-table fullWidth bottomBorderedTable grayBorder" style="margin:10px 0">
+    <thead class="borderedTable">
+      <tr>
+        <th>日期</th>
+        <th>新增用户</th>
+        <th>新增绑定</th>
+        <th>新增付费</th>
+        <th>点赞人数</th>
+        <th>评论人数</th>
+        <th>发稿人数</th>
+        <th>活跃人数</th>
+        <th>兑换人数</th>
+        <th>付费金额</th>
+        <th>总付费人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in weekData">
+        <td>{{x.wDate}}</td>
+        <td>{{x.wNewUser}}</td>
+        <td>{{x.wNewBind}}</td>
+        <td>{{x.wNewCustomer}}</td>
+        <td>{{x.wLike}}</td>
+        <td>{{x.wComment}}</td>
+        <td>{{x.wContribute}}</td>
+        <td>{{x.wActive}}</td>
+        <td>{{x.wExchange}}</td>
+        <td>{{x.wConsum}}</td>
+        <td>{{x.wConsumer}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <xy-page-navigator style="float:right" crt-page="cCurrentPage" total-page="cTotalPage" on-change="onWeekPageChange"></xy-page-navigator>
+</div>
+
+<!--月报表-->
+<div class="xy-nav-content">
+  <div style="line-height:32px;">
+    <span>时间段</span>
+    <input id="mDateFrom" class="selectIndicatorBG shorterInput" type="text" placeholder="选择开始时间"/>
+    <span>-</span>
+    <input id="mDateTo" class="selectIndicatorBG shorterInput" type="text" placeholder="选择结束时间"/>
+    <a class="xy-button">查询</a>
+  </div>
+  <table class="xy-table fullWidth bottomBorderedTable grayBorder" style="margin:10px 0">
+    <thead class="borderedTable">
+      <tr>
+        <th>日期</th>
+        <th>新增用户</th>
+        <th>新增绑定</th>
+        <th>新增付费</th>
+        <th>点赞人数</th>
+        <th>评论人数</th>
+        <th>发稿人数</th>
+        <th>活跃人数</th>
+        <th>兑换人数</th>
+        <th>付费金额</th>
+        <th>总付费人数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in monthData">
+        <td>{{x.mDate}}</td>
+        <td>{{x.mNewUser}}</td>
+        <td>{{x.mNewBind}}</td>
+        <td>{{x.mNewCustomer}}</td>
+        <td>{{x.mLike}}</td>
+        <td>{{x.mComment}}</td>
+        <td>{{x.mContribute}}</td>
+        <td>{{x.mActive}}</td>
+        <td>{{x.mExchange}}</td>
+        <td>{{x.mConsum}}</td>
+        <td>{{x.mConsumer}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <xy-page-navigator style="float:right" crt-page="mCurrentPage" total-page="mTotalPage" on-change="onMonthPageChange"></xy-page-navigator>
+</div>
+<!--积分产出-->
+<div class="xy-nav-content current">
+  <div style="line-height:32px;">
+    <span>时间段</span>
+    <input id="dDateFrom" class="selectIndicatorBG shorterInput" type="text" placeholder="选择开始时间"/>
+    <span>-</span>
+    <input id="dDateTo" class="selectIndicatorBG shorterInput" type="text" placeholder="选择结束时间"/>
+    <a class="xy-button" ng-click="searchDay()">查询</a>
+  </div>
+  <table class="xy-table fullWidth bottomBorderedTable grayBorder" style="margin:10px 0">
+    <thead class="borderedTable">
+    <tr>
+      <th>日期</th>
+      <th>日总活跃用户</th>
+      <th>当日新用户</th>
+      <th>老用户</th>
+      <th>流失用户回归</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in dayData">
+      <td>{{x.dDate}}</td>
+      <td>{{x.dTotal}}</td>
+      <td>{{x.dNew}}</td>
+      <td>{{x.dOld}}</td>
+      <td>{{x.dReturn}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <xy-page-navigator style="float:right" crt-page="dCurrentPage" total-page="dTotalPage" on-change="onDayPageChange"></xy-page-navigator>
+</div>
+
+<!--积分消耗-->
+<div class="xy-nav-content">
+  <div style="line-height:32px;">
+    <span>时间段</span>
+    <input id="mDateFrom" class="selectIndicatorBG shorterInput" type="text" placeholder="选择开始时间"/>
+    <span>-</span>
+    <input id="mDateTo" class="selectIndicatorBG shorterInput" type="text" placeholder="选择结束时间"/>
+    <a class="xy-button" ng-click="searchMonth()">查询</a>
+  </div>
+  <table class="xy-table fullWidth bottomBorderedTable grayBorder" style="margin:10px 0">
+    <thead class="borderedTable">
+    <tr>
+      <th>日期</th>
+      <th>月总活跃用户</th>
+      <th>当月新用户</th>
+      <th>老用户</th>
+      <th>流失用户回归</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in monthData">
+      <td>{{x.mDate}}</td>
+      <td>{{x.mTotal}}</td>
+      <td>{{x.mNew}}</td>
+      <td>{{x.mOld}}</td>
+      <td>{{x.mReturn}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <xy-page-navigator style="float:right" crt-page="mCurrentPage" total-page="mTotalPage" on-change="onMonthPageChange"></xy-page-navigator>
+</div>
+</body>
+</html>

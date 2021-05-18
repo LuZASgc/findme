@@ -1,0 +1,321 @@
+<{include file="Public/top.html" }>
+	</head>
+	<body>
+		<div id="warpper">
+            <div class="content">
+                <div class="location">资讯文章</div>
+                <{include file="./nav.html" }>
+
+                <form action="<{u(update)}>" class="ui-form" id="addManagerForm" method="post" >
+                <div class="topic">文章信息</div>
+                <div class="form-box border0 border-box">
+
+                        <input type="hidden" name="id" value="<{$obj.id|default:0}>" />
+                        <div class="ui-form-item">
+                            <label class="ui-label">标题</label>
+                            <input type="text" class="ui-text"  name="title" value="<{$obj.title}>" required/>
+                        </div>
+                        <div class="ui-form-item">
+                            <label class="ui-label">标签</label>
+                            <select name="contentType" id="contentType" class="ui-select" onchange="ajaxGetDaRenTypeRelated(this)">
+                                <{html_options options=$contentType selected=$obj.contentType}>
+                            </select>
+                            <!--<input type="button" id="eventsTypeManage" value="标签管理" class="ui-button"/>-->
+                        </div>
+                        <div class="ui-form-item">
+                            <label class="ui-label">栏目</label>
+                            <{html_checkboxes name="channel" options=$channels checked=$selectedChannels separator="&nbsp;"}>
+                        </div>
+
+                        <{if $clientShow}>
+                            <div class="ui-form-item">
+                                <label class="ui-label">展现渠道</label>
+                                <{html_checkboxes name="clientShow" options=$clientShow checked=$selectedClients separator="&nbsp;"}>
+                            </div>
+                        <{/if}>
+                        <{if $shopSwitch}>
+                            <div class="ui-form-item">
+                                <label class="ui-label">商家</label>
+                                <select name="shipID" class="ui-select">
+                                    <option value="0">无</option>
+                                    <{html_options options=$shops selected=$obj.shopID}>
+                                </select>
+                                <!--<input type="reset" value="筛选器" class="ui-button fade-o-butn"/>-->
+                            </div>
+                        <{/if}>
+                        <{if $relatedSwitch}>
+                            <{if $relatedNum eq 0}>
+                                <div class="ui-form-item">
+                                    <label class="ui-label">关联</label>
+                                    <select name="relatedType[]" class="ui-select" onchange="ajaxGetRelated(this)">
+                                        <option value="0">无关联</option>
+                                        <option value="2">活动</option>
+                                        <option value="3">电商</option>
+                                        <option value="4">积分商城</option>
+                                    </select>
+                                    <select name="relatedID[]" class="ui-select">
+                                        <option value="">活动名称</option>
+                                    </select>
+                                    <input type="button" id="addRelate" value="添加" class="ui-button"/>
+                                </div>
+                            <{else}>
+                                <{foreach from=$related item=item name=forRelated}>
+                                    <{if $smarty.foreach.forRelated.first}>
+                                        <div class="ui-form-item">
+                                            <label class="ui-label">关联</label>
+                                            <select id="related<{$smarty.foreach.forRelated.index}>" name="relatedType[]" class="ui-select" onchange="ajaxGetRelated(this)">
+                                                <option value="0">无关联</option>
+                                                <option value="2" >活动</option>
+                                                <option value="3" >电商</option>
+                                                <option value="4" >积分商城</option>
+                                            </select>
+                                            <select id="relatedID<{$smarty.foreach.forRelated.index}>" name="relatedID[]" class="ui-select">
+                                                <option value="">活动名称</option>
+                                            </select>
+                                            <input type="button" id="addRelate" value="添加" class="ui-button"/>
+                                        </div>
+
+                                    <{else}>
+                                        <div class="ui-form-item">
+                                            <label class="ui-label"></label>
+                                            <select id="related<{$smarty.foreach.forRelated.index}>" name="relatedType[]" class="ui-select" onchange="ajaxGetRelated(this)">
+                                                <option value="0">无关联</option>
+                                                <option value="2" >活动</option>
+                                                <option value="3" >电商</option>
+                                                <option value="4" >积分商城</option>
+                                            </select>
+                                            <select id="relatedID<{$smarty.foreach.forRelated.index}>" name="relatedID[]" class="ui-select">
+                                                <option value="">活动名称</option>
+                                            </select>
+                                        </div>
+                                    <{/if}>
+                                    <script>
+
+                                        $("#related<{$smarty.foreach.forRelated.index}>").val(<{$item[0]}>);
+                                        $(document).ready(function(){
+
+                                            ajaxGetRelated(document.getElementById("related<{$smarty.foreach.forRelated.index}>"),
+
+                                            function(){
+                                                $("#relatedID<{$smarty.foreach.forRelated.index}>").val(<{$item[1]}>);
+
+                                            });
+                                        });
+                                    </script>
+                                <{/foreach}>
+                            <{/if}>
+                        <{/if}>
+                        <{if $businessSwitch}>
+                            <div class="ui-form-item">
+                                <label class="ui-label">商务经理</label>
+                                <input type="radio" value="0" name="business" checked/>不选
+                                <{html_radios name="business" options=$sysUser selected=$selectedSysUser separator="&nbsp;"}>
+                            </div>
+                        <{/if}>
+                        <div class="ui-form-item2 uploader">
+                            <input type="hidden" value="<{$obj.listPic}>" id="listPic" name="listPic">
+                            <label class="ui-label">列表图片</label>
+                            <span class="picture_box picture_270">
+								<div class="a-imgBox" id="imgBox" <{if $obj.listPic}>style="display:block"<{else}>style="display:none;"<{/if}>>
+                                    <a href="javascript:;" class="a-close" onclick="deleteListPic()"></a>
+
+                                    <img src="<{$preUploadUrl}><{$obj.listPic}>" width="270" height="169" />
+                                </div>
+                                <div>
+                                    <a href="javascript:;" class="a-upload">
+                                        <input type="file" name="file" >
+                                    </a>
+                                    <i class="uptxt">上传图片</i>
+                                    <i>640*350</i>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="reply_box">
+                            <label class="ui-label">正文</label>
+                            <textarea id="editor" name="content" class="edui-default inline-block"><{$obj.content}></textarea>
+                            <ul id="fixed" class="FloatingBox" style="display: none">
+                                    <li id="company"><i class="FloatingIcon1"></i>平台名</li>
+                                    <li id="author"><i class="FloatingIcon2"></i>小编名</li>
+                                    <li id="ewm"><i class="FloatingIcon3"></i>二维码</li>
+                            </ul>
+
+                        </div>
+                        <{if $authorSwitch}>
+                            <div class="ui-form-item">
+                                <label class="ui-label">作者</label>
+                                <input type="hidden" name="uid" value="<{$obj.uid|default:$uid}>" />
+                                <input type="text" class="ui-text"  name="nickname" value="<{$obj.nickname|default:$nickname}>" readonly required/>
+                            </div>
+                        <{/if}>
+                        <div class="ui-form-item">
+                            <label class="ui-label">推荐指数</label>
+                            <select name="recommend" class="ui-select">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                </div>
+                <div class="integral_btn-group">
+                    <input type="submit" value="提交" class="ui-button"/>
+                    <input type="reset" value="清空" class="ui-button fade-o-butn"/>
+                </div>
+
+
+                </form>
+            </div>
+		</div>
+
+
+
+
+
+        <{include file="Public/foot.html" }>
+        <{include file="Public/ueditor.html" }>
+		<script>
+            $(document).ready(function(){
+                $("#contentType").val("<{$obj.contentType|default:1}>");
+                ajaxGetDaRenTypeRelated($("#contentType"));
+                $("#addRelate").on("click",function(){
+                    var src=$(this).parent();
+                    var cloneObj=src.clone();
+                    cloneObj.find('input').remove();
+                    cloneObj.find('label').text('');
+                    src.after(cloneObj);
+                });
+
+                $("input[name='channel[]']").on('click',function(){
+                    var status= $(this).attr("checked");
+                    if(status == false || !status){
+                        $(this).attr("checked",true);
+                        $("input[name='channel[]'][value=1]").prop("checked",true).attr("checked",true);
+                    } else{
+                        $(this).attr("checked",false);
+                    }
+                });
+
+                $("form").submit(function () {
+                    if( !$("#listPic").val() ){
+                        layer.msg('请上传列表图片！');
+                        return false;
+                    }
+                    if( !UE.getEditor('editor').getContent() ){
+                        layer.msg('请填写文章详情！');
+                        return false;
+                    }
+                    layer.msg("正在提交数据...",{time:999});
+                    $.post("<{U('update')}>",$(this).serialize(), function(data){
+                        if(data.status==0){
+                             layer.msg(data.info);
+                        }else{
+                            layer.msg(data.info);
+                            location.href="<{U('index')}>";
+                        }
+                    }, 'json');
+                    return false;
+                });
+            });
+
+
+
+
+			datePickter('startDate','endDate');
+
+            (function ($) {
+                'use strict';
+                $.fn.uploader = function () {
+                    return this.each(function () {
+                        var $this = $(this);
+                        var $img = $this.find('img');
+                        var $file = $this.find('input[type=file]');
+                        var $hidden = $this.find('input[type=hidden]');
+                        var $txt = $this.find('i.uptxt');
+                        $file.AjaxFileUpload({
+                            action: './api.php?m=Api&c=index&a=ajaxUpload&from=IMG_INDEX_ARTICLE_LIST',
+                            onSubmit: function () {
+                                $txt.text('上传中');
+                            },
+                            onComplete: function (filename, response) {
+                                if(parseInt(response.id)>0){
+                                    $txt.text("上传成功");
+                                    $hidden.attr('value', response.msg);
+                                    $img.attr("src",response.msg);
+									$('#imgBox').show();
+                                }else{
+                                    $txt.text(response.msg);
+                                }
+
+                            }
+                        });
+                    });
+                }
+            })(jQuery);
+
+            $('.uploader').uploader();
+
+            //删除图片
+            function deleteListPic() {
+                $('#imgBox').hide();
+                $('.uptxt').text('上传图片');
+                $('#listPic').val('');
+            }
+
+            //达人类型获取关联
+            function ajaxGetDaRenTypeRelated(e){
+                var type = $(e).val();
+                $.getJSON("./api.php?m=Api&c=index&a=getDaRenNickname",{type:type},function(data){
+                    if(data){
+                        $("#writer").empty().append("<option value=\"<{$uid}>\"><{$nickname|default:$uid}></option>");
+                        var uid= "<{$obj.uid}>";
+                        $.each(data,function(i,item){
+                            if(uid==i){
+                                $("#writer").prepend("<option value=\"" + i + "\" selected>" + item + "</option>");
+                            }else{
+                                $("#writer").prepend("<option value=\"" + i + "\">" + item + "</option>");
+                            }
+                        });
+                }
+                });
+            }
+
+            //获取作者昵称
+            function getNickname(){
+                $("#nickname").val($("#writer option:selected").text());
+            }
+			
+			function scrollLis(){
+				var toTop = offs.top-$(window).scrollTop();
+				if(toTop==0||toTop<0){
+					if(!$('#fixed').hasClass('FloatingBoxab'))$('#fixed').addClass('FloatingBoxab');
+				}else{
+					$('#fixed').removeClass('FloatingBoxab');
+				}
+			}
+            var offs=$('#fixed').offset();
+            $(window).scroll(function(){
+                scrollLis();
+            });
+
+
+
+
+            $('#fixed').on('click',function(e){
+                switch(e.target.id){
+                    case 'company'://企业平台
+                        ue.execCommand('inserthtml', '<star id="companyPaltform">--平台--</star>');
+                        break;
+                    case 'author'://作者
+                        ue.execCommand('inserthtml', '<star id="author">--作者签名--</star>');
+                        break;
+                    case 'ewm'://二维码
+                        ue.execCommand('inserthtml', '<star id="qrcode">--二维码--</star>');
+                        break;
+                }
+            });
+
+        </script>
+	</body>
+</html>
