@@ -31,13 +31,5 @@ function NetRequest({ url, data, success, fail, complete, method = "POST" }) {
 
 }  
 
-function showCurrentURL(){
-  var pages = getCurrentPages();
-  var currentURL = pages[0].route;
-  wx.setNavigationBarTitle({
-    title: currentURL,
-  })
-}
 
 module.exports.request = NetRequest
-module.exports.showCurrentURL = showCurrentURL

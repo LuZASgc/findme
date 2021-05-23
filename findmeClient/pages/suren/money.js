@@ -44,8 +44,7 @@ Page({
           console.log(re);
           if(re.status==0){
             that.pay(that.data.totalMoney,re.gid.toString());
-          }else{
-           
+          }else{           
             wx.showModal({
               title: '出现错误',
               content: re.msg,
@@ -64,9 +63,24 @@ Page({
     var payInfo={
       body:'塞钱进红包',
       total_fee: fee,
-      order_sn:gid
+      order_sn:'g_'+gid
     }
-    this.basePay(payInfo, function (e) { console.log(e) }, function (e) { console.log(e) });
+    this.basePay(payInfo, function (e) { 
+      
+      common.request({
+        url: 'm=Api&c=Api&a=checkPayStatus',
+        data: { 'id': gid, 'type': 'g' },
+        success: function (_payResult) {
+          
+        }
+      })
+
+      
+     }, function (e) { 
+       
+
+
+      });
   },
 
   /** 

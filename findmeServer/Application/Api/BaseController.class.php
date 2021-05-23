@@ -15,5 +15,8 @@ class BaseController extends Controller {
 
     public $dataSuccess = array('status'=>self::SUCCESS,'msg'=>'成功');
     public $dataFailure = array('status'=>self::FAILURE,'msg'=>'无效参数');
+    protected function _initialize(){
 
+        session_start();
+    }
 }

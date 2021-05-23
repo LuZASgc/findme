@@ -1,1 +1,2 @@
 /* pages/index/menu.wxss */
+text{white-space: nowrap}

@@ -1,0 +1,12 @@
+<!--上传图片-->
+<view class='container'>
+
+<view style='background-image:url("{{avatarUrl}}");background-size:cover;width:300rpx;height:300rpx;border-radius:50%'></view> 
+<text>{{nickname}}</text>
+<view style='clear:both'>
+  <button open-type='share' style="float:right">分享给好友</button>
+  <button type='default' style='float:left' bindtap='createNew'>创建新游戏</button>
+</view>
+
+<button type='primary'>开始游戏</button>
+</view>

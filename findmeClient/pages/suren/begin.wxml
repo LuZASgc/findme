@@ -1,0 +1,21 @@
+<!--上传图片-->
+<view class='container'>
+
+<view style='background-image:url("{{avatarUrl}}");background-size:cover;width:300rpx;height:300rpx;border-radius:50%'></view> 
+<text>{{nickname}}</text>
+<view id='notice' style='font-size: 40rpx;width: 85%;word-break: break-all;white-space: normal;margin:80rpx auto;line-height:54rpx;text-align:justify'>
+<text style='font-size:40rpx;font-weight:600'>说明：</text>
+<view>6张照片中，有一张属于"{{nickname}}"，你能从中找到他吗？</view>
+<view>
+<text wx:if="{{hasPrizeWithoutBet}}" >如果找对了，有机会获得红包奖励唷</text>
+<text wx:if="{{hasPrizeWithBet}}" >"{{nickname}}"设置了您必须提交1元保证金，如果答对，不光这1元会返回给您，您还将获得至少1元的红包奖励。当然如果选错了，那么嘿嘿，您的保证金也将归"{{nickname}}"喽。</text>
+</view>
+
+</view>
+<button wx:if="{{hasPrizeWithoutBet}}" type='primary' bindtap='beginGame' style='margin-bottom:20rpx'>开始游戏</button>
+<button wx:if="{{hasPrizeWithBet}}" type='primary' bindtap='submitForm' style='margin-bottom:20rpx'>去充值</button>
+<view style='clear:both'>
+  <button open-type='share' style="float:right">分享给好友</button>
+  <button type='default' style='float:left' bindtap='createNew'>创建新游戏</button>
+</view>
+</view>

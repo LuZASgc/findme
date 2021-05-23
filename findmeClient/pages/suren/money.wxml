@@ -1,0 +1,34 @@
+<!--pages/create/money.wxml-->
+<view class="container" >
+  <form bindsubmit='submitForm'>
+    <view class="row">
+      <view class='left'>红包金额</view>
+      <view class='right'>
+              <input id='prizeMoney' bindinput='changeMoney' name="prizeMoney" type="digit" placeholder="0.00" value='{{prizeMoney}}'></input>元
+      </view>
+    </view>
+    <view class="row">
+      <view class='left'>红包个数</view>
+      <view class='right'>
+          <input id='num' name="num" type="number" placeholder="1" value='{{num}}'></input><text>个</text>
+      </view>
+    </view>
+    <view class="row">
+      <view class='left'>最小红包</view>
+      <view class='right'>
+          <input name="min" type='digit' placeholder="0.00" value='{{min}}'></input><text>元</text>
+      </view>
+    </view>
+
+    <view class="row">
+      <view class='left'>是否启动对擂</view>
+      <view class='right'><switch checked name="isBet" bindchange="switch1Change"/></view>
+    </view>
+    <view class="big" >
+      <view style='font-size:150rpx'>{{totalMoney}}元</view><br />
+      <view>含平台{{serviceScale}}%服务费</view>
+    </view>
+
+    <button type='primary' form-type='submit' disabled='{{canPay}}'>塞钱进红包</button>
+  </form>
+</view>

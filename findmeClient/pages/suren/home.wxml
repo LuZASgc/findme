@@ -1,0 +1,24 @@
+<view class="container">
+  <view class="userinfo" style='background-image:url({{userInfo.avatarUrl}});'>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" > 获取头像昵称 </button>
+    <block wx:else>
+    
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+ 
+    </block>
+
+
+
+
+  </view>
+<view class='row-list'>
+    <view class='row-cell'><view class='row_left'>您的总收益</view><view class='row_right'>0元</view></view>
+    <view class='row-cell'><view class='row_left'>可取现金额</view><view class='row_right'>0元</view> </view>    
+    <view class='row-cell'><view class='row_left'>历史记录</view><view class='row_right'><view class='arrow-right'></view></view></view>
+</view>
+<view class='row-list'>
+    <view class='row-cell'><view class='row_left'>星探最高得分</view><view class='row_right'><view class='arrow-right'></view></view></view>
+    <view class='row-cell'><view class='row_left'>我的游戏记录</view><view class='row_right'><view class='arrow-right'></view></view></view>
+</view>
+</view>

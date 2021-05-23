@@ -4,16 +4,20 @@
     "pages/index/index",        
     "pages/play/play",
     "pages/star/index",
-    "pages/create/index",
-    "pages/create/set",
-    "pages/create/money",
-    "pages/create/upload",
+    "pages/star/play",
+    "pages/star/rank",
+    "pages/suren/begin",
+    "pages/suren/set",
+    "pages/suren/money",
+    "pages/suren/finish",
+    "pages/suren/play",
+    "pages/suren/home",
     "pages/help/index",
   	"pages/logs/logs"    
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#9988ff",
+    "navigationBarBackgroundColor": "#0000ff",
     "navigationBarTitleText": "找我唷",
     "navigationBarTextStyle":"white"
   },
@@ -36,7 +40,7 @@
         "text": "星探"
       },
       {
-        "pagePath": "pages/create/set",
+        "pagePath": "pages/suren/set",
         "iconPath": "image/icon_API.png",
         "selectedIconPath": "image/icon_API_HL.png",
         "text": "发起"

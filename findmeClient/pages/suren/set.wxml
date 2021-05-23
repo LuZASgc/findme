@@ -1,0 +1,21 @@
+<view class="container">
+
+<view class='album' bindtap='deletePhoto'>
+  <block  wx:for="{{album}}" wx:key="unique">   
+
+    <block wx:if="{{item==''}}">
+      <view class='img'  style='background-image:url({{item}})' ></view>
+    </block>
+    <block wx:else>
+      <view class='img'  style='background-image:url({{item}})' >
+        <image id='remove' src="../../image/close.png" data-src="{{item}}"/>
+      </view>
+    </block>
+
+  </block>
+</view>
+<view class='btns' >
+<view bindtap='upload' disabled='{{uploadPhotoDisable}}'>{{uploadPhotoText}}</view>
+<view class='next' bindtap='nextStep' >{{nextAction}}</view>
+</view>
+</view>

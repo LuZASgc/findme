@@ -81,6 +81,11 @@ class UserModel extends BaseModel{
         return self::$userInstance;
     }
 
+
+    public static function getUserDetail($uid){
+        return self::getUserInstance()->where('uid='.$uid)->find();
+    }
+
     public static function getMaxStarId(){
         return self::getUserInstance()->where('uid<='.self::USER_STAR_DIVIDE)->max('uid');
     }
@@ -88,6 +93,8 @@ class UserModel extends BaseModel{
     public static function getMaxUserId(){
         return min(self::USER_STAR_DIVIDE + 1, self::getUserInstance()->where('uid >'.self::USER_STAR_DIVIDE)->max('uid'));
     }
+
+
 
     /**
      * 金额转移
@@ -128,6 +135,7 @@ class UserModel extends BaseModel{
     public static function login($openId,$nickname,$headPic,$sex){
         $uinfo=self::getUserInstance()->where("openid='{$openId}'")->find();
         if($uinfo){
+            session('uid',$uinfo['uid']);
             return $uinfo;
         }else{
             $uid=self::getUserInstance()->add(array(
@@ -138,6 +146,7 @@ class UserModel extends BaseModel{
                 'addTime'=>time()
             ));
             $uinfo=self::getUserInstance()->where("openid='{$openId}'")->find();
+            session('uid',$uinfo['uid']);
             return $uinfo;
         }
     }

@@ -4,32 +4,35 @@ const app = getApp()
 var common = require("../../common.js")
 Page({
   onShow: function () {
-    common.showCurrentURL();
-
+    wx.setNavigationBarTitle({
+      title: '创建我的游戏--找我唷',
+    })
   },
   data: {
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    album:[],
+    album: ['', '', '', '', '', ''],
     nextAction:"下一步",
     uploadPhotoDisable:false,
     uploadPhotoText:"上传照片"
   },
-  clickMe: function () {
-    this.setData({ msg: "Hello World" })
-  },
-  //事件处理函数
-  bindViewTap: function () {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
-  onLoad: function () {
+  //处理图片显示
+  processPhoto:function(){
+    var album = ['', '', '', '', '', ''];
+    var photoNum = app.globalData.album.length;
+    for (var i = 0; i < photoNum; i++) {
+        album[i] = app.globalData.album[i];
+    }
     this.setData({
-      album:app.globalData.album
+      album: album
     })
+  },
+  onLoad: function () {   
+    console.log(app.globalData.album)
+
+    this.processPhoto();
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -65,9 +68,15 @@ Page({
       hasUserInfo: true
     })
   },
+  //下一步，跳转充值页面
+  nextStep: function () {
+    wx.navigateTo({
+      url: '../../pages/suren/money',
+    })
+  },
+  //上传图片
   upload:function(){
-    var that=this;
-    
+    var that=this;    
     wx.chooseImage({
       success: function (res) {
         var tempFilePaths = res.tempFilePaths
@@ -77,38 +86,43 @@ Page({
           filePath: tempFilePaths[0],
           name: 'file',          
           success: function (res) {
-            console.log(res);
-            var unit8Arr = new Uint8Array(res.data.data)
+            
+            if(typeof res =='object'){
+              var ret = JSON.parse(res.data);
+            }else{
+              var unit8Arr = new Uint8Array(res.data.data)
+              var encodedString = String.fromCharCode.apply(null, unit8Arr),
+                decodedString = decodeURIComponent(escape((encodedString)));//没有这一步中文会乱码
+              var ret = JSON.parse(decodedString);
+            }
 
-            var encodedString = String.fromCharCode.apply(null, unit8Arr),
-              decodedString = decodeURIComponent(escape((encodedString)));//没有这一步中文会乱码
 
-            var data = JSON.parse(decodedString);
-            console.log(data)
-            that.data.album.push(data.msg)
-            that.setData(
-              { album: that.data.album}
-            );
-            app.globalData.album.push(data.msg);
+            var photoNum = app.globalData.album.length;
+            var append=true
+            for (var i = 0; i < photoNum; i++) {
+              if (app.globalData.album[i].length<5){
+                app.globalData.album[i] = ret.msg;
+                append=false;
+                break;
+              }
+            }
+            if (append){
+              app.globalData.album.push(ret.msg);
+            }
+            that.processPhoto()
             app.updateAlbum();
-            if (that.data.album.length >= 6) {
+            if (app.globalData.album.length >= 6) {
               that.setData({
                 uploadPhotoText:'照片数量已达上限',
                 uploadPhotoDisable: !that.data.uploadPhotoDisable
               })
-            }
-            
-            
+            }        
           }
-        })
+        });        
       }
     })
   },
-  nextStep:function(){
-    wx.navigateTo({
-      url: '../../pages/create/money',
-    })
-  },
+  //删除图片
   deletePhoto:function(e){
     var that=this;
     if(e.target.id!='remove'){
@@ -118,17 +132,14 @@ Page({
     var len = that.data.album.length;
     for (var i = 0; i < len; i++) {
       if (that.data.album[i] == src) {
-        that.data.album.splice(i, 1);        
-        that.setData(
-          { album: that.data.album }
-        );
-        app.globalData.album.splice(i, 1);
+        that.data.album.splice(i, 1);    
+        app.globalData.album.splice(i, 1);    
+        that.processPhoto();
+        
         app.updateAlbum();
         break;
       }
     }
-
-
     
   },
 

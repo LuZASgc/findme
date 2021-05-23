@@ -1,0 +1,38 @@
+/* pages/create/money.wxss */
+.container form{width: 100%}
+.container .row{
+  background-color:white;
+  display:block;
+  justify-content:space-between;
+  margin:8px auto;
+  width:98%;
+  border-radius:20rpx;
+  height:120rpx;
+  line-height:120rpx;
+}
+.left,.right{
+  height:120rpx;
+  line-height:120rpx;
+  padding:auto 10rpx;
+}
+.container .row .left{
+  float: left;
+  margin-left:20rpx;
+}
+.container .row .right{
+  float: right;
+  margin-right:20rpx;
+
+}
+
+.container input{
+  text-align:right;
+  display:inline-block;
+  vertical-align:text-top;
+  margin-right:9rpx;
+}
+.big{
+  display:block;
+  text-align:center;
+  margin-bottom:70rpx;
+}

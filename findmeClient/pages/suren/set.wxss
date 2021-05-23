@@ -1,0 +1,45 @@
+/* pages/create/set.wxss */
+.album{display:block;
+width:98%;
+margin:29rpx auto;
+height:645rpx;
+background-color:#eee;
+padding-top:20rpx;
+box-sizing:content-box;
+outline:1px solid #fff;
+padding-bottom:20rpx;
+}
+.album .img{
+  float:left;
+  margin-left:10rpx;
+  margin-top:4px;
+  width:230rpx;
+  height:300rpx;
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:100%;
+  border-radius:20rpx;
+  border:1rpx solid darkgray;
+}
+.album .img image{width:80rpx;
+height:80rpx;
+display:block;float:right;margin-right:8rpx;margin-top:8rpx
+}
+
+.btns{
+  display:block;
+  width: 100%;
+}
+.btns view{
+  width:100%;
+  display:block;
+  border-radius:20rpx;
+  background-color:green;
+  text-align:center;
+  height:90rpx;
+  margin-top:20rpx;
+  line-height:90rpx;
+}
+.btns view.next{
+  background-color:#eee;
+}

@@ -1,18 +1,24 @@
 // pages/index/menu.js
-Page({
 
+Page({
   /**
    * 页面的初始数据
    */
   data: {
     page:[
-      {title:'首页',url:"pages/index/index"},
+      { title: '首页', url: "pages/index/index" },
       { title: '菜单', url: "pages/index/menu" },
       { title: '游戏', url: "pages/play/play" },
-      { title: '星探-首页', url: "pages/star/index" },
-      { title: '发起-首页', url: "pages/create/index" },
-      { title: '发起-设置', url: "pages/create/set" },
-      { title: '发起-上传', url: "pages/create/upload" },
+      { title: '星探-游戏', url: "pages/star/play" },
+      { title: '星探-排行', url: "pages/star/rank" },
+      { title: '素人-开始对赌', url: "pages/suren/begin?id=7" },
+      { title: '素人-开始普通', url: "pages/suren/begin?id=6" },
+      { title: '素人-设置', url: "pages/suren/set" },
+      { title: '素人-充钱', url: "pages/suren/money" },
+      { title: '素人-创建结束', url: "pages/suren/finish?id=9874&name=shijy" },
+      { title: '素人-游戏', url: "pages/suren/play?id=7" },
+      { title: '素人-游戏', url: "pages/suren/play" },
+      { title: '个人主页', url: "pages/suren/home" },
       { title: '帮助-首页', url: "pages/help/index" },
       { title: '', url: "pages/logs/logs" },         
       
@@ -21,11 +27,10 @@ Page({
   jump:function(e){
     console.log(e);
     console.log(e.currentTarget.dataset.url);
-    wx.navigateTo({
-      
+    var a=wx.navigateTo({
       url: "../../" + e.currentTarget.dataset.url,
     })
-    
+    console.log(a);
 
   },
 

@@ -10,24 +10,11 @@ class GameController extends Controller {
     const SUCCESS   =0;//成功
     const FAILURE   =1;//失败
     public function index(){
-        $this->show('星悦，公共支持','utf-8');
+        $this->show('公共支持','utf-8');
     }
 
 
-    public function createGame(){
-        $uid=I('post.uid',0,'intval');
-        $totalMoney=I('post.totalMoney',0,'floatval');
-        $packNum=I('post.packNum',0,'intval');
-        $isBet=I('post.isBet',0,'intval');
 
-        $newData=array(
-            'uid'=>$uid,
-            'totalMoney'=>$totalMoney,
-            'packNum'=>$packNum,
-            'isBet'=>$isBet
-        );
-        $this->ajaxReturn(GameModel::newGame($newData));
-    }
 
     /**
      * 提交结果，
@@ -35,7 +22,7 @@ class GameController extends Controller {
     public function submitResult(){
         $gid=I('post.gid',0,'intval');//游戏编号
         $oid=I('post.oid',0,'intval');//对家uid
-        $uid=I('post.uid',0,'intval');//自己uid
+        $uid=session('uid');//自己uid
         $sid=I('post.sid',0,'intval');//选中uid
         $userInfo=UserModel::getUserInstance()->find($uid);
 
@@ -46,14 +33,21 @@ class GameController extends Controller {
             $result=GameModel::BET_RESULT_LOSE;
         }
 
-        $return=array('status'=>0,'msg'=>'success','result'=>$result,'prize'=>0,'return'=>0,'next'=>'');
+        $return=array('status'=>0,
+            'msg'=>'success',
+            'result'=>$result,//对错，1对
+            'prize'=>0,//获得奖励
+            'return'=>0,//对赌退回
+            'next'=>'' //下一组
+        );
+
         if(UserModel::isStar($oid)){//明星赛
             $update=array();
             if($result==GameModel::BET_RESULT_WIN){
                 $userInfo['nowScore']+=1;
                 $update['nowScore']=$userInfo['nowScore'];
 
-                if($userInfo['historyScore']>$userInfo['nowScore']){
+                if($userInfo['historyScore']<$userInfo['nowScore']){
                     $userInfo['historyScore']=$userInfo['nowScore'];
                     $userInfo['historyTime']=time();
 
@@ -64,8 +58,10 @@ class GameController extends Controller {
             }else{
                 $userInfo['nowScore']=0;
                 $update['nowScore']=$userInfo['nowScore'];
+
                 $this->initGame();//重置明星序列
             }
+
             UserModel::getUserInstance()->where("uid={$uid}")->save($update);
         }
         else{//素人
@@ -108,12 +104,15 @@ class GameController extends Controller {
                 }
             }
         }
+
         $this->ajaxReturn($return);
     }
-    
-    
-    
-    public function initGame(){
+
+
+    /**
+     * 初始化明星列表
+     */
+    private function initGame(){
         $maxStarId=UserModel::getMaxStarId();
         $array=range(1,$maxStarId);
         shuffle($array);
@@ -121,45 +120,81 @@ class GameController extends Controller {
     }
 
     /**
+     * 明星游戏
+     */
+    public function startStarGame(){
+        $this->initGame();
+        $this->ajaxReturn($this->getNextTeam(0));
+    }
+
+    /**
+     * 素人
+     */
+    public function startSurenGame(){
+        $gid=I('post.gid',0,'intval');
+        $mainUid=GameModel::getGameInstance()->where('gid='.$gid)->getField('uid');
+        $num=10;
+        $uidArr=UserModel::getUserInstance()->where("uid<>{$mainUid} and length(album)>10")->limit($num)->getField('uid',true);
+        shuffle($uidArr);
+        for($i=$num-1;$i>4;$i--){
+            unset($uidArr[$i]);
+        }
+        array_unshift($uidArr,$mainUid);
+        $this->ajaxReturn( $this->getPhotos($uidArr));
+    }
+
+    /**
      * 取下一组明星
-     * @param $nowScore
+     * @param $nowScore， 当前答对的明星数量
      * @return bool|mixed
      */
-    private function getNextTeam($nowScore){
+    public function getNextTeam($nowScore=0){
         $idStr=session('starId');
-        if(!$idStr){
-            $this->initGame();
-            $idStr=session('starId');
-        }
         $idArray=explode(',',$idStr);
         if(!array_key_exists($nowScore,$idArray)){
             return false;
         }
-        $nextStarId=$idArray[$nowScore];
+
+        $nextStarId=$idArray[$nowScore];//下一场要答的主咖编号
+
+        $uidArr=array();
+        $uidArr[]=$nextStarId;
+
         $others=array_rand($idArray,6);
-        foreach ($others as $k=>$id){
-            if($id == $nextStarId){
-                unset($others[$k]);
-                break;
+        foreach ($others as $id){
+            if($idArray[$id] == $nextStarId){
+                continue;
             }
+            $uidArr[]=$idArray[$id];
         }
-        array_unshift($others,$nextStarId);
-        return $this->getPhotos($others);
+
+        if(count($uidArr)>6){
+            unset($uidArr[6]);
+        }
+
+        return $this->getPhotos($uidArr);
     }
 
 
     private function getPhotos(&$idarray){
         $idstr=implode(',',$idarray);
-        $list= UserModel::getUserInstance()->where("uid in ($idstr)")->field('id,headPic,album')->select();
+        $list= UserModel::getUserInstance()->where("uid in ($idstr)")->field('uid,headPic,album')->select();
         foreach($list as $k=>$v){
+
             $imgs=explode(',',$v['album']);
-            $list[$k]['album']=array_rand($imgs,1);
-            if( $k>0 ){
+            $idx=array_rand($imgs,1);
+            $list[$k]['album']=$imgs[$idx];
+
+            if( $idarray[0] != $v['uid'] ){
                 unset($list[$k]['headPic']);
             }
         }
+        shuffle($list);
         return $list;
     }
+
+
+
 
 
     /**
@@ -170,12 +205,6 @@ class GameController extends Controller {
         $headPic    = I('post.headPic');
         $sex        = I('post.gender');
         $nickname   = I('post.nickname');
-        $num=session("num");
-        if(!$num){
-            session("num",1);
-        }else{
-            session("num",$num+1);
-        }
 
         $this->ajaxReturn(UserModel::login($openId,$nickname,$headPic,$sex));
     }
@@ -230,6 +259,58 @@ class GameController extends Controller {
         }else{
             $this->ajaxReturn(array('status'=>0,'gid'=>$gid));
         }
+
+
+    }
+
+
+    /**
+     * 支付赌注订单
+     */
+    public function wagerOrder(){
+
+        $gid=I('post.gid',0,'intval');//游戏编号
+
+        $uid=session('uid')+0;
+
+        $wid=GameModel::getWagerInstance()->where("gid={$gid} and uid={$uid} and hasPay=0")->getField('wid');
+        if(!$wid) {
+            $wid = GameModel::getWagerInstance()->add(array(
+                'gid' => $gid,
+                'uid' => $uid,
+                'addTime' => time(),
+                'hasPay' => 0
+            ));
+        }
+        if($wid===false){
+            $this->ajaxReturn(array('status'=>1,'msg'=>'服务器出现错误，请过段时间再试'));
+        }else{
+            $this->ajaxReturn(array('status'=>0,'wid'=>$wid));
+        }
+    }
+
+    /**
+     * 获取游戏基本信息
+     */
+    public function getGame(){
+        $gid=I('post.id',0,'intval');
+        $game=GameModel::getGameDetail($gid);
+        $this->ajaxReturn($game);
+        //$this->ajaxReturn(array('status'=>1,'msg'=>"为啥错了，你还不知道吗"));
+
+    }
+
+
+    /**
+     * 星探排行
+     */
+    public function starRank(){
+        $page=I('post.p',1,'intval');
+        $pageSize=10;
+        $uid=session('uid');
+
+        $offset=($page-1)*$pageSize;
+        $list=UserModel::getUserInstance()->where('uid >'.self::USER_STAR_DIVIDE)->order('historyScore desc,historyTime asc')->limit($offset,$pageSize)->field('nickname,headPic,historyScore')->select();
 
 
     }

@@ -159,6 +159,7 @@ class UserController extends BaseController
         else{
             $uid=I('get.uid',0,'intval');
             $uinfo=M('u_user',null,DB_MAIN_CFG)->find($uid);
+
             $this->smarty->assign('sex',UserModel::getSex());
             $this->smarty->assign('race',UserModel::getRace());
 

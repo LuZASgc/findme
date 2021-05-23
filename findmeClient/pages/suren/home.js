@@ -7,15 +7,11 @@ Page({
     common.showCurrentURL();
   },
   data: {
-    motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
-  },
-  clickMe: function() {
-    this.setData({ msg: "Hello World" })
-  },
-  onLoad: function () {
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+  }, 
+  onLoad: function () { 
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -43,12 +39,17 @@ Page({
       })
     }
   },
+
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
+    console.log(e.detail);
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-  }
+  },  
 })
+
+
+

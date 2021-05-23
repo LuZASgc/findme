@@ -1,0 +1,20 @@
+<!--play.wxml-->
+<view style='display:flex'>
+<image bindtap="startStarGame" id='avatar' catchlongpress='showBigImg'  class="userinfo-avatar" data-src="{{avatarUrl}}" src="{{avatarUrl}}" background-size="cover"></image>
+<view id='countdown' >{{num}}</view>
+<button id='submit' bindtap='submitResult'>提交</button>
+</view>
+
+
+  <view class="photo"  style="">
+<block wx:for="{{album}}" wx:key="unique">  
+    <view class='img' catchtap='selectPhoto' catchlongpress='showBigImg' style='background:url({{item.album}});background-size:cover;background-position:center center;background-repeat:no-repeat' data-uid="{{item.uid}}" data-id="{{index}}">
+      <image class='right' style='display:{{albumShow[index]}}' src='/image/cardSuccessIcon.png'></image>
+    </view>
+</block>
+  </view>
+
+<view wx:if="{{showModalStatus}}"  class='modal' data-statu="close" bindtap='showBigImg'></view>
+<image wx:if="{{showModalStatus}}"  class="modalImage" data-statu="close" mode="widthFix"  bindtap='showBigImg' animation="{{animationData}}"  src='{{bigImg}}'  ></image>
+
+

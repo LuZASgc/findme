@@ -2,7 +2,7 @@
 var common=require('common.js');
 App({
   globalData: {
-    baseURL: '192.168.31.175:81/api.php?',//基础通知url
+    baseURL: 'http://192.168.31.175:81/api.php?',//基础通知url
     appId: 'wx0bc6c5ceddbae730',
     secret: 'e774e7f275cca946bcd85e217cd2ebd8',
     userInfo: null,

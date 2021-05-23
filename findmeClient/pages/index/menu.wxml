@@ -1,6 +1,7 @@
 <!--pages/index/menu.wxml-->
 <block wx:for="{{page}}" wx:key="unique">
 <view>
-<text bindtap='jump' data-url="{{item.url}}">{{item.title}}</text> <text>{{item.url}}</text>
+<text bindtap='jump' data-url="{{item.url}}">{{item.title}}{{item.url}}</text>
 </view>
 </block>
+

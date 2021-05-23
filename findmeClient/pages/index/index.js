@@ -11,15 +11,22 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
   },
-  //事件处理函数
-  bindViewTap: function() {
+  bindViewTap:function(){
     wx.navigateTo({
-      url: '../logs/logs'
+      url: '../../pages/suren/home',
+    })
+  }, 
+  starTap:function(){
+    wx.navigateTo({
+      url: '../../pages/star/index',
     })
   },
-  
-  onLoad: function () {
-    
+  surenTap: function () {
+    wx.navigateTo({
+      url: '../../pages/suren/index',
+    })
+  },
+  onLoad: function () {    
     
     if (app.globalData.userInfo) {
       this.setData({
@@ -48,15 +55,7 @@ Page({
       })
     }
   },
-  createNew:function(e){
-    wx.navigateTo({
-      url: '../create/index',
-      success:function(re){console.log('success');console.log(re);},
-      fail: function (re) { console.log('fail'); console.log(re); },
-      complete: function (re) { console.log('complete'); console.log(re); },
-    })
 
-  },
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo

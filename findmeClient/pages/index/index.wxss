@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 40rpx;
 }
 
 .userinfo-avatar {
@@ -16,22 +17,32 @@
   color: #aaa;
 }
 
-
-.flex-wrp{
-  margin-top: 60rpx;
-  display:flex;
+.row{width:80%;
+background-color:white;
+height:200rpx;
+margin:20rpx auto;
+box-sizing:border-box;
+border-radius: 20rpx;
 }
-.flex-item{
-  width: 200rpx;
-  height: 200rpx;
-  font-size: 26rpx;
-  line-height: 200rpx;
-  background-color: red;
-  margin-left: 40rpx;
-  text-align: center;
+.row .icon{
+  background-color:red;
+width:180rpx;
+height:180rpx;
+margin:10rpx;
+border-radius: 20rpx;
 }
-.flex-item-V{
-  margin: 0 auto;
-  width: 300rpx;
-  height: 200rpx;
+.row .title{
+position:relative;
+left:210rpx;
+top:-180rpx;
+font-size:39rpx;
+font-weight:600;
+}
+.row .desc{
+position:relative;
+left:210rpx;
+top:-160rpx;
+font-size:30rpx;
+font-weight:300;
+width: 345rpx;
 }

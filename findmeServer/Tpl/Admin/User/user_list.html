@@ -61,8 +61,8 @@
                 <tbody>
                 <{foreach from=$list item=item}>
                 <tr>
-                    <td><{$item.nickname}></td>
-                    <td><img src="<{$item.headPic}>" /></td>
+                    <td>(<{$item.uid}>)<{$item.nickname}></td>
+                    <td><img src="<{$item.headPic}>" style="max-height:150px;max-width:100px"/></td>
                     <td><{$sex[$item.sex]}></td>
                     <td><{$race[$item.race]}></td>
                     <td class="album"><{foreach from=split(',',$item.album) item=photo}>

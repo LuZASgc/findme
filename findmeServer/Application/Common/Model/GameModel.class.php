@@ -16,13 +16,6 @@ class GameModel extends BaseModel{
     const BET_RESULT_WIN    = 1;//成功
     const BET_RESULT_LOSE   = 2;//失败
 
-    public static function newGame($data){
-        $result= M('g_game',null,DB_MAIN_CFG)->add($data);
-        if($result==false){
-            return array('status'=>0,'msg'=>'创建失败');
-        }
-        return array('status'=>0,'msg'=>'success','id'=>$result);
-    }
 
     private static $gameInstance=null;
     public static function getGameInstance(){
@@ -32,10 +25,18 @@ class GameModel extends BaseModel{
         return self::$gameInstance;
     }
 
+    private static $wagerInstance=null;
+    public static function getWagerInstance(){
+        if(!self::$wagerInstance){
+            self::$wagerInstance=M('w_wager',null,DB_MAIN_CFG);
+        }
+        return self::$wagerInstance;
+    }
+
     private static $joinInstance=null;
     public static function getJoinInstance(){
         if(!self::$joinInstance){
-            self::$joinInstance=M('g_game',null,DB_MAIN_CFG);
+            self::$joinInstance=M('j_join',null,DB_MAIN_CFG);
         }
         return self::$joinInstance;
     }
@@ -43,7 +44,7 @@ class GameModel extends BaseModel{
     private static $prizeInstance=null;
     public static function getPrizeInstance(){
         if(!self::$prizeInstance){
-            self::$prizeInstance=M('g_game',null,DB_MAIN_CFG);
+            self::$prizeInstance=M('redpack_record',null,DB_MAIN_CFG);
         }
         return self::$prizeInstance;
     }
@@ -61,7 +62,7 @@ class GameModel extends BaseModel{
     public static function getPrizeRecordByGid($gid){
         $record=self::getPrizeInstance()
             ->where("setId={$gid} and status=".self::PRIZE_RECORD_STATUS_UNSEND)
-            ->limit(1)->select();
+            ->find();
         return $record;
     }
 
@@ -93,6 +94,20 @@ class GameModel extends BaseModel{
         );
     }
 
+
+    /**
+     * 获取游戏
+     * @param $gid
+     * @return mixed
+     */
+    public static function getGameDetail($gid){
+        $baseInfo = self::getGameInstance()->where('gid='.$gid)->find();
+        if(!$baseInfo){
+            return array('status'=>1,'msg'=>'指定的游戏不存在');
+        }
+        $userInfo = UserModel::getUserDetail($baseInfo['uid']);
+        return array('status'=>0,'msg'=>'success','base'=>$baseInfo,'user'=>$userInfo);
+    }
     
     
 

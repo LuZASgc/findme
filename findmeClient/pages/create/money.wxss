@@ -1,5 +1,0 @@
-/* pages/create/money.wxss */
-.redpackSet{background-color:lightblue;height: 100%}
-.redpackSet .field{background-color:white;display: flex;justify-content: space-between}
-
-.redpackSet input{text-align:right;display: inline-block}

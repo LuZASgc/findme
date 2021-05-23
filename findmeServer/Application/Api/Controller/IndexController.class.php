@@ -57,26 +57,60 @@ class IndexController extends Controller {
             file_put_contents(APP_ROOT.'/Statics/log2.txt',"{$order_sn},{$openid},{$total_fee},{$transaction_id}\r\n",FILE_APPEND);
             return false;
         }
+        list($type,$orderId,$time,$rnd)=explode('_',$order_sn);
 
-        GameModel::getGameInstance()->where('id='.$order_sn)->save(
-            array(
-                'hasPay'=>1,
-                'transaction_id'=>$transaction_id,
-                'total_fee'=>$total_fee
-                )
-        );
-        RedpackModel::createRecord($game['id'],$game['totalMoney'],$game['packNum'],$game['packMin']);
+        switch ($type){
+            case 'w':
+                GameModel::getGameInstance()->where('id='.$order_sn)->save(
+                    array(
+                        'hasPay'=>1,
+                        'transaction_id'=>$transaction_id,
+                        'total_fee'=>$total_fee
+                    )
+                );
+                break;
+            case 'g':
+                GameModel::getGameInstance()->where('id='.$order_sn)->save(
+                    array(
+                        'hasPay'=>1,
+                        'transaction_id'=>$transaction_id,
+                        'total_fee'=>$total_fee
+                    )
+                );
+                RedpackModel::createRecord($game['id'],$game['totalMoney'],$game['packNum'],$game['packMin']);
+                break;
+        }
+
+
     }
 
 
 
+    public function checkPayStatus(){
+        $id=I('post.id',0,'intval');
+        $type=I('post.type');
+        if(!$id){
+            $this->ajaxUpload(array('status'=>1,'msg'=>'参数错误'));
+        }
+        switch ($type){
+            case 'w':
+                $hasPay=GameModel::getWagerInstance()->where('wid='.$id)->getField('hasPay');
+                break;
+            case 'g':
+                $hasPay=GameModel::getGameDetail()->where('gid='.$id)->getField('hasPay');
+                break;
+            default:
+                $this->ajaxUpload(array('status'=>1,'msg'=>'参数类型错误'));
+                break;
+        }
+        $this->ajaxUpload(array('status'=>0,'msg'=>'success','payStatus'=>$hasPay));
+    }
 
 
 
 
     public function ajaxUpload(){
         $from = I('get.from');
-
         $res = UtilsModel::imageUpload('file',FILE_UPLOAD_DIR);
         $this->ajaxReturn($res);
 
