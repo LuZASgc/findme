@@ -2,7 +2,6 @@
 var common=require('common.js');
 App({
   globalData: {
-    baseURL: 'http://192.168.31.175:81/api.php?',//基础通知url
     appId: 'wx0bc6c5ceddbae730',
     secret: 'e774e7f275cca946bcd85e217cd2ebd8',
     userInfo: null,
@@ -59,7 +58,7 @@ App({
     })
   },
   buildURL:function(str){
-    return this.globalData.baseURL+str;
+    return common.baseURL+str;
   }, 
   login: function (e) {
     var that=this;
@@ -67,19 +66,21 @@ App({
       success: function (res) {
         if (res.code) {
           //获取openId
-          wx.request({
-            url: 'https://api.weixin.qq.com/sns/jscode2session',
+          common.request({
+            url: 'c=Game&a=getWXopenid',
             data: {
-              //小程序唯一标识
-              appid: that.globalData.appId,
-              //小程序的 app secret
-              secret: that.globalData.secret,
-              grant_type: 'authorization_code',
               js_code: res.code
             },
             method: 'GET',
             header: { 'content-type': 'application/json' },
             success: function (openIdRes) {
+              if(openIdRes.status!=0){
+                wx.showModal({
+                  title: '错误',
+                  content: '游戏登陆失败，请稍候再试',
+                });
+                return false;
+              }
               console.info("登录成功返回的openId：" + openIdRes.data.openid);
               wx.setStorageSync('PHPSESSID', openIdRes.data.openid);
               that.globalData.openId = openIdRes.data.openid;

@@ -311,7 +311,22 @@ class GameController extends Controller {
 
         $offset=($page-1)*$pageSize;
         $list=UserModel::getUserInstance()->where('uid >'.self::USER_STAR_DIVIDE)->order('historyScore desc,historyTime asc')->limit($offset,$pageSize)->field('nickname,headPic,historyScore')->select();
+    }
 
 
+    public function getWXopenid(){
+        $jscode=I('get.js_code');
+        //https://api.weixin.qq.com/sns/jscode2session?appid=wx0bc6c5ceddbae730&secret=e774e7f275cca946bcd85e217cd2ebd8&grant_type=authorization_code&js_code=081w1PiU13K1pV0UuWlU1EQOiU1w1PiG
+        $data=array(
+            'appid'=>XIAO_APPID,
+            'secret'=>XIAO_SECRET,
+            'grant_type'=>'authorization_code',
+            'js_code'=>$jscode
+        );
+        $return=UtilsModel::curl_request('https://api.weixin.qq.com/sns/jscode2session?','get',$data);
+        if($return['status']==0){
+            $return['data']=json_decode($return['data'],1);
+        }
+        $this->ajaxReturn($return);
     }
 }

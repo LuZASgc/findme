@@ -1,4 +1,5 @@
-let baseURL = "http://192.168.31.175:81/api.php?";
+//const baseURL = "https://findme.bibei365.com/api.php?";
+const baseURL = "http://127.0.0.1:81/api.php?";
 function NetRequest({ url, data, success, fail, complete, method = "POST" }) {
 
   var session_id = wx.getStorageSync('PHPSESSID');//本地取存储的sessionID  
@@ -33,3 +34,4 @@ function NetRequest({ url, data, success, fail, complete, method = "POST" }) {
 
 
 module.exports.request = NetRequest
+module.exports.baseURL = baseURL

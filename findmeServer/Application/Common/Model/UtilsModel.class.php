@@ -883,4 +883,45 @@ class UtilsModel extends BaseModel{
         $s=2*asin(sqrt(pow(sin($a/2),2)+cos($radLat1)*cos($radLat2)*pow(sin($b/2),2)))*6378.137;
         return $s;
     }
+
+
+
+    /**
+     * 发起请求
+     */
+    public static function curl_request($url,$method, $data=array(), $second=30,$aHeader=array()){
+        $ch = curl_init();
+        //超时时间
+        curl_setopt($ch,CURLOPT_TIMEOUT,$second);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+        //这里设置代理，如果有的话
+        if (strcasecmp($method,'get')==0){
+            $param=http_build_query($data);
+            if(substr($url, -1)=='?'){
+                $url.=$param;
+            }
+        }else{
+            curl_setopt($ch,CURLOPT_POST, 1);
+            curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+        }
+
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+
+        if( count($aHeader) >= 1 ){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
+        }
+
+        $data = curl_exec($ch);
+        if($data){
+            curl_close($ch);
+            return array('status'=>0,'msg'=>'success','data'=>$data);
+        }
+        else {
+            $error = curl_errno($ch);
+            curl_close($ch);
+            return array('status'=>1,'msg'=>"call faild, errorCode:{$error}");
+        }
+    }
 }

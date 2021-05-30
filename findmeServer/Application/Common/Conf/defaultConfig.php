@@ -25,6 +25,7 @@ define('FILE_SHOW_PATH','http://223.corp.soe-soe.com/server/upload/');//图片�
 
 //微信小程序配置
 define('XIAO_APPID','wx0bc6c5ceddbae730');//小程序appid||LT|1
+define('XIAO_SECRET','e774e7f275cca946bcd85e217cd2ebd8');//小程序secret||LT|1
 //微信商户
 define('PAY_MCHID','1499526672');//小程序appid||LT|1
 define('PAY_APIKEY','49f1809020c2fb56212d7fa02c33be01');//小程序appid||LT|1
