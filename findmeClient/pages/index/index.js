@@ -4,27 +4,31 @@ const app = getApp()
 var common = require("../../common.js")
 Page({
   onShow: function () {
-    common.showCurrentURL();
+    
   },
   data: {
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+
+    showTip:false,
+    qa: [{ q: '积分有什么用', a: '消耗积分才可以玩星探游戏' }, { q: '怎样获取积分', a: '分享小程序给您的朋友即可获得积分' }, { q: '奖金怎么提现', a: '点击提现，系统就会打款到您的微信钱包中' }]
   },
-  bindViewTap:function(){
-    wx.navigateTo({
-      url: '../../pages/suren/home',
-    })
-  }, 
-  starTap:function(){
-    wx.navigateTo({
-      url: '../../pages/star/index',
-    })
+
+  /**
+   * 弹出层函数
+   */
+  //出现
+  showTip: function () {
+
+    this.setData({ showTip: true })
+
   },
-  surenTap: function () {
-    wx.navigateTo({
-      url: '../../pages/suren/index',
-    })
+  //消失
+  hideTip: function () {
+
+    this.setData({ showTip: false })
+
   },
   onLoad: function () {    
     
@@ -67,7 +71,27 @@ Page({
   },
   login: function(){
     common.request({ url: 'c=Game&a=userLogin', data:{openId: app.globalData.openId}, success:function(e){console.log(e)}, method:"get" });
-  }
+  },
+  homeTap:function(){
+    wx.navigateTo({
+      url: '../suren/home',
+    })
+  },
+  bindViewTap: function () {
+    wx.navigateTo({
+      url: '../../pages/suren/home',
+    })
+  },
+  starTap: function () {
+    wx.navigateTo({
+      url: '../../pages/star/index',
+    })
+  },
+  surenTap: function () {
+    wx.navigateTo({
+      url: '../../pages/suren/index',
+    })
+  },
   
 })
 

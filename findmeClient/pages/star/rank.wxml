@@ -1,2 +1,36 @@
-<!--pages/star/rank.wxml-->
-<text>pages/star/rank.wxml</text>
+<view class="container">
+<view class='head'>全球排名</view>
+<view class='list'>
+
+  <view class='row' wx:for="{{list}}">  
+    <view class='cell'>    
+       {{item.rank}}
+    </view>
+    <view class='cell'>    
+       {{item.icon}}
+    </view>
+    <view class='cell'>    
+       {{item.name}}
+    </view>
+    <view class='cell'>    
+      {{item.score}}
+    </view>
+  </view>
+
+  <view class='row mine'>  
+    <view class='cell'>    
+       999+
+    </view>
+    <view class='cell'>    
+       1
+    </view>
+    <view class='cell'>    
+       我的排名
+    </view>
+    <view class='cell'>    
+       256
+    </view>
+  </view>
+
+</view>
+</view>

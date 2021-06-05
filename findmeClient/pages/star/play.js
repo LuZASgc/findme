@@ -4,7 +4,7 @@ const app = getApp();
 var common=require("../../common.js")
 Page({
   onShow: function () {
-    common.showCurrentURL();
+    
   },
  
   data: {

@@ -3,19 +3,32 @@
 
 <view style='background-image:url("{{avatarUrl}}");background-size:cover;width:300rpx;height:300rpx;border-radius:50%'></view> 
 <text>{{nickname}}</text>
-<view id='notice' style='font-size: 40rpx;width: 85%;word-break: break-all;white-space: normal;margin:80rpx auto;line-height:54rpx;text-align:justify'>
-<text style='font-size:40rpx;font-weight:600'>说明：</text>
-<view>6张照片中，有一张属于"{{nickname}}"，你能从中找到他吗？</view>
+<view id='notice' style='font-size: 40rpx;width: 90%;word-break: break-all;white-space: normal;margin:30rpx auto;line-height:54rpx;text-align:justify;border:1px solid white;border-radius:1rem;padding:0.5rem;background-color:rgba(255,255,255,0.3);'>
+<text style='font-size:40rpx;font-weight:600'>游戏说明：</text>
+<view>从6张照片中，找到"{{nickname}}"</view>
 <view>
-<text wx:if="{{hasPrizeWithoutBet}}" >如果找对了，有机会获得红包奖励唷</text>
-<text wx:if="{{hasPrizeWithBet}}" >"{{nickname}}"设置了您必须提交1元保证金，如果答对，不光这1元会返回给您，您还将获得至少1元的红包奖励。当然如果选错了，那么嘿嘿，您的保证金也将归"{{nickname}}"喽。</text>
+<text wx:if="{{hasPrizeWithoutBet}}" >找到后有机会获得红包奖励</text>
+<text wx:if="{{hasPrizeWithBet}}" >"{{nickname}}"设置了您必须提交1元保证金，如果答对，保证金将退回，您还将获得至少1元的红包奖励。如果选错了，那么您的保证金将归"{{nickname}}"。</text>
 </view>
 
 </view>
-<button wx:if="{{hasPrizeWithoutBet}}" type='primary' bindtap='beginGame' style='margin-bottom:20rpx'>开始游戏</button>
-<button wx:if="{{hasPrizeWithBet}}" type='primary' bindtap='submitForm' style='margin-bottom:20rpx'>去充值</button>
-<view style='clear:both'>
-  <button open-type='share' style="float:right">分享给好友</button>
-  <button type='default' style='float:left' bindtap='createNew'>创建新游戏</button>
+<view class='btns'>
+
+  <button class='button'  wx:if="{{hasPrizeWithoutBet}}"  type='primary' bindtap='beginGame' >
+    <image src='../../image/go.jpg' mode='widthFix' ></image>
+     开始游戏</button>
+  <button class='button main' wx:if="{{hasPrizeWithBet}}" type='primary' bindtap='submitForm' >
+    <image src='../../image/money.png' mode='widthFix' ></image>
+    开始游戏
+  </button>
+ 
+  <button class='button' type='default' bindtap='createNew'>
+    <image src='../../image/new.jpg' mode='widthFix' ></image>
+    创建游戏
+  </button>
+  <button class='button' open-type='share'>
+    <image src='../../image/wx.jpg' mode='widthFix' ></image>
+    好友分享
+  </button>
 </view>
 </view>

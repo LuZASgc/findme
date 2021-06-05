@@ -25,10 +25,16 @@
       <view class='right'><switch checked name="isBet" bindchange="switch1Change"/></view>
     </view>
     <view class="big" >
-      <view style='font-size:150rpx'>{{totalMoney}}元</view><br />
+      <view style='font-size:150rpx;color:white'>{{totalMoney}}元</view><br />
       <view>含平台{{serviceScale}}%服务费</view>
     </view>
 
-    <button type='primary' form-type='submit' disabled='{{canPay}}'>塞钱进红包</button>
+<view class='btns'>
+    <button class='button' type='primary' form-type='submit' disabled='{{canPay}}' >
+        <image src='../../image/money.png' mode='widthFix' ></image>
+        塞钱进红包
+    </button>
+</view>
+
   </form>
 </view>

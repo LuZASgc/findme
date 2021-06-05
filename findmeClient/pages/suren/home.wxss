@@ -22,13 +22,13 @@
 }
 
 .row-list{
-  margin:30rpx 0 10rpx;
+  margin:0 0 20rpx;
   border-top:0.5px solid #ddd;
   border-bottom:0.5px solid #ddd;
   width: 100%;
 
 }
-.row-cell{
+.row-cell,.record{
   display:flex;
 flex-direction:row;
 justify-content:space-between;
@@ -46,11 +46,18 @@ flex-direction:row;
 align-items:center;
 }
 .arrow-right{
-  width:20rpx;
-height:20rpx;
-border-right:1px solid #aaa;
-border-top:1px solid #aaa;
+  width:30rpx;
+height:30rpx;
+border-right:2rpx solid #aaa;
+border-top:2rpx solid #aaa;
 transform:rotate(45deg);
 text-align:end;
-
+display: inline-flex
 }
+.record{
+  padding-left:60rpx;
+  padding-right:60rpx;
+}
+.record:nth-child(odd){  background-color: rgba(255, 255, 255, 0.9)}
+.record .date{display: inline-flex}
+

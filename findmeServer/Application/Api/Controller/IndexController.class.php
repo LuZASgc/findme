@@ -120,10 +120,9 @@ class IndexController extends Controller {
                 $result[$key] = image_resize($res['msg'],$val);
             }
             $this->ajaxReturn($result[0]);
-        } else{
+        } else {
             $this->ajaxReturn($res);
         }
-
     }
 
     /**

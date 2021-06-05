@@ -13,12 +13,37 @@
 
   </view>
 <view class='row-list'>
-    <view class='row-cell'><view class='row_left'>您的总收益</view><view class='row_right'>0元</view></view>
+  <view class='row-cell'><view class='row_left'>我的积分</view><view class='row_right'>0</view></view>
+    <view class='row-cell'><view class='row_left'>我的总收益</view><view class='row_right'>0元</view></view>
     <view class='row-cell'><view class='row_left'>可取现金额</view><view class='row_right'>0元</view> </view>    
     <view class='row-cell'><view class='row_left'>历史记录</view><view class='row_right'><view class='arrow-right'></view></view></view>
 </view>
-<view class='row-list'>
-    <view class='row-cell'><view class='row_left'>星探最高得分</view><view class='row_right'><view class='arrow-right'></view></view></view>
-    <view class='row-cell'><view class='row_left'>我的游戏记录</view><view class='row_right'><view class='arrow-right'></view></view></view>
+<view class='row-list' >
+  <view class='row-cell'>
+    <view class='row_left'>我的游戏</view>
+    <view class='row_right'>
+      <view class='arrow-right'></view>
+    </view>
+  </view>
+    <view bindtap='surenTap' wx:if="{{myGame.length == 0}}" style='background-color:white;padding:20rpx 80rpx;'>
+      <view style='font-weight:600;margin:23rpx auto;'>
+      游戏等你创建!!!go
+      </view>
+      <view style='text-align:left'>人的一生就是进行尝试，尝试的越多，生活就越美好。</view>
+      <view style='text-align:right'>—— 爱默生</view>
+     
+    </view>
+
+
+    <block  wx:for="{{myGame}}" wx:key="unique">
+       <view class="record" data-id='{{item.id}}' bindtap='gameTap'>
+        <view class='row_left'>寻找：{{item.title}}</view>
+        <view class='row_right'>
+          <view class='date'>{{item.date}}</view>
+          <view class='arrow-right'></view>
+        </view>
+       </view>
+    </block>
+
 </view>
 </view>

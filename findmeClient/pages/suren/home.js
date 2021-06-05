@@ -3,13 +3,23 @@
 const app = getApp()
 var common = require("../../common.js")
 Page({
-  onShow: function () {
-    common.showCurrentURL();
-  },
   data: {
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    myGame: [
+     // { id: 1, title: "施坚永", date: '2018-05-19' },
+      //{ id: 2, title: "施某人", date: '2018-05-18' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+      { id: 3, title: "我爸爸", date: '2018-05-17' },
+    ]
+
   }, 
   onLoad: function () { 
     if (app.globalData.userInfo) {
@@ -49,6 +59,18 @@ Page({
       hasUserInfo: true
     })
   },  
+  gameTap:function(e){
+    console.log(e);
+    const id=e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: 'detail?id='+id,
+    })
+  },
+  surenTap: function () {
+    wx.navigateTo({
+      url: '../../pages/suren/index',
+    })
+  },
 })
 
 

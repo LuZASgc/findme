@@ -3,9 +3,9 @@
 <body>
 <div id="warpper" style="height: 900px;">
     <div class="content" style="height: 900px;">
-        <div class="location">明星管理</div>
+        <div class="location">用户管理</div>
         <{include file= "User/nav.html"}>
-        <div class="topic">添加明星</div>
+        <div class="topic">添加用户</div>
         <div class="form-box border0 border-box">
             <form action="<{u($smarty.const.ACTION_NAME)}>" class="ui-form" method="post" id="addManagerForm">
 
@@ -15,19 +15,12 @@
                     <label class="ui-label">名称：</label>
                     <input type="text" class="ui-text" name="nickname" value="<{$obj.nickname}>" required/>
                 </div>
-
                 <div class="ui-form-item">
                     <label class="ui-label">性别</label>
                     <{html_radios name="sex" options=$sex selected=$obj.sex separator="&nbsp;"}>
                 </div>
-
                 <div class="ui-form-item">
-                    <label class="ui-label">人种</label>
-                    <{html_radios name="race" options=$race selected=$obj.race separator="&nbsp;"}>
-                </div>
-
-                <div class="ui-form-item">
-                    <label class="ui-label">明星头像：</label>
+                    <label class="ui-label">用户头像：</label>
                     <span class="picture_box picture_150 " id="listPic" >
                         <div class="a-imgBox" id="imgBox" <{if $obj.headPic}> style="display:block;"<{else}>style="display:none;"<{/if}>>
                             <input type="hidden" name="headPic" value="<{$preUploadUrl}><{$obj.headPic}>">
@@ -43,34 +36,6 @@
                         </div>
                     </span>
                 </div>
-
-
-        <div class="ui-form-item2 uploader" style="min-height: 157px">
-            <label class="ui-label">明星图集:</label>
-            <div style="width: 775px;display: inline-block;">
-                <{foreach from=split(',',$obj.album) item=img}>
-                    <{if strlen($img)>1}>
-                    <span class="picture_box picture_150">
-                        <div class="a-imgBox"   style="display:block;">
-                            <a href="javascript:void(0);" class="a-close" onclick="removeElement(this)"></a>
-                            <img src="<{$preUploadUrl}><{$img}>" width="150" height="130" />
-                            <input type="hidden" name="album[]" value="<{$img}>" />
-                        </div>
-                    </span>
-                    <{/if}>
-                <{/foreach}>
-
-                    <span class="picture_box picture_150 " id="addImg" style="position: absolute;">
-                        <div>
-                            <a href="javascript:;" class="a-upload">
-                                <input type="file" name="file"  >
-                            </a>
-                            <i>上传图片</i>
-                            <i>150*130</i>
-                        </div>
-                    </span>
-            </div>
-        </div>
 
                 <div class="integral_btn-group">
                     <input type="submit" value="提交" class="ui-button"/>

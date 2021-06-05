@@ -11,8 +11,6 @@ namespace Common\Model;
 
 
 class UserModel extends BaseModel{
-    const USER_STAR_DIVIDE=10000;
-
     const SEX_MALE   = 1; //性别男
     const SEX_FEMALE = 0; //性别女
 
@@ -63,16 +61,8 @@ class UserModel extends BaseModel{
         );
     }
 
-    /**
-     * 是否明星判断
-     * @param $uid
-     * @return bool
-     */
-    public static function isStar($uid){
-        return $uid<=self::USER_STAR_DIVIDE;
-    }
 
-
+//素人
     private static $userInstance=null;
     public static function getUserInstance(){
         if(!self::$userInstance){
@@ -82,16 +72,22 @@ class UserModel extends BaseModel{
     }
 
 
-    public static function getUserDetail($uid){
-        return self::getUserInstance()->where('uid='.$uid)->find();
+//明星
+    private static $starInstance=null;
+    public static function getStarInstance(){
+        if(!self::$starInstance){
+            self::$starInstance=M('s_star',null,DB_MAIN_CFG);
+        }
+        return self::$starInstance;
     }
 
     public static function getMaxStarId(){
-        return self::getUserInstance()->where('uid<='.self::USER_STAR_DIVIDE)->max('uid');
+        return self::getStarInstance()->max('uid');
     }
 
-    public static function getMaxUserId(){
-        return min(self::USER_STAR_DIVIDE + 1, self::getUserInstance()->where('uid >'.self::USER_STAR_DIVIDE)->max('uid'));
+
+    public static function getUserDetail($uid){
+        return self::getUserInstance()->where('uid='.$uid)->find();
     }
 
 
@@ -158,6 +154,25 @@ class UserModel extends BaseModel{
      * @return bool
      */
     public static function updateAlbum($uid,$albumStr){
-        return self::getUserInstance()->where('uid='.$uid)->setField('album',$albumStr);
+        $pics=explode(',',$albumStr);
+        $audit=PHOTO_AUDIT_PASS;
+        foreach($pics as $pic){
+            $rt=PornModel::checkPic($pic);
+            if($rt==PHOTO_AUDIT_UNPASS){
+                return array('status'=>1,'msg'=>'包含色情图片请调整');
+                break;
+            }elseif($rt==PHOTO_AUDIT_REVIEW){
+                $audit  = PHOTO_AUDIT_REVIEW;
+                break;
+            }elseif($rt==PHOTO_AUDIT_PASS){
+            }
+        }
+        self::getUserInstance()->where('uid='.$uid)->save(array('album'=>$albumStr,'audit'=>$audit));
+        if ($audit==PHOTO_AUDIT_PASS){
+            return array('status'=>0,'msg'=>'图集已保存');
+        }else{
+            return array('status'=>0,'msg'=>'图集已保存，系统发现其中可能含有不适当，需要进行人工审核，当然您也可以换张图片再试试');
+        }
+
     }
 }

@@ -29,7 +29,7 @@ class PayController extends Controller
         $body = I('post.body');
         $order_sn = I('post.order_sn');
         $total_fee = I('post.total_fee');
-
+        $total_fee=0.01;
         //统一下单参数构造
         $unifiedorder = array(
             'appid'			=> XIAO_APPID,

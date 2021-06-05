@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="baseinfo" style='background-image:url({{userInfo.avatarUrl}});'>
+      <image bindtap="bindViewTap" mode='widthFix' class="target" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <view class='detail'>
+        <view class="baseinfo-nickname">总额：{{userInfo.nickName}}</view> 
+        <view class="baseinfo-nickname">已领：{{userInfo.nickName}}</view> 
+        <view class="baseinfo-nickname">剩余：{{userInfo.nickName}}</view> 
+        <view class="baseinfo-nickname">发布：{{userInfo.nickName}}</view> 
+      </view>
+      
+  </view>
+
+<view class='row-list' >
+  <view class='row-cell'>
+    <view class='row-left'>
+    <button>退还余额</button>
+    </view>
+    <view class='row-right'>
+      <button>邀请好友参加</button>
+    </view>
+  </view>
+
+
+  <view class='row-cell'>
+    <view class='row-left'>看看谁找到了"必有我施"</view>
+    <view class='row-right'>
+      <view class='arrow-right'></view>
+    </view>
+  </view>
+    <view bindtap='surenTap' wx:if="{{myGame.length == 0}}" style='background-color:white;padding:20rpx 80rpx;'>
+      <view style='font-weight:600;margin:23rpx auto;'>
+      游戏等你创建!!!go
+      </view>
+      <view style='text-align:left'>人的一生就是进行尝试，尝试的越多，生活就越美好。</view>
+      <view style='text-align:right'>—— 爱默生</view>     
+    </view>
+
+   <scroll-view scroll-y  style="height:{{clientHeight?clientHeight+'px':'auto'}}">
+    <block  wx:for="{{myGame}}" wx:key="unique">
+       <view class="record" >
+        <view class='row-left'><image src='{{item.icon}}'></image>{{item.nickname}} </view>
+        <view class='row-center' wx:if="{{item.money > 0}}">{{item.money}}</view>
+        <view class='row-right'>
+          <view class='date'>{{item.date}}</view>
+        </view>
+       </view>
+    </block>
+   </scroll-view>
+</view>
+</view>

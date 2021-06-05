@@ -5,9 +5,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    showTip:false
   },
+  /**
+   * 弹出层函数
+   */
+  //出现
+  showTip: function () {
 
+    this.setData({ showTip: true })
+
+  },
+  //消失
+  hideTip: function () {
+
+    this.setData({ showTip: false })
+
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -62,5 +76,15 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  starTap:function(){
+    wx.navigateTo({
+      url: '../star/play',
+    })
+  },
+  starRankTap:function(){
+    wx.navigateTo({
+      url: '../star/rank',
+    })
   }
 })

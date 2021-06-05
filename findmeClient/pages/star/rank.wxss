@@ -1,1 +1,17 @@
-/* pages/star/rank.wxss */
+.list{display: table;width: 100%;background-color: rgba(0, 0, 0, 0.1);color:#e3e3e3}
+.row{display: table-row;height: 95rpx}
+.mine{font-size: 38rpx;font-weight: 600;background-color: #333 !important}
+.row:nth-child(odd){  background-color: rgba(0, 0, 0, 0.2)}
+.cell{display: table-cell;justify-content: center;align-items: center;vertical-align: middle;text-align: center}
+.head{
+  background-color:rgba(0,0,0,0.4);
+  width:60%;
+  height:100rpx;
+  line-height:100rpx;
+  text-align:center;
+  font-size:50rpx;
+  border-top-left-radius:25rpx;
+  border-top-right-radius:25rpx;
+  color:white;
+  font-weight:600;
+}

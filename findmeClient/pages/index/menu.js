@@ -9,6 +9,7 @@ Page({
       { title: '首页', url: "pages/index/index" },
       { title: '菜单', url: "pages/index/menu" },
       { title: '游戏', url: "pages/play/play" },
+      { title: '星探-首页', url: "pages/star/index" },
       { title: '星探-游戏', url: "pages/star/play" },
       { title: '星探-排行', url: "pages/star/rank" },
       { title: '素人-开始对赌', url: "pages/suren/begin?id=7" },

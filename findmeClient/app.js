@@ -18,10 +18,8 @@ App({
       success: res => {
         // 可以将 res 发送给后台解码出 unionId
         that.globalData.userInfo = res.userInfo
-        console.log(res);
-        
+        console.log(res);        
         that.login();
-
         // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
         // 所以此处加入 callback 以防止这种情况
         if (that.userInfoReadyCallback) {
@@ -33,9 +31,9 @@ App({
   onLaunch: function () {
     var that = this;
     // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    // var logs = wx.getStorageSync('logs') || []
+    // logs.unshift(Date.now())
+    // wx.setStorageSync('logs', logs)
 
     // 获取用户信息
     wx.getSetting({
@@ -99,7 +97,7 @@ App({
                     }, 
                     success: function (e) { 
                       that.globalData.uid = e.uid;
-                      that.globalData.album =e.album.split(',');
+                      //that.globalData.album =e.album.split(',');
                     }, 
                     method: "POST" 
                 });
@@ -117,18 +115,5 @@ App({
       }
     });
   },
-  updateAlbum: function () {
-    var that = this;
-    common.request({
-      url: 'c=Game&a=updateAlbum',
-      data: {
-        uid: this.globalData.uid,
-        album: this.globalData.album.join(','),
-      },
-      success: function (e) {
-        console.log(e)
-      },
-      method: "POST"
-    });
-  },
+
 })

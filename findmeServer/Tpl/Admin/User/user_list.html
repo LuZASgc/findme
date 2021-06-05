@@ -52,8 +52,6 @@
                     <th class="pct10">名称</th>
                     <th class="pct10">头像</th>
                     <th class="pct5">性别</th>
-                    <th class="pct5">人种</th>
-                    <th class="pct20">图集</th>
                     <th class="pct5">状态</th>
                     <th class="pct10 last-col">操作</th>
                 </tr>
@@ -64,13 +62,6 @@
                     <td>(<{$item.uid}>)<{$item.nickname}></td>
                     <td><img src="<{$item.headPic}>" style="max-height:150px;max-width:100px"/></td>
                     <td><{$sex[$item.sex]}></td>
-                    <td><{$race[$item.race]}></td>
-                    <td class="album"><{foreach from=split(',',$item.album) item=photo}>
-                        <{if strlen($photo)>1}>
-                            <img src="<{$photo}>" />
-                        <{/if}>
-                    <{/foreach}>
-                    </td>
                     <td><{$auditType[$item.status]}></td>
                     <td class="ta_l">
                         <div class="handler">

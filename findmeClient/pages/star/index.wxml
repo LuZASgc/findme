@@ -1,2 +1,38 @@
-<!--pages/star/index.wxml-->
-<text>pages/star/index.wxml</text>
+<view class="container" style=''>
+
+  <view >
+      <image bindtap="" class="" src="../../image/sp.png" background-size="cover"></image>
+  </view>
+
+  <view class='help' bindtap="showTip">
+ 规则 <image src='../../image/help.jpg' mode='widthFix' ></image>
+</view>
+
+<view class="row" bindtap='starTap'>
+    <image class='icon' src='../../image/star.jpg'></image><view class='title'>开始寻星</view><view class='desc'>明星气质是不是从小就具备呢？</view>
+  </view> 
+  <view class="row" bindtap='starRankTap'>
+    <image class='icon' mode='widthFix' src='../../image/prize.png'></image><view class='title'>星探排行</view><view class='desc'>看看谁才是真正的火眼金睛！</view>
+  </view>       
+  
+
+</view>
+
+
+<view class="modal-box" wx:if="{{showTip}}" bindtap="hideTip">
+  <image src="../../image/tip.png" mode='widthFix' style='width:95%;margin-left:2.5%;' class="fenxiang"></image>
+  <scroll-view scroll-y class='helpContent'>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+  </scroll-view>
+</view>

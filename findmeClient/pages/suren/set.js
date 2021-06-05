@@ -14,9 +14,10 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     album: ['', '', '', '', '', ''],
-    nextAction:"下一步",
     uploadPhotoDisable:false,
-    uploadPhotoText:"上传照片"
+
+    showTip: false,
+    qa: [{ q: '积分有什么用', a: '消耗积分才可以玩星探游戏' }, { q: '怎样获取积分', a: '分享小程序给您的朋友即可获得积分' }, { q: '奖金怎么提现', a: '点击提现，系统就会打款到您的微信钱包中' }]
   },
   //处理图片显示
   processPhoto:function(){
@@ -28,6 +29,21 @@ Page({
     this.setData({
       album: album
     })
+  },
+  /**
+     * 弹出层函数
+     */
+  //出现
+  showTip: function () {
+
+    this.setData({ showTip: true })
+
+  },
+  //消失
+  hideTip: function () {
+
+    this.setData({ showTip: false })
+
   },
   onLoad: function () {   
     console.log(app.globalData.album)
@@ -82,11 +98,10 @@ Page({
         var tempFilePaths = res.tempFilePaths
         console.log(tempFilePaths);
         wx.uploadFile({
-          url: app.buildURL('c=Index&a=ajaxUpload'), //仅为示例，非真实的接口地址
+          url: app.buildURL('c=Index&a=ajaxUpload&tp=user'), //仅为示例，非真实的接口地址
           filePath: tempFilePaths[0],
-          name: 'file',          
+          name: 'file',
           success: function (res) {
-            
             if(typeof res =='object'){
               var ret = JSON.parse(res.data);
             }else{
@@ -110,7 +125,7 @@ Page({
               app.globalData.album.push(ret.msg);
             }
             that.processPhoto()
-            app.updateAlbum();
+            updateAlbum();
             if (app.globalData.album.length >= 6) {
               that.setData({
                 uploadPhotoText:'照片数量已达上限',
@@ -136,11 +151,25 @@ Page({
         app.globalData.album.splice(i, 1);    
         that.processPhoto();
         
-        app.updateAlbum();
+        updateAlbum();
         break;
       }
     }
     
+  },
+  updateAlbum: function () {
+    var that = this;
+    common.request({
+      url: 'c=Game&a=updateAlbum',
+      data: {
+        uid: this.globalData.uid,
+        album: this.globalData.album.join(','),
+      },
+      success: function (e) {
+        console.log(e)
+      },
+      method: "POST"
+    });
   },
 
   

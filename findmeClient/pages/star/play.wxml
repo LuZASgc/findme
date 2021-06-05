@@ -1,9 +1,13 @@
 <!--play.wxml-->
 <view class="container">
-<view style='display:flex'>
+<view style='display:flex;background-color:rgba(255,255,255,0.4);padding:15rpx 0;border-radius:20rpx;align-items:center;'>
 <image bindtap="startStarGame" id='avatar' catchlongpress='showBigImg'  class="userinfo-avatar" data-src="{{avatarUrl}}" src="{{avatarUrl}}" background-size="cover"></image>
+<view style='margin-left:10rpx'>
+<view>松岛菜菜子</view>
+<view>20积分</view>
+</view>
 <view id='countdown' >{{num}}</view>
-<button id='submit' bindtap='submitResult'>提交</button>
+<button id='submit'  bindtap='submitResult' style='background-color:blue'>提交</button>
 </view>
 
 

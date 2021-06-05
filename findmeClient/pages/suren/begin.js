@@ -18,7 +18,7 @@ Page({
   },
   createNew:function(){
     wx.navigateTo({      
-      url: '../../pages/suren/set',
+      url: '../../pages/suren/index',
     })
   },
   beginGame:function(){    

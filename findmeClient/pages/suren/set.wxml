@@ -14,8 +14,44 @@
 
   </block>
 </view>
-<view class='btns' >
-<view bindtap='upload' disabled='{{uploadPhotoDisable}}'>{{uploadPhotoText}}</view>
-<view class='next' bindtap='nextStep' >{{nextAction}}</view>
+<view style='display:flex;height:100rpx;align-items:center;'>
+  <view>寻找对象：</view>
+  <input type='text'  bindinput="bindKeyInput" auto-focus placeholder="照片中的人是谁" style='background-color:rgba(255,255,255,0.3);border-radius:20rpx;height:80rpx;line-height:80rpx;padding-left:0.5rem;width:7.5rem'/>
+
+  <view class='help' bindtap="showTip" style='width:initial;margin-left:15rpx'>
+ 规则 <image src='../../image/help.jpg' mode='widthFix' ></image>
 </view>
+</view>
+
+
+
+<view class='btns' >
+  <view class='button' bindtap='upload' disabled='{{uploadPhotoDisable}}'>
+    <image src='../../image/camara.png' mode='widthFix' ></image>
+      上传照片
+  </view>
+  <view class='button main' bindtap='nextStep' >
+    <image src='../../image/ok.png' mode='widthFix' ></image>
+      下步操作
+  </view>
+</view>
+</view>
+
+
+<view class="modal-box" wx:if="{{showTip}}" bindtap="hideTip">
+  <image src="../../image/tip.png" mode='widthFix' style='width:95%;margin-left:2.5%;' class="fenxiang"></image>
+  <scroll-view scroll-y class='helpContent'>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+    <view class="q" >我的问题是天气如倾听？</view>
+    <view class="a" >超过三天，您设置的奖金如果还没有被领取，你可以在个人中心，游戏列表，游戏详情中申请退款</view>
+  </scroll-view>
 </view>

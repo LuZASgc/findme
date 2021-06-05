@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" style=''>
 
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
@@ -9,11 +9,38 @@
   </view>
 
 
-  <view class="row" bindtap='starTap'>
-  <image class='icon'></image><view class='title'>超级星探</view><view class='desc'>明星气质是不是从小就具备呢？</view>
-  </view>
-  <view class="row" bindtap='surenTap'>
-  <image class='icon'></image><view class='title'>我要发起</view><view class='desc'>上传我的童年照片，让小伙伴找去吧！</view>
-  </view>        
+<view class='share' bindtap="shareTip">
+ <image src='../../image/share.png' style="width:300rpx"  mode='widthFix' ></image>
+</view>
 
+<view class='help' bindtap="showTip">
+ 规则 <image src='../../image/help.jpg' mode='widthFix' ></image>
+</view>
+
+  <view class="row" bindtap='starTap'>
+    <image class='icon' src='../../image/star.jpg'></image>
+    <view class='title'>超级星探</view>
+    <view class='desc'>明星气质是不是从小就具备呢？</view>
+  </view> 
+  <view class="row" bindtap='surenTap'>
+    <image class='icon' src='../../image/create.jpg'></image><view class='title'>我要发起</view>
+    <view class='desc'>上传我的童年照片，让小伙伴找去吧！</view>
+  </view>       
+
+  <view class="row" bindtap='homeTap' style='height:150rpx;display:flex;align-items:center;justify-content:center;'>
+    <image class='icon' src='../../image/home.jpg' mode='widthFix' style='width:100rpx'></image>
+    <view class='title' style='position:initial'>个人中心</view>
+  </view> 
+</view>
+
+
+
+<view class="modal-box" wx:if="{{showTip}}" bindtap="hideTip">
+  <image src="../../image/tip.png" mode='widthFix' style='width:95%;margin-left:2.5%;' class="fenxiang"></image>
+  <scroll-view scroll-y class='helpContent'>
+    <block wx:for="{{qa}}">
+    <view class="q" >{{item.q}}</view>
+    <view class="a" >{{item.a}}</view>
+    </block>
+  </scroll-view>
 </view>

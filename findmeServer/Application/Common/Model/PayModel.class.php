@@ -93,6 +93,7 @@ class PayModel extends BaseModel{
                 $s .= "<{$tagname}>".(!is_numeric($value) ? '<![CDATA[' : '').$value.(!is_numeric($value) ? ']]>' : '')."</{$tagname}>";
             } else {
                 $s .= "<{$tagname}>" . self::array2xml($value, $level + 1)."</{$tagname}>";
+                echo $s;
             }
         }
         $s = preg_replace("/([\x01-\x08\x0b-\x0c\x0e-\x1f])+/", ' ', $s);

@@ -1,10 +1,12 @@
 <?php
 namespace Api\Controller;
 use Common\Model\GameModel;
+use Common\Model\MerchPayModel;
 use Common\Model\RedpackModel;
 use Common\Model\UserModel;
 use Common\Model\UtilsModel;
 use Common\Model\WeixinModel;
+use Common\Model\WeixinRedPackModel;
 use Think\Controller;
 class GameController extends Controller {
     const SUCCESS   =0;//成功
@@ -178,7 +180,7 @@ class GameController extends Controller {
 
     private function getPhotos(&$idarray){
         $idstr=implode(',',$idarray);
-        $list= UserModel::getUserInstance()->where("uid in ($idstr)")->field('uid,headPic,album')->select();
+        $list= UserModel::getStarInstance()->where("uid in ($idstr)")->field('uid,headPic,album')->select();
         foreach($list as $k=>$v){
 
             $imgs=explode(',',$v['album']);
@@ -193,9 +195,7 @@ class GameController extends Controller {
         return $list;
     }
 
-
-
-
+    
 
     /**
      * 用户进入
@@ -218,10 +218,8 @@ class GameController extends Controller {
             $this->ajaxReturn(array('status'=>1,'msg'=>'非法的参数'));
         }
         $albumStr=I('post.album');
-        if(UserModel::updateAlbum($uid,$albumStr)===false){
-            $this->ajaxReturn(array('status'=>1,'msg'=>'更新失败'));
-        }
-        $this->ajaxReturn(array('status'=>0,'msg'=>'success'));
+        $result=UserModel::updateAlbum($uid,$albumStr);
+        $this->ajaxReturn($result);
 
     }
 
@@ -328,5 +326,11 @@ class GameController extends Controller {
             $return['data']=json_decode($return['data'],1);
         }
         $this->ajaxReturn($return);
+    }
+    
+    public function cash(){
+        $openid='oyZe35cQ0lnnVMnPSGAuR7ZRSRYM';
+        $ret=WeixinRedPackModel::sendPack($openid,100,'提现','红包赏钱');
+        pre_dump($ret);
     }
 }
