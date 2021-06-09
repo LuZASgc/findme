@@ -1,6 +1,6 @@
 <!--play.wxml-->
 <view class="container">
-<view style='display:flex;background-color:rgba(255,255,255,0.4);padding:15rpx 0;border-radius:20rpx;align-items:center;'>
+<view class='topBar'>
 <image bindtap="startStarGame" id='avatar' catchlongpress='showBigImg'  class="userinfo-avatar" data-src="{{avatarUrl}}" src="{{avatarUrl}}" background-size="cover"></image>
 <view style='margin-left:10rpx'>
 <view>松岛菜菜子</view>
@@ -11,9 +11,9 @@
 </view>
 
 
-  <view class="photo"  style="">
+  <view class="photo"  >
 <block wx:for="{{album}}" wx:key="unique">  
-    <view class='img' catchtap='selectPhoto' catchlongpress='showBigImg' style='background:url({{item.album}});background-size:cover;background-position:center center;background-repeat:no-repeat' data-uid="{{item.uid}}" data-id="{{index}}">
+    <view class='img' catchtap='selectPhoto' catchlongpress='showBigImg' style='background:url({{item.album}});' data-uid="{{item.uid}}" data-id="{{index}}">
       <image class='right' style='display:{{albumShow[index]}}' src='/image/cardSuccessIcon.png'></image>
     </view>
 </block>
