@@ -53,4 +53,8 @@ left:7rpx;
 top:233rpx;
 transform:rotate(-20deg);
 z-index:1;
+background:transparent;
+}
+.share::after{
+  border: none
 }

@@ -9,9 +9,9 @@
   </view>
 
 
-<view class='share' bindtap="shareTip">
+<button class='share' open-type='share'>
  <image src='../../image/share.png' style="width:300rpx"  mode='widthFix' ></image>
-</view>
+</button>
 
 <view class='help' bindtap="showTip">
  规则 <image src='../../image/help.jpg' mode='widthFix' ></image>

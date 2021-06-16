@@ -7,7 +7,7 @@
 <view>20积分</view>
 </view>
 <view id='countdown' >{{num}}</view>
-<button id='submit'  bindtap='submitResult' style='background-color:blue'>提交</button>
+<button id='submit'  bindtap='submitResult'>提交</button>
 </view>
 
 

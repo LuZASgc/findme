@@ -95,8 +95,11 @@ App({
                       gender: that.globalData.userInfo.gender,
                       nickname: that.globalData.userInfo.nickName,
                     }, 
-                    success: function (e) { 
-                      that.globalData.uid = e.uid;
+                    success: function (e) {
+                      that.globalData.uid           = e.uid;
+                      that.globalData.historyScore  = e.historyScore;
+                      that.globalData.nickname      = e.nickname;
+                      that.globalData.rank          = e.rank;
                       //that.globalData.album =e.album.split(',');
                     }, 
                     method: "POST" 

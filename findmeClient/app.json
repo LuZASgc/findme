@@ -1,8 +1,8 @@
 {
   "pages":[    
+    "pages/index/menu",
     "pages/index/index",
     "pages/star/play",
-    "pages/index/menu",
     "pages/play/play",
     "pages/star/index",
     "pages/star/rank",

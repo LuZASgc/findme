@@ -3,32 +3,32 @@
 <view class='list'>
 
   <view class='row' wx:for="{{list}}">  
-    <view class='cell'>    
-       {{item.rank}}
+    <view class='cell rank'>    
+       {{index+1}}
     </view>
-    <view class='cell'>    
-       {{item.icon}}
+    <view class='cell pic'>    
+       <image src="{{item.icon}}" mode="widthFix" class='headpic'></image>
     </view>
-    <view class='cell'>    
+    <view class='cell name'>    
        {{item.name}}
     </view>
-    <view class='cell'>    
-      {{item.score}}
+    <view class='cell score'>    
+      {{item.score}}积分
     </view>
   </view>
 
   <view class='row mine'>  
-    <view class='cell'>    
-       999+
+    <view class='cell rank'>    
+       {{mine.rank}}
     </view>
-    <view class='cell'>    
-       1
+    <view class='cell pic'>    
+       <image src="{{mine.icon}}" mode="widthFix" class='headpic'></image>
     </view>
-    <view class='cell'>    
-       我的排名
+    <view class='cell name'>    
+       {{mine.name}}
     </view>
-    <view class='cell'>    
-       256
+    <view class='cell score'>    
+       {{mine.score}}积分
     </view>
   </view>
 

@@ -43,7 +43,7 @@ class GameController extends Controller {
             'next'=>'' //下一组
         );
 
-        if(UserModel::isStar($oid)){//明星赛
+        if(true){//明星赛
             $update=array();
             if($result==GameModel::BET_RESULT_WIN){
                 $userInfo['nowScore']+=1;
@@ -142,7 +142,7 @@ class GameController extends Controller {
             unset($uidArr[$i]);
         }
         array_unshift($uidArr,$mainUid);
-        $this->ajaxReturn( $this->getPhotos($uidArr));
+        $this->ajaxReturn( $this->getStarPhotos($uidArr));
     }
 
     /**
@@ -174,11 +174,11 @@ class GameController extends Controller {
             unset($uidArr[6]);
         }
 
-        return $this->getPhotos($uidArr);
+        return $this->getStarPhotos($uidArr);
     }
 
 
-    private function getPhotos(&$idarray){
+    private function getStarPhotos(&$idarray){
         $idstr=implode(',',$idarray);
         $list= UserModel::getStarInstance()->where("uid in ($idstr)")->field('uid,headPic,album')->select();
         foreach($list as $k=>$v){
@@ -294,8 +294,6 @@ class GameController extends Controller {
         $gid=I('post.id',0,'intval');
         $game=GameModel::getGameDetail($gid);
         $this->ajaxReturn($game);
-        //$this->ajaxReturn(array('status'=>1,'msg'=>"为啥错了，你还不知道吗"));
-
     }
 
 
@@ -303,12 +301,21 @@ class GameController extends Controller {
      * 星探排行
      */
     public function starRank(){
-        $page=I('post.p',1,'intval');
-        $pageSize=10;
         $uid=session('uid');
+        $list=UserModel::getUserInstance()->order('historyScore desc,historyTime asc')->field('nickname as name,headPic as icon,historyScore as score')->limit(9)->select();
+        $mine=UserModel::getUserInstance()->where('uid='.$uid)->find();
+        $rank=UserModel::getUserInstance()->where("uid <> {$uid} and historyScore >={$mine['historyScore']}")->count();
 
-        $offset=($page-1)*$pageSize;
-        $list=UserModel::getUserInstance()->where('uid >'.self::USER_STAR_DIVIDE)->order('historyScore desc,historyTime asc')->limit($offset,$pageSize)->field('nickname,headPic,historyScore')->select();
+        $this->ajaxReturn(
+            array('list'=>$list)
+        );
+
+        /*
+         *  SELECT * FROM (
+SELECT (@rownum:=@rownum+1) AS rownum, a.* FROM `test` a, (SELECT @rownum:= 0 ) r  ORDER BY a.`socre` DESC ,`createTime`
+) AS b  WHERE id = 1
+         */
+
     }
 
 

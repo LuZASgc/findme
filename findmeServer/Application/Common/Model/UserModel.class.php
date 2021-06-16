@@ -131,8 +131,7 @@ class UserModel extends BaseModel{
     public static function login($openId,$nickname,$headPic,$sex){
         $uinfo=self::getUserInstance()->where("openid='{$openId}'")->find();
         if($uinfo){
-            session('uid',$uinfo['uid']);
-            return $uinfo;
+            $uinfo['rank']=self::getUserInstance()->where("historyScore>={$uinfo['historyScore']} and uid!={$uinfo['uid']}")->count()+1;
         }else{
             $uid=self::getUserInstance()->add(array(
                 'nickname'=>$nickname,
@@ -141,10 +140,11 @@ class UserModel extends BaseModel{
                 'sex'=>$sex,
                 'addTime'=>time()
             ));
-            $uinfo=self::getUserInstance()->where("openid='{$openId}'")->find();
-            session('uid',$uinfo['uid']);
-            return $uinfo;
+            $uinfo=self::getUserInstance()->where("uid='{$uid}'")->find();
+            $uinfo['rank']='999+';
         }
+        session('uid',$uinfo['uid']);
+        return $uinfo;
     }
 
     /**

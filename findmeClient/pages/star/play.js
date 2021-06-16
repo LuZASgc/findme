@@ -1,15 +1,15 @@
 //index.js
 //获取应用实例
 const app = getApp();
-var common=require("../../common.js")
+var common=require("../../common.js");
+var timer= null;
 Page({
   onShow: function () {
-    
+    this.pause=false;
   },
  
-  data: {
-    timer:null,
-    num:5,
+  data: {    
+    num:20,
     album: [
       { 'uid': 0, 'album': '/image/2.jpg' }, { 'uid': 0, 'album': '/image/2.jpg' }, { 'uid': 0, 'album': '/image/2.jpg' },
       { 'uid': 0, 'album': '/image/2.jpg' }, { 'uid': 0, 'album': '/image/2.jpg' }, { 'uid': 0, 'album': '/image/2.jpg' }
@@ -64,14 +64,17 @@ Page({
     }
   },
   startCountDown:function(){
-    //this.data.num=5;
     this.setData({
-      num:10
+      num:20
     })
     this.countdown(this);
   },
+  pause:false,
   countdown:function(that){
-    setTimeout(function () {
+    if(this.pause)return false;
+    clearTimeout(timer);
+    console.log(that.data.num);
+    timer=setTimeout(function () {
       //console.log("----Countdown----", that.data.num);
       if(that.data.num<=0){
         wx.showToast({
@@ -85,7 +88,6 @@ Page({
     }, 1000);
   },
   selectPhoto:function(e){//选中图片
-  console.log(e)
     var index=parseInt(e.currentTarget.dataset.id);
     var reset=false
     if (this.data.albumShow[index] == "none") {
@@ -107,7 +109,6 @@ Page({
   },
   //显示大图
   showBigImg: function (e) {
-    console.log(e);
     var currentStatu = e.currentTarget.dataset.statu;
     if (typeof currentStatu =='undefined'){
       
@@ -232,8 +233,7 @@ Page({
           wx.showToast({
             title: '正确',
           })
-          that.processTeam(e.next)
-          
+          that.processTeam(e.next);          
         }
         
         
@@ -243,6 +243,24 @@ Page({
       },
       method: "POST"
     });
+  },
+  /**
+ * 生命周期函数--监听页面隐藏
+ */
+  onHide: function () {
+      console.log('hide-------------');
+      this.pauseTimer();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    console.log('onUnload-------------');
+    this.pauseTimer();
+  },
+  pauseTimer:function(){
+    this.pause=true;
   }
 });
 

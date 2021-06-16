@@ -92,7 +92,22 @@ Page({
       url: '../../pages/suren/index',
     })
   },
-  
+  /**
+  * 用户点击右上角分享
+  */
+  onShareAppMessage: function () {
+    return {
+      title: '找到我就算你厉害',
+      desc: '最具人气的小程序开发联盟!',
+      path: 'pages/suren/finish?id=123',
+      success: function (res) {
+        console.log('shareReturn', res);
+      },
+      fail: function (ret) {
+        console.log('cancelShare', ret);
+      }
+    }
+  },
 })
 
 
